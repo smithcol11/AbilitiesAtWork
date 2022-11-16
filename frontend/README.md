@@ -1,13 +1,13 @@
 ## Recommended VS Code Extensions
 
-[Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
-[Tailwind Intellisense](https://open-vsx.org/extension/bradlc/vscode-tailwindcss)
+- [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+- [Tailwind Intellisense](https://open-vsx.org/extension/bradlc/vscode-tailwindcss)
 
 ## Customize configuration
 
-See [Vite Config Reference](https://vitejs.dev/config/).
-See [Tailwind Config Reference](https://tailwindcss.com/docs/configuration#creating-your-configuration-file)
-See [Package.json](https://docs.npmjs.com/cli/v9/configuring-npm/package-json)
+- [Vite Config Reference](https://vitejs.dev/config/)
+- [Tailwind Config Reference](https://tailwindcss.com/docs/configuration#creating-your-configuration-file)
+- [Package.json](https://docs.npmjs.com/cli/v9/configuring-npm/package-json)
 
 ## Project Setup
 

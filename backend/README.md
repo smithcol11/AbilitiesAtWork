@@ -1,7 +1,7 @@
 ## Recommended VS Code Extensions
 
-[MongoDB](https://open-vsx.org/extension/mongodb/mongodb-vscode)
-[DotENV](https://open-vsx.org/extension/mikestead/dotenv)
+- [MongoDB](https://open-vsx.org/extension/mongodb/mongodb-vscode)
+- [DotENV](https://open-vsx.org/extension/mikestead/dotenv)
 
 ## Project Setup
 
