@@ -2,19 +2,31 @@
     <p> 
     <center>Abilities at Work Login Terminal</center>
     </p>
-    <form>
-       <label>Username:</label>
-       <input type="username" required v-model="username">
-       <label>password:</label>
-       <input type="password" required v-model="password">
-       <label>name:</label>
-       <input type="name" required v-model="name">
-      <button @click="IsValidLogin()"> Submit </button>
-       <img src= "../assets/images/logo.png" >
+    <!--onsubmit="return false", prevents page from reloading when a button is pressed -->
+    <form onsubmit="return false">
+        <center>
+            <button class="btn" @click="ChangeLoginType()">{{loginTypeString}}</button>
+        </center>
+        <div v-if="isAdmin">
+            <label>Username:</label>
+            <input type="username"  v-model ="username">
+            <label>password:</label>
+            <input type="password"   v-model="password">
+        </div>
+         <div v-else>
+            <label>name:</label>
+            <input type="name"   v-model="name">
+        </div>
+        <center> 
+            <button class= "btn" @click="IsValidLogin()">  Sign in </button>    
+            <img src= "../assets/images/logo.png" >
+        </center>
     </form>
     <p> Username: {{username}}</p>
     <p> password: {{password}}</p>
     <p> name: {{name}}</p>
+    <p> isAdmin: {{isAdmin}}</p>
+    <p> login type: {{loginTypeString}}</p>
 </template>
 
 <script>
@@ -23,7 +35,10 @@ export default {
         return{
            username: '',
            password: '',
-           name: ''
+           name: '',
+           loginTypeString: "Employee Login",
+           isAdmin : true,
+           
         }
     },
     methods:
@@ -33,7 +48,29 @@ export default {
         IsValidLogin()
         {
             console.log("submitted login data!")
+            if(this.isAdmin)
+                this.IsValidAdminLogin()
+            else
+            this.IsValidEmployeeLogin();
+        },
+        IsValidAdminLogin()
+        {
+            console.log("submitted admin login!")
+        },
+        IsValidEmployeeLogin()
+        {
+            console.log("Submitted employee login!")
+        },
+        ChangeLoginType()
+        {
+            console.log("changing login type!")
+            if(this.isAdmin)
+               this.loginTypeString = "Admin Login";
+            else
+               this.loginTypeString = "Employee Login";
+           this.isAdmin = !this.isAdmin;
         }
+
        
     }
     
@@ -68,17 +105,15 @@ input{
     border-bottom: 1px solid #ddd;
     color: rgb(37, 36, 36)
 }
-.pill{
-    display: inline-block;
-    margin: 20px 10px 0 0;
-    padding: 6px 12-x;
-    background: white;
-    border-radius: 20px;
-    font-size: 12px;
-    letter-spacing: 1px;
-    font-weight: bold;
-    color: rgb(136, 22, 22);
-    cursor: pointer;
-
+.btn {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 6px 24px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.btn:hover {
+  background: #e7e7e7;
 }
 </style>
