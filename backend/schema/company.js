@@ -16,7 +16,7 @@ const CompanySchema = new Schema({
             required: 'Email address is required',
             match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
         },
-        clearPhone: {
+        Phone: {
             type: String,
             required: 'Bussiness phone number is required',
             match: [/^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/, 'Please fill a valid phone number'],
