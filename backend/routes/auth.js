@@ -6,24 +6,19 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const crypto = require('crypto');
 
-passport.use(new LocalStrategy(
-  { // or whatever you want to use
-    usernameField: 'username',    // define the parameter in req.body that passport can use as username and password
-    passwordField: 'password'
-  }, 
-function verify(username, password, resultCallback) {
+passport.use(new LocalStrategy(function verify(username, password, resultCallback) {
+  crypto.pbkdf2(password, "nosalt", 310000, 32, 'sha256', (err, hashedPassword) => {
 
-  var salt = "salt!";
-
-  crypto.pbkdf2(password, salt, 310000, 32, 'sha256', (err, hashedPassword) => {
-    var expectedHash = new Uint8Array(32);
+    // Yes, the hash of the admin password is directly hardcoded here. At least the actual
+    // password isn't stored anywhere (and this code shouldn't leave the server).
+    var expectedHash = new Uint8Array([163, 205, 218, 83, 109, 196, 65, 68, 164, 68, 126, 246, 76, 236, 194, 153, 25, 40, 127, 179, 195, 55, 248, 148, 79, 117, 107, 82, 72, 82, 24, 196]);
 
     if (err) { 
       return resultCallback(err); 
     } else if (!crypto.timingSafeEqual(expectedHash, hashedPassword)) {
       return resultCallback(null, false, { message: 'Incorrect credentials.' });
     } else {
-      return resultCallback(null, false, { message: 'Login complete.' });
+      return resultCallback(null, username);
     }
   });
 }));
@@ -39,17 +34,6 @@ passport.deserializeUser(function(user, cb) {
     return cb(null, user);
   });
 });
-
-// router.post('/login/admin', (req, res) => {
-//   console.log("authenticate???");
-//   let postHandler = passport.authenticate('local', {
-//       successReturnToOrRedirect: '/',
-//       failureRedirect: '/login',
-//       failureMessage: true
-//     });
-//   postHandler(req, res);
-//   }
-// );
 
 router.post('/login/admin', passport.authenticate('local', {
   successReturnToOrRedirect: '/',
