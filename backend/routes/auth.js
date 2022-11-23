@@ -36,7 +36,7 @@ passport.deserializeUser(function(user, cb) {
 });
 
 router.post('/login/admin', passport.authenticate('local', {
-  successReturnToOrRedirect: '/',
+  successReturnToOrRedirect: '/login-success',
   failureRedirect: '/login',
   failureMessage: true
 }));
@@ -46,6 +46,14 @@ router.post('/logout', function(req, res, next) {
     if (err) { return next(err); }
     res.redirect('/');
   });
+});
+
+router.get('/login', (req, res) => {
+  res.send("Login page. Failed logins redirect here, for now.");
+});
+
+router.get('/login-success', (req, res) => {
+  res.send("Successful logins redirect here, for now.");
 });
 
 module.exports = router;
