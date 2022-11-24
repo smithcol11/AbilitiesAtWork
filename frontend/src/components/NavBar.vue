@@ -3,7 +3,7 @@ var open = true;</script>
 
 <template>
     <nav>
-        <div class="w-screen md:w-60 h-full md:h-screen shadow-md bg-white px-1">
+        <div class="w-screen md:w-60 h-full md:h-screen shadow-md text-center bg-white px-1">
         <ul class="relative">
             <li class="relative">
                     <RouterLink class="md:flex sm:inline-block items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out" to="/">Home</RouterLink>
