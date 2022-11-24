@@ -9,7 +9,7 @@ import NavBar from "./components/NavBar.vue"
 
   </header>
   <div class="md:flex">
-    <div class="md:h-screen md:p-5">
+    <div class="">
       <NavBar />
     </div>
     <div class="md:p-7 sm:text-align-center">
