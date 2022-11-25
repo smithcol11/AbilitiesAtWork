@@ -11,7 +11,7 @@ passport.use(new LocalStrategy(function verify(username, password, resultCallbac
 
     // Yes, the hash of the admin password is directly hardcoded here. At least the actual
     // password isn't stored anywhere (and this code shouldn't leave the server).
-    var expectedHash = new Uint8Array([163, 205, 218, 83, 109, 196, 65, 68, 164, 68, 126, 246, 76, 236, 194, 153, 25, 40, 127, 179, 195, 55, 248, 148, 79, 117, 107, 82, 72, 82, 24, 196]);
+    const expectedHash = new Uint8Array([163, 205, 218, 83, 109, 196, 65, 68, 164, 68, 126, 246, 76, 236, 194, 153, 25, 40, 127, 179, 195, 55, 248, 148, 79, 117, 107, 82, 72, 82, 24, 196]);
 
     if (err) { 
       return resultCallback(err); 
