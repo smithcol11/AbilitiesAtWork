@@ -2,11 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const passport = require('passport');
+const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 const uri = process.env.ATLAS_URI;
 const connection = mongoose.connection;
-// const routeName = require("./routes/routeFile")
 
 mongoose
   .connect(uri, {
@@ -19,7 +22,6 @@ mongoose
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(routeName)
 
 app.use(
   cors({
@@ -29,10 +31,22 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use(cookieParser('SECRET'));
+app.use(session({
+  secret: 'SECRET',
+  resave: false, // don't save session if unmodified
+  saveUninitialized: false, // don't create session until something stored
+  //cookie: { secure: true },
+  store: new SQLiteStore({ db: 'sessions.db', dir: '.'})
+}));
+
+app.use(passport.initialize());
+app.use(passport.authenticate('session'));
+
+app.use(require("./routes/auth.js"));
 
 const server = app.listen(port, () => {
   console.log(`AAW app listening on port ${port}`);
 });
+
+module.exports = app;
