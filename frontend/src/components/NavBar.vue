@@ -1,31 +1,26 @@
-<script>
-var open = true;</script>
-
+<script setup></script>
 <template>
     <nav>
-        <div class="w-screen md:w-60 h-full md:h-screen shadow-md text-center bg-white px-1">
-        <ul class="relative">
-            <li class="relative">
-                    <RouterLink class="md:flex sm:inline-block items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out" to="/">Home</RouterLink>
+        <div class="sm:w-32  sm:h-screen shadow-md text-center px-1 py-5">
+        <ul class="sm:pl-5 grid grid-cols-5 sm:grid-cols-1 text-xs text-gray-700 duration-300 hover:text-gray-900">
+            <li class="">
+                <RouterLink class="sm:flex items-center  py-4" to="/clientmenu">Client Menu</RouterLink>
             </li>
-            <li class="relative">
-                <RouterLink class="md:flex sm:inline-block items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out" to="/clientmenu">Client Menu</RouterLink>
+            <li class="">
+                <RouterLink class="sm:flex items-center  py-4" to="/jobmenu">Job Menu</RouterLink>
             </li>
-            <li class="relative">
-                <RouterLink class="md:flex sm:inline-block items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out" to="/jobmenu">JobMenu</RouterLink>
+            <li class="">
+                <RouterLink class="sm:flex items-center  py-4" to="/search">Search</RouterLink>
             </li>
-            <li class="relative">
-                <RouterLink class="md:flex sm:inline-block items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out" to="/search">Search</RouterLink>
+            <li class="">
+                <RouterLink class="sm:flex items-center  py-4" to="/match">Match</RouterLink>
             </li>
-            <li class="relative">
-                <RouterLink class="md:flex sm:inline-block items-center text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out" to="">Exit</RouterLink>
-   
+            <li class="">
+                <RouterLink class="sm:flex items-center  py-4" to="/logout">Logout</RouterLink>
             </li>
         </ul>
     </div>
     </nav>
 </template>
-<style scoped>
-
-</style>
+<style></style>
   
