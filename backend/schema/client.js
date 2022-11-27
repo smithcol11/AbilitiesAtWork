@@ -3,6 +3,11 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
+const editsSchema = new Schema({
+    Created: Date,
+    Edited: Date
+})
+
 const contactSchema = new Schema({
     Email: String,
     Phone: Integer,
@@ -17,15 +22,13 @@ const contactSchema = new Schema({
     State: String,
     City: String
   });
-  
+
 const clientSchema = new Schema({
   User_ID: Integer,
-  First_Name: String,
-  Last_Name: String,
-  Address: String,
+  Initials: String,
   Resume: String,     //How are resumes handled?
-  Contact_Info: contactSchema,
   Preference: categorySchema, 
   SavedJobs: String,
-  AppliedJobs: String //How are saved jobs handled?
+  AppliedJobs: String, //How are saved jobs handled?
+  Edits: editsSchema
 });
