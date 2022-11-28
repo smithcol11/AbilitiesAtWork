@@ -19,7 +19,18 @@ import LoginMenu from "./components/LoginMenu.vue";
     </div>
   </header>
 
-  <RouterView />
+  </header>
+  <div class="sm:flex">
+    <div class="">
+      <NavBar />
+    </div>
+    <div class="p-5 sm:text-align-center">
+      <RouterView />
+    </div>
+  </div>
+
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>
