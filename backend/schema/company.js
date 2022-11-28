@@ -1,10 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-
-let company  = mongoose.model('company', companySchema);
-let job  = mongoose.model('job', jobSchema);
-
 const companySchema = new Schema({
     companyID: Schema.Types.ObjectId,
     companyName: String, 
@@ -26,4 +22,5 @@ const companySchema = new Schema({
     jobs: [{type: Schema.Types.ObjectId, ref: 'job' }]
 });
 
-module.exports = company;
+let Company  = mongoose.model('Company', companySchema); 
+module.exports = Company;
