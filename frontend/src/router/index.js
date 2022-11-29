@@ -27,7 +27,34 @@ const router = createRouter({
       path: '/logout',
       name: 'logout',
     },
+    {
+      path: '/userlogin',
+      name: 'userlogin',
+      component: () => import('../views/UserLogin.vue')
+    },
+    {
+      path: '/adminlogin',
+      name: 'adminlogin',
+      component: () => import('../views/AdminLogin.vue')
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: () => import('../views/Test.vue')
+    }
   ]
 })
+/*
+router.beforeEach(async (to) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/userlogin','/adminlogin'];
+  const authRequired = !publicPages.includes(to.path);
+  const auth = useAuthStore();
 
+  if (authRequired && !auth.user) {
+    console.log("hjere");
+      auth.returnUrl = to.fullPath;
+      return '/login';
+  }
+});*/
 export default router

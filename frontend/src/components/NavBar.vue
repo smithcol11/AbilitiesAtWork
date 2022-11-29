@@ -40,6 +40,27 @@
             >Logout</RouterLink
           >
         </li>
+        <li class="">
+          <RouterLink
+            class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
+            to="/userlogin"
+            >UserLogin</RouterLink
+          >
+        </li>
+        <li class="">
+          <RouterLink
+            class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
+            to="/adminlogin"
+            >AdminLogin</RouterLink
+          >
+        </li>
+        <li class="">
+          <RouterLink
+            class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
+            to="/test"
+            >Test</RouterLink
+          >
+        </li>
       </ul>
     </div>
   </nav>

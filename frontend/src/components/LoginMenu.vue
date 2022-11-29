@@ -5,7 +5,7 @@
     <!--onsubmit="return false", prevents page from reloading when a button is pressed -->
     <form onsubmit="return false">
         <center>
-            <button class="btn" @click="ChangeLoginType()">{{loginTypeString}}</button>
+            <button class="btn" @click="ChangeLoginType()">{{loginTypeButtonString}}</button>
         </center>
         <div v-if="isAdmin">
             <label>Username:</label>
@@ -26,18 +26,19 @@
     <p> password: {{password}}</p>
     <p> name: {{name}}</p>
     <p> isAdmin: {{isAdmin}}</p>
-    <p> login type: {{loginTypeString}}</p>
+    <p> login type: {{loginTypeButtonString}}</p>
 </template>
 
 <script>
+
 export default {
     data(){
         return{
            username: '',
            password: '',
            name: '',
-           loginTypeString: "Employee Login",
-           isAdmin : true,
+           loginTypeButtonString: "Admin Login",
+           isAdmin : false,
            
         }
     },
@@ -46,7 +47,7 @@ export default {
         //This function would be used in the backend to check
         //if the login info provided was valid
         IsValidLogin()
-        {
+        {   
             console.log("submitted login data!")
             if(this.isAdmin)
                 this.IsValidAdminLogin()
@@ -65,9 +66,9 @@ export default {
         {
             console.log("changing login type!")
             if(this.isAdmin)
-               this.loginTypeString = "Admin Login";
+               this.loginTypeButtonString = "Admin Login";
             else
-               this.loginTypeString = "Employee Login";
+               this.loginTypeButtonString = "Employee Login";
            this.isAdmin = !this.isAdmin;
         }
 

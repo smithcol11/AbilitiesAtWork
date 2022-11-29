@@ -1,25 +1,24 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
-import LoginMenu from "./components/LoginMenu.vue";
+import NavBar from "./components/NavBar.vue"
+import Login from "./components/LoginMenu.vue"
 </script>
 
 <template>
   <header>
-    <div class="">
-      <LoginMenu/>
-
-      
-      <HelloWorld msg="You did it!" />
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-       
-      </nav> 
-    </div>
-  </header>
 
   </header>
+  <div v-if="isAdmin">
+            <label>Username:</label>
+            <input type="username"  v-model ="username">
+            <label>password:</label>
+            <input type="password"   v-model="password">
+        </div>
+         <div v-else>
+            <label>name:</label>
+            <input type="name"   v-model="name">
+        </div>
+
   <div class="sm:flex">
     <div class="">
       <NavBar />
@@ -32,5 +31,4 @@ import LoginMenu from "./components/LoginMenu.vue";
 </template>
 
 <style scoped>
-
 </style>
