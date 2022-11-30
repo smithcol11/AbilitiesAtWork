@@ -12,7 +12,9 @@ const clientSchema = new Schema({
   }, 
   savedJobs: String,
   appliedJobs: String, //How are saved jobs handled?
-  createdOn: {type: Date, default: Date.now, required: true},
+  postedBy: { type: String, required: true },
+  postedOn: {type: Date, default: Date.now, required: true},
+  editedBy: { type: String, required: true },
   editedOn: {type: Date, default: Date.now},
 
 });
