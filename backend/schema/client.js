@@ -3,32 +3,22 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const editsSchema = new Schema({
-    Created: Date,
-    Edited: Date
-})
-
-const contactSchema = new Schema({
-    Email: String,
-    Phone: Integer,
-    Other:   String
-  });
-
-  const categorySchema = new Schema({
-    Job_Type: String,
-    Hours_per_W: Integer,
-    Shift_Schedule: String,
-    Location: String,
-    State: String,
-    City: String
-  });
-
 const clientSchema = new Schema({
-  User_ID: Integer,
-  Initials: String,
-  Resume: String,     //How are resumes handled?
-  Preference: categorySchema, 
-  SavedJobs: String,
-  AppliedJobs: String, //How are saved jobs handled?
-  Edits: editsSchema
+  userID: {type: Integer, required: true},
+  initials: {type: String, required: true, minlength: 2},
+  preference: {
+    industry: {type: [String], required: true},
+    hours: {type: String, enum: ['Any', 'Part-Time', 'Full-Time'], default: 'Any', required: true}
+  }, 
+  savedJobs: String,
+  appliedJobs: String, //How are saved jobs handled?
+  createdOn: {type: Date, default: Date.now, required: true},
+  editedOn: {type: Date, default: Date.now},
+
 });
+
+const Client = mongoose.model(
+  "Client",
+  clientSchema
+  );
+modeule.exports = Client;
