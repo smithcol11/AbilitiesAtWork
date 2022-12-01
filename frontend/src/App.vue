@@ -19,7 +19,7 @@ let isAuthUser = false;
       <div class="">
         <NavBar />
       </div>
-      <div class="p-5 sm:text-align-center">
+      <div class="p-5 sm:text-align-center h-screen w-full">
         <RouterView />
       </div>
     </div>
