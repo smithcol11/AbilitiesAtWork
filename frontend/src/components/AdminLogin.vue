@@ -1,32 +1,38 @@
-<script></script>
+<script setup></script>
 <template>
   <div id="Admin Login" class="">
     <h2>Admin Login</h2>
-      <form method="post" @submit.prevent>
-        <div class="py-3">
-          <label class="pr-5" for="email">Username</label>
-          <input
-            class="rounded border p-1 w-1/3 sm:w-3/4" 
-            type="username"
-            name="username"
-            id="username"
-            aria-describedby="usernameHelp"
-            placeholder="Enter username"
-            required
-          />
-        </div>
-        <div class="p-3">
-          <label class="pr-5" for="password">Password</label>
-          <input
-            class="rounded border p-1 w-1/3 sm:w-3/4"
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Enter password"
-            required
-          />
-        </div>
-        <button type="submit" class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded " @click="IsValidLogin()">Sign in</button>
+    <form method="post" @submit.prevent>
+      <div class="py-3">
+        <label class="pr-5" for="email">Username</label>
+        <input
+          class="rounded border p-1"
+          type="username"
+          name="username"
+          id="username"
+          aria-describedby="usernameHelp"
+          placeholder="Enter username"
+          required
+        />
+      </div>
+      <div class="py-3">
+        <label class="pr-5" for="password">Password</label>
+        <input
+          class="rounded border p-1"
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Enter password"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded"
+        @click=""
+      >
+        Sign in
+      </button>
     </form>
   </div>
 </template>

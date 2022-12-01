@@ -11,9 +11,6 @@ export const useAuthStore = defineStore({
   }),
 
   actions: {
-    Test() {
-      console.log("Test function");
-    },
     AdminLogin(password) {
       fetch("http://localhost:3000/authAdmin", {
         method: "POST",
