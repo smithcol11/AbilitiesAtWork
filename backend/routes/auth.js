@@ -66,13 +66,4 @@ router.post("/logout", function (req, res, next) {
     res.redirect("/");
   });
 });
-
-router.get("/authUser", (req, res) => {
-  res.send("Login page. Failed logins redirect here, for now.");
-});
-
-router.get("/login-success", (req, res) => {
-  res.send("Successful logins redirect here, for now.");
-});
-
 module.exports = router;
