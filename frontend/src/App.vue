@@ -1,23 +1,29 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import NavBar from "./components/NavBar.vue"
+import NavBar from "./components/NavBar.vue";
+import Login from "./views/Login.vue";
+let isAuthAdmin = true;
+let isAuthUser = false;
 </script>
 
 <template>
-  <header>
-
-  </header>
-  <div class="sm:flex">
-    <div class="">
-      <NavBar />
-    </div>
-    <div class="p-5 sm:text-align-center">
-      <RouterView />
+  <div v-if="!isAuthAdmin && !isAuthUser">
+    <div class="sm:flex">
+      <div class="p-5 sm:text-align-center">
+        <RouterView />
+      </div>
     </div>
   </div>
-
+  <div v-else>
+    <div class="sm:flex">
+      <div class="">
+        <NavBar />
+      </div>
+      <div class="p-5 sm:text-align-center h-screen w-full">
+        <RouterView />
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
