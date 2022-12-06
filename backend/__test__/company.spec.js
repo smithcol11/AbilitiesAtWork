@@ -27,8 +27,8 @@ beforeAll(() => {
   });
 });
 
-afterEach(() => {
-  connection.collections["companies"].deleteMany();
+afterEach(async () => {
+  await connection.collections["companies"].deleteMany();
 });
 
 afterAll(async () => {
@@ -58,6 +58,14 @@ describe("Company documents", () => {
       expect(error).toBeInstanceOf(Error.ValidationError);
       expect(error.errors.email).toBeDefined();
     }
+  });
+
+  it("should reject duplicate email addresses", async () => {
+    const firstCompany = new Company(exampleCompany);
+    const duplicate = new Company(exampleCompany);
+
+    await firstCompany.save();
+    await expect(duplicate.save()).rejects.toThrow("duplicate key");
   });
 
   it("should only contain fields in the schema", async () => {
