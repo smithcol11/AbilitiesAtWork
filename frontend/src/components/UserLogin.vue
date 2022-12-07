@@ -1,4 +1,7 @@
-<script setup></script>
+<script setup>
+import { useAuthenticationStore } from "../stores/AuthenticationStore";
+const authStore = useAuthenticationStore();
+</script>
 <template>
   <div id="User Login" class="">
     <h2>User Login</h2>
@@ -18,7 +21,7 @@
       <button
         type="submit"
         class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded"
-        @click=""
+        @click="authStore.UserLoginDev"
       >
         Sign in
       </button>

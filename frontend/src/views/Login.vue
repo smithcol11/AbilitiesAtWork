@@ -1,12 +1,10 @@
 <script setup>
-import { useAuthStore } from "../stores/Authentication";
+import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import AdminLogin from "../components/AdminLogin.vue";
 import UserLogin from "../components/UserLogin.vue";
 import { ref } from "vue";
-const auth = useAuthStore();
-
+const auth = useAuthenticationStore();
 const isAdmin = ref(false);
-
 function ChangeLoginType() {
   isAdmin.value = !isAdmin.value;
 }
@@ -37,5 +35,11 @@ function ChangeLoginType() {
         </div>
       </form>
     </div>
+  </div>
+  <div>
+    <p>isAuthAdmin: {{ auth.isAuthAdmin }}</p>
+    <p>isAuthUser: {{ auth.isAuthUser }}</p>
+    <p>username: {{ auth.username }}</p>
+    <p>name: {{ auth.name }}</p>
   </div>
 </template>
