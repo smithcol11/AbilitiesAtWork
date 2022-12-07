@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+import { useAuthenticationStore } from "../stores/AuthenticationStore";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -34,4 +34,15 @@ const router = createRouter({
     },
   ],
 });
+
+router.beforeEach(async(to)=>{
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+  const auth = useAuthenticationStore();
+
+  //return to '/login' if user or admin is not authorized
+  if(authRequired && (!auth.IsAuthorizedAdmin && !auth.IsAuthorizedUser)){
+    return '/login';
+  }
+  })
 export default router;

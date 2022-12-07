@@ -61,6 +61,10 @@ export const useAuthenticationStore = defineStore({
       this.isAuthAdmin = !this.isAuthAdmin;
       console.log("AdminLoginDev func call");
     },
+    Logout(){
+      this.isAuthAdmin = false;
+      this.isAuthUser = false;
+    }
   },
   getters: {
     IsAuthorizedUser() {

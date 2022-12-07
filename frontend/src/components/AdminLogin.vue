@@ -24,7 +24,7 @@ const auth = useAuthenticationStore();
           class="rounded border p-1"
           type="password"
           name="password"
-          id="{{auth.username}}"
+          id="password"
           placeholder="Enter password"
           required
         />

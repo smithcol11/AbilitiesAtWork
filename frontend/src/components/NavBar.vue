@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import { useAuthenticationStore } from "../stores/AuthenticationStore";const auth = useAuthenticationStore();
+ </script>
 <template>
   <nav>
     <div class="sm:w-32 sm:h-screen shadow-md text-center px-1 py-5">
@@ -36,7 +38,7 @@
         <li class="">
           <RouterLink
             class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
-            to="/logout"
+            to="/logout" @click="auth.Logout()"
             >Logout</RouterLink
           >
         </li>
