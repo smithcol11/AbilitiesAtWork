@@ -1,11 +1,9 @@
 "use strict";
 
-require("dotenv").config();
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { connect, Error, startSession } from "mongoose";
 import Company from "../schema/company";
-
-const uri = process.env.ATLAS_URI;
+import { connectDatabase, finalizeTest, setupTest } from "./db-test";
+import { Error } from "mongoose";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 const exampleCompany = {
   companyName: "Example Corporation",
@@ -23,20 +21,16 @@ const exampleCompany = {
 
 let session = null;
 
-beforeAll(() => {
-  connect(uri, {
-    useNewUrlParser: true,
-  });
+beforeAll(async () => {
+  await connectDatabase();
 });
 
 beforeEach(async () => {
-  session = await startSession();
-  session.startTransaction();
+  session = await setupTest();
 });
 
 afterEach(async () => {
-  await session.abortTransaction();
-  session.endSession();
+  await finalizeTest(session);
 });
 
 describe("Company documents", () => {
@@ -45,9 +39,9 @@ describe("Company documents", () => {
     await Company.create([exampleCompany], { session });
 
     // Retrieve from database
-    const compFromDB = await Company.findOne().session(session);
+    const savedCompany = await Company.findOne().session(session);
 
-    expect(compFromDB.companyName).toBe(exampleCompany.companyName);
+    expect(savedCompany.companyName).toBe(exampleCompany.companyName);
   });
 
   it("should require an email address", async () => {
@@ -77,9 +71,9 @@ describe("Company documents", () => {
       ...exampleCompany,
     });
 
-    const savedDoc = await companyWithExtraField.save({ session });
+    const savedCompany = await companyWithExtraField.save({ session });
 
-    expect(savedDoc.extraField).toBeUndefined();
-    expect(savedDoc.companyName).toBe(exampleCompany.companyName);
+    expect(savedCompany.extraField).toBeUndefined();
+    expect(savedCompany.companyName).toBe(exampleCompany.companyName);
   });
 });
