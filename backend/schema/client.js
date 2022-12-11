@@ -8,7 +8,6 @@ const clientSchema = new Schema({
   initials: {type: String, required: true, minlength: 2},
   preference: {
     industry: [{type: String, required: true}],
-
     hours: {type: String, enum: ['Any', 'Part-Time', 'Full-Time'], default: 'Any', required: true}
   }, 
   savedJobs: String,
