@@ -9,8 +9,6 @@ const uri = process.env.ATLAS_URI;
 const connectDatabase = async () => {
   await connect(uri, {
     useNewUrlParser: true,
-    //
-    useCreateIndex: true
   });
   //
   await connection.once('open', () => { console.log("database connected")})
