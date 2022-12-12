@@ -34,5 +34,7 @@ const jobSchema = new Schema(
   { timestamps: true }
 );
 
-const Job = mongoose.model("Job", jobSchema);
+// creating a model
+const Job = mongoose.model("Job", jobSchema); 
+
 module.exports = Job;
