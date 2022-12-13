@@ -1,28 +1,32 @@
 "use strict";
 
-import { connect, startSession } from "mongoose";
-import { expect } from "vitest";
+import { MongoMemoryServer } from "mongodb-memory-server";
+import { connect, connection } from "mongoose";
 
-require("dotenv").config();
-const uri = process.env.ATLAS_URI;
+let mongo = undefined;
 
 const connectDatabase = async () => {
-  await connect(uri, {
+  mongo = await MongoMemoryServer.create();
+  const url = mongo.getUri();
+
+  await connect(url, {
     useNewUrlParser: true,
-  });  
+  });
 };
 
 const setupTest = async () => {
-  const session = await startSession();
-  session.startTransaction();
-  expect(session).not.toBeNull();
-  return session;
+
 };
 
-const finalizeTest = async (session) => {
-  expect(session).not.toBeNull();
-  await session.abortTransaction();
-  session.endSession();
+const finalizeTest = async () => {
+  if (mongo) {
+    const collections = connection.collections;
+
+    for (const key in collections) {
+        const collection = collections[key];
+        await collection.deleteMany();
+    }
+  }
 };
 
 module.exports = { connectDatabase, finalizeTest, setupTest };

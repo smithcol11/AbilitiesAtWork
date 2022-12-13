@@ -23,6 +23,7 @@
     "sqlite3": "^5.1.2"
   },
   "devDependencies": {
+    "mongodb-memory-server": "^8.10.2",
     "nodemon": "^2.0.20",
     "vitest": "^0.25.6"
   }

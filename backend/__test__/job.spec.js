@@ -68,42 +68,38 @@ const exampleJob2 = {
 //   }
 // }
 
-let session = null;
-
 beforeAll(async () => {
   await connectDatabase();
 });
 
 beforeEach(async () => {
-  session = await setupTest();
+  await setupTest();
 });
 
 afterEach(async () => {
-  await finalizeTest(session);
+  await finalizeTest();
 });
 
 describe("Job document", () => {
   it("can be saved and retrieved", async () => {
-    await Job.create([exampleJob1], { session });
-    const savedJob = await Job.findOne().session(session);
+    await Job.create([exampleJob1]);
+    const savedJob = await Job.findOne();
     expect(savedJob.id).toBe(exampleJob1.id);
   });
 
   it("should find and return correct job id using postedBy", async () => {
-    const savedJobs = await Job.create([exampleJob1, exampleJob2], { session });
+    const savedJobs = await Job.create([exampleJob1, exampleJob2]);
     await expect(new Set(savedJobs).size).toEqual(2);
 
-    const jobToFind = await Job.findOne({ postedBy: "John Smith" }).session(
-      session
-    );
+    const jobToFind = await Job.findOne({ postedBy: "John Smith" });
     await expect(jobToFind.id).toBe(exampleJob2.id);
   });
 
   it("should find and return null if job does not exist using editedBy", async () => {
-    const savedJobs = await Job.create([exampleJob1, exampleJob2], { session });
+    const savedJobs = await Job.create([exampleJob1, exampleJob2]);
     await expect(new Set(savedJobs).size).toEqual(2);
 
-    const jobToFind = await Job.findOne({ editedBy: "Ben" }).session(session);
+    const jobToFind = await Job.findOne({ editedBy: "Ben" });
     expect(jobToFind).toBe(null);
   });
 });

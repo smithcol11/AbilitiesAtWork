@@ -36,24 +36,22 @@ const client2Test = {
 };
 */
 
-let session = null;
-
 beforeAll(async () => {
   await connectDatabase();
 });
 
 beforeEach(async () => {
-  session = await setupTest();
+  await setupTest();
 });
 
 afterEach(async () => {
-  await finalizeTest(session);
+  await finalizeTest();
 });
 
 describe("Client model", () => {
   it("should create, save and retrieve the client successfully with valid data", async () => {
     const validClient = new client(client1Test);
-    const savedClient = await validClient.save({ session });
+    const savedClient = await validClient.save();
 
     expect(savedClient.userID).toBe(client1Test.userID);
 
@@ -87,7 +85,7 @@ describe("Client model", () => {
       extraField: "Extra Field",
       ...client1Test,
     });
-    const savedClient = await clientWithExtraField.save({ session });
+    const savedClient = await clientWithExtraField.save();
     expect(savedClient.extraField).toBeUndefined();
   });
 });

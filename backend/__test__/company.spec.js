@@ -19,27 +19,22 @@ const exampleCompany = {
   jobs: [],
 };
 
-let session = null;
-
 beforeAll(async () => {
   await connectDatabase();
 });
 
 beforeEach(async () => {
-  session = await setupTest();
+  await setupTest();
 });
 
 afterEach(async () => {
-  await finalizeTest(session);
+  await finalizeTest();
 });
 
 describe("Company documents", () => {
   it("can be saved to and retrieved from the database", async () => {
-    // Save to database
-    await Company.create([exampleCompany], { session });
-
-    // Retrieve from database
-    const savedCompany = await Company.findOne().session(session);
+    await Company.create([exampleCompany]);
+    const savedCompany = await Company.findOne();
 
     expect(savedCompany.companyName).toBe(exampleCompany.companyName);
   });
@@ -48,7 +43,7 @@ describe("Company documents", () => {
     const { email, ...theRest } = exampleCompany;
 
     try {
-      await Company.create([theRest], { session });
+      await Company.create([theRest]);
     } catch (error) {
       expect(error).toBeInstanceOf(Error.ValidationError);
       expect(error.errors.email).toBeDefined();
@@ -56,10 +51,10 @@ describe("Company documents", () => {
   });
 
   it("should reject duplicate email addresses", async () => {
-    await Company.create([exampleCompany], { session });
+    await Company.create([exampleCompany]);
 
     const addDuplicate = async () => {
-      await Company.create([exampleCompany], { session });
+      await Company.create([exampleCompany]);
     };
 
     await expect(addDuplicate).rejects.toThrow("duplicate key");
@@ -71,7 +66,7 @@ describe("Company documents", () => {
       ...exampleCompany,
     });
 
-    const savedCompany = await companyWithExtraField.save({ session });
+    const savedCompany = await companyWithExtraField.save();
 
     expect(savedCompany.extraField).toBeUndefined();
     expect(savedCompany.companyName).toBe(exampleCompany.companyName);
