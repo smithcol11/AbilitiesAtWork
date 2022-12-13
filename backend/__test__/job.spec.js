@@ -96,11 +96,21 @@ describe("Job document", () => {
     
     const savedJobs = await Job.create([exampleJob1, exampleJob2], {session});
     await expect((new Set(savedJobs)).size).toEqual(2);
-    
+
     const jobToFind = await Job.findOne({ postedBy: "John Smith"}).session(session);
     await expect(jobToFind.id).toBe(exampleJob2.id);
     
   });
 
+  
+  it("should find and return null if job does not exist using editedBy", async () => {
+    
+    const savedJobs = await Job.create([exampleJob1, exampleJob2], {session});
+    await expect((new Set(savedJobs)).size).toEqual(2);
+
+    const jobToFind = await Job.findOne({ editedBy: "Ben"}).session(session);
+    expect(jobToFind).toBe(null);
+    
+  });
 
 });
