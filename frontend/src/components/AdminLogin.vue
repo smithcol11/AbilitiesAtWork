@@ -1,6 +1,23 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
+import { ref } from "vue"
 const auth = useAuthenticationStore();
+const adminUser = ref('')
+const adminPassword = ref('')
+// Actual login function for the admin account(s)
+const updateAdmin = () => {
+  auth.username = adminUser
+  auth.isAuthAdmin = true
+  retfunc = auth.AdminLogin(adminPassword.value)
+  return { retfunc }
+}
+// Test login function for admin account(s)
+const updateAdminDev = () => {
+  auth.username = adminUser
+  auth.isAuthAdmin = true
+  retfunc = auth.AdminLoginDev
+  return { retfunc }
+}
 </script>
 <template>
   <div id="Admin Login" class="">
@@ -15,6 +32,7 @@ const auth = useAuthenticationStore();
           id="username"
           aria-describedby="usernameHelp"
           placeholder="Enter username"
+          v-model = "adminUser"
           required
         />
       </div>
@@ -26,13 +44,14 @@ const auth = useAuthenticationStore();
           name="password"
           id="password"
           placeholder="Enter password"
+          v-model = "adminPassword"
           required
         />
       </div>
       <button
         type="submit"
         class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded"
-        @click="auth.AdminLoginDev"
+        @click="updateAdminDev"
       >
         Sign in
       </button>
