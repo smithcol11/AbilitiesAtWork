@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "39-test-schemas-and-cleanup-atlas-instance" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
