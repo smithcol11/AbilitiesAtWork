@@ -13,7 +13,7 @@
 //   });
 // });
 
-import { test } from "vitest";
+import { test, expect } from "vitest";
 
 test("Minimum required single test", () => {
     expect(true).toBe(true);
