@@ -2,7 +2,10 @@
 
 import Job from "../schema/job"; // this is the model
 import { connectDatabase, finalizeTest, setupTest } from "./db-test";
+import { set } from "mongoose";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+set("strictQuery", false);
 
 const exampleJob1 = {
   id: "12345",

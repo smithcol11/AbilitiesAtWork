@@ -2,8 +2,10 @@
 
 import Company from "../schema/company";
 import { connectDatabase, finalizeTest, setupTest } from "./db-test";
-import { Error } from "mongoose";
+import { Error, set } from "mongoose";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+set("strictQuery", false);
 
 const exampleCompany = {
   companyName: "Example Corporation",
