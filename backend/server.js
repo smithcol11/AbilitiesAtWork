@@ -47,6 +47,7 @@ app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
 app.use(require("./routes/auth_admin.js"));
+app.use(require("./routes/auth_employee.js"));
 
 const server = app.listen(port, () => {
   console.log(`AAW app listening on port ${port}`);

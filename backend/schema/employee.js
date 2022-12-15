@@ -5,8 +5,12 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
     {
-        first: { type: String, required: true, minlength: 1 },
-        last: { type: String, required: true, minlength: 1 },
+        //first name
+        username: { type: String, required: true, minlength: 1 },
+
+        //last name
+        hash: { type: String, required: true },
+        salt: { type: String, required: true }, 
     }
 );
 
