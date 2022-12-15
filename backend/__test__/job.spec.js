@@ -49,28 +49,6 @@ const exampleJob2 = {
   // { timestamps: true }
 };
 
-// const exampleJob =
-// {
-//   "_id": {
-//     "$oid": "639766bb2f6540b8d0711ec2"
-//   },
-//   "Business Name": "ABC",
-//   "Position": "Receptionist",
-//   "Contact Name": "John Smith",
-//   "Contact Info": "jsmith@abc.com",
-//   "Industry": "Marketing",
-//   "Hours": "Part-Time",
-//   "Shift": "Day",
-//   "County": "Multnomah",
-//   "Address": "123 Main St.",
-//   "Notes": "Test",
-//   "Date Posted": {
-//     "$date": {
-//       "$numberLong": "1670832000000"
-//     }
-//   }
-// }
-
 beforeAll(async () => {
   await connectDatabase();
 });
