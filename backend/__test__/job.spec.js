@@ -1,9 +1,9 @@
 "use strict";
 
 import Job from "../schema/job"; // this is the model
-import { connectDatabase, finalizeTest, setupTest } from "./db-test";
+import { connectDatabase, testInSession } from "./db-test";
 import { set } from "mongoose";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 set("strictQuery", false);
 
@@ -75,34 +75,41 @@ beforeAll(async () => {
   await connectDatabase();
 });
 
-beforeEach(async () => {
-  await setupTest();
-});
-
-afterEach(async () => {
-  await finalizeTest();
-});
-
 describe("Job document", () => {
-  it("can be saved and retrieved", async () => {
-    await Job.create([exampleJob1]);
-    const savedJob = await Job.findOne();
-    expect(savedJob.id).toBe(exampleJob1.id);
-  });
+  it(
+    "can be saved and retrieved",
+    testInSession(async (session) => {
+      await Job.create([exampleJob1], { session });
+      const savedJob = await Job.findOne().session(session);
+      expect(savedJob.id).toBe(exampleJob1.id);
+    })
+  );
 
-  it("should find and return correct job id using postedBy", async () => {
-    const savedJobs = await Job.create([exampleJob1, exampleJob2]);
-    await expect(new Set(savedJobs).size).toEqual(2);
+  it(
+    "should find and return correct job id using postedBy",
+    testInSession(async (session) => {
+      const savedJobs = await Job.create([exampleJob1, exampleJob2], {
+        session,
+      });
+      expect(new Set(savedJobs).size).toEqual(2);
 
-    const jobToFind = await Job.findOne({ postedBy: "John Smith" });
-    await expect(jobToFind.id).toBe(exampleJob2.id);
-  });
+      const jobToFind = await Job.findOne({ postedBy: "John Smith" }).session(
+        session
+      );
+      expect(jobToFind.id).toBe(exampleJob2.id);
+    })
+  );
 
-  it("should find and return null if job does not exist using editedBy", async () => {
-    const savedJobs = await Job.create([exampleJob1, exampleJob2]);
-    await expect(new Set(savedJobs).size).toEqual(2);
+  it(
+    "should find and return null if job does not exist using editedBy",
+    testInSession(async (session) => {
+      const savedJobs = await Job.create([exampleJob1, exampleJob2], {
+        session,
+      });
+      expect(new Set(savedJobs).size).toEqual(2);
 
-    const jobToFind = await Job.findOne({ editedBy: "Ben" });
-    expect(jobToFind).toBe(null);
-  });
+      const jobToFind = await Job.findOne({ editedBy: "Ben" }).session(session);
+      expect(jobToFind).toBe(null);
+    })
+  );
 });

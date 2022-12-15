@@ -1,9 +1,9 @@
 "use strict";
 
 import Company from "../schema/company";
-import { connectDatabase, finalizeTest, setupTest } from "./db-test";
+import { connectDatabase, testInSession } from "./db-test";
 import { Error, set } from "mongoose";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 set("strictQuery", false);
 
@@ -25,52 +25,56 @@ beforeAll(async () => {
   await connectDatabase();
 });
 
-beforeEach(async () => {
-  await setupTest();
-});
-
-afterEach(async () => {
-  await finalizeTest();
-});
-
 describe("Company documents", () => {
-  it("can be saved to and retrieved from the database", async () => {
-    await Company.create([exampleCompany]);
-    const savedCompany = await Company.findOne();
+  it(
+    "can be saved to and retrieved from the database",
+    testInSession(async (session) => {
+      await Company.create([exampleCompany], { session });
+      const savedCompany = await Company.findOne().session(session);
 
-    expect(savedCompany.companyName).toBe(exampleCompany.companyName);
-  });
+      expect(savedCompany.companyName).toBe(exampleCompany.companyName);
+    })
+  );
 
-  it("should require an email address", async () => {
-    const { email, ...theRest } = exampleCompany;
+  it(
+    "should require an email address",
+    testInSession(async (session) => {
+      const { email, ...theRest } = exampleCompany;
 
-    try {
-      await Company.create([theRest]);
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error.ValidationError);
-      expect(error.errors.email).toBeDefined();
-    }
-  });
+      try {
+        await Company.create([theRest], { session });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error.ValidationError);
+        expect(error.errors.email).toBeDefined();
+      }
+    })
+  );
 
-  it("should reject duplicate email addresses", async () => {
-    await Company.create([exampleCompany]);
+  it(
+    "should reject duplicate email addresses",
+    testInSession(async (session) => {
+      await Company.create([exampleCompany], { session });
 
-    const addDuplicate = async () => {
-      await Company.create([exampleCompany]);
-    };
+      const addDuplicate = async () => {
+        await Company.create([exampleCompany], { session });
+      };
 
-    await expect(addDuplicate).rejects.toThrow("duplicate key");
-  });
+      await expect(addDuplicate).rejects.toThrow("duplicate key");
+    })
+  );
 
-  it("should only contain fields in the schema", async () => {
-    const companyWithExtraField = new Company({
-      extraField: "Extra Field",
-      ...exampleCompany,
-    });
+  it(
+    "should only contain fields in the schema",
+    testInSession(async (session) => {
+      const companyWithExtraField = new Company({
+        extraField: "Extra Field",
+        ...exampleCompany,
+      });
 
-    const savedCompany = await companyWithExtraField.save();
+      const savedCompany = await companyWithExtraField.save({ session });
 
-    expect(savedCompany.extraField).toBeUndefined();
-    expect(savedCompany.companyName).toBe(exampleCompany.companyName);
-  });
+      expect(savedCompany.extraField).toBeUndefined();
+      expect(savedCompany.companyName).toBe(exampleCompany.companyName);
+    })
+  );
 });
