@@ -51,7 +51,7 @@ const updateAdminDev = () => {
       <button
         type="submit"
         class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded"
-        @click="updateAdminDev"
+        @click="updateAdmin"
       >
         Sign in
       </button>
