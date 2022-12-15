@@ -10,6 +10,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const uri = process.env.ATLAS_URI;
 const connection = mongoose.connection;
+const MongoStore = require("connect-mongo");
 
 mongoose
   .connect(uri, {
@@ -32,13 +33,15 @@ app.use(
 );
 
 app.use(cookieParser('SECRET'));
-app.use(session({
-  secret: 'SECRET',
-  resave: false, // don't save session if unmodified
-  saveUninitialized: false, // don't create session until something stored
-  //cookie: { secure: true },
-  store: new SQLiteStore({ db: 'sessions.db', dir: '.'})
-}));
+app.use(
+  session({
+    secret: "SECRET",
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
+    //cookie: { secure: true },
+    store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI })
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
