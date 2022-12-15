@@ -5,8 +5,9 @@ const router = express.Router();
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const crypto = require("crypto");
-
-passport.use(
+const User = require("../schema/admin")
+/*
+/*passport.use(
   new LocalStrategy(function verify(username, password, resultCallback) {
     crypto.pbkdf2(
       password,
@@ -37,6 +38,7 @@ passport.use(
   })
 );
 
+
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
     cb(null, { id: user.id, username: user.username });
@@ -48,6 +50,11 @@ passport.deserializeUser(function (user, cb) {
     return cb(null, user);
   });
 });
+*/
+passport.use(new LocalStrategy(User.authenticate()))
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 router.post(
   "/authAdmin",
