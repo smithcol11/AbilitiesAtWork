@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-  <div id="Job Match" class ="mx-auto rounded w-1/2 h-1/3 bg-light p-5 text-center shadow-lg border" >
+  <div id="Job Match" class ="mx-auto rounded w-1/2 h-50 bg-light p-5 text-center shadow-lg border" >
     <h2 class="text-center">Client-Job Match </h2>
     <form method="post" @submit.prevent>
       <div class="p-5 text-center">
