@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-  <div class="Job Menu text-2xl rounded w-1/3 h-100 bg-light p-5 shadow-lg border">
+  <div class="Job Menu mx-auto text-2xl rounded w-1/3 h-100 bg-light p-5 shadow-lg text-center border">
     <h1>Job Menu</h1>
     <div class = "pt-6 text-lg">
     <p>Please select from the following options:</p>
