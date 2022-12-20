@@ -32,6 +32,26 @@ const router = createRouter({
       name: "login",
       component: () => import("../views/Login.vue"),
     },
+    {
+      path: "/AddJOb",
+      name: "AddJob",
+      component: () => import("../components/AddJob.vue"),
+    },
+    {
+      path: "/RemoveJob",
+      name: "RemoveJob",
+      component: () => import("../components/RemoveJob.vue"),
+    },
+    {
+      path: "/EditJob",
+      name: "EditJob",
+      component: () => import("../components/EditJob.vue"),
+    },
+    {
+      path: "/ViewAllJobs",
+      name: "ViewAllJobs",
+      component: () => import("../components/ViewAllJobs.vue"),
+    }
   ],
 });
 export default router;
