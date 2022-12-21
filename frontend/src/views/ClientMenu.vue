@@ -11,7 +11,7 @@ const JobOption = ref(0);
 
 </script>
 <template>
-  <div class="Job Menu mx-auto text-2xl rounded w-1/3 h-100 bg-light p-5 shadow-lg text-center border">
+  <div class="Job Menu mx-auto text-2xl rounded w-2/3 h-100 bg-light p-5 shadow-lg text-center border">
     <h1>Client Menu</h1>
     <div class = "pt-6 text-lg">
     <p>Please select from the following options:</p>
@@ -24,7 +24,7 @@ const JobOption = ref(0);
     >
       <button
         type="add"
-        class=" w-20 bg-accentDark pt-1 py-1 md:pt-2 md:py-2 lg:pt-2 lg:py-2 lg:px-4 lg:py-1 lg:my-5 lg:w-40 md:w-40 sm:w-30 sm:bg-accentDark duration-300 lg:bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded"
+        class="w-40 bg-accentDark pt-1 py-1 md:pt-2 md:py-2 lg:pt-2 lg:py-2 lg:px-4 lg:py-1 lg:my-5 lg:w-40 md:w-40 sm:w-30 sm:bg-accentDark duration-300 lg:bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded"
         @click="navigate"
       >
         Add Client
@@ -39,7 +39,7 @@ const JobOption = ref(0);
     >
       <button
         type="remove"
-        class=" w-20 bg-accentDark pt-1 py-1 md:pt-2 md:py-2 lg:pt-2 lg:py-2 lg:px-4 lg:py-1 lg:my-5 lg:w-40 md:w-40 sm:w-20 sm:bg-accentDark  duration-300 lg:bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded"
+        class=" w-40 bg-accentDark pt-1 py-1 md:pt-2 md:py-2 lg:pt-2 lg:py-2 lg:px-4 lg:py-1 lg:my-5 lg:w-40 md:w-40 sm:w-30 sm:bg-accentDark  duration-300 lg:bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded"
         @click="navigate"
       >
         Remove Client
@@ -54,7 +54,7 @@ const JobOption = ref(0);
     >
       <button
         type="add"
-        class=" w-20 bg-accentDark pt-1 py-1 md:pt-2 md:py-2 lg:pt-2 lg:py-2 lg:px-4 lg:py-1 lg:my-5 lg:w-40 md:w-40 sm:w-20 sm:bg-accentDark duration-300 lg:bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded"
+        class=" w-40 bg-accentDark pt-1 py-1 md:pt-2 md:py-2 lg:pt-2 lg:py-2 lg:px-4 lg:py-1 lg:my-5 lg:w-40 md:w-40 sm:w-30 sm:bg-accentDark duration-300 lg:bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded"
         @click="navigate"
       >
         Edit a Client
@@ -70,7 +70,7 @@ const JobOption = ref(0);
     >
       <button
         type="add"
-        class=" w-20 bg-accentDark pt-1 py-1 md:pt-2 md:py-2 lg:pt-2 lg:py-2 lg:px-4 lg:py-1 lg:my-5 lg:w-40 md:w-40 sm:w-30 sm:bg-accentDark duration-300 lg:bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded"
+        class=" w-40 bg-accentDark pt-1 py-1 md:pt-2 md:py-2 lg:pt-2 lg:py-2 lg:px-4 lg:py-1 lg:my-5 lg:w-40 md:w-40 sm:w-30 sm:bg-accentDark duration-300 lg:bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded"
         @click="navigate"
       >
         View All Clients
