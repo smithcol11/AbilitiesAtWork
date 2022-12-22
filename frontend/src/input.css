@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.jobMenuButton {
+.menuButton {
   @apply w-40 bg-accentDark my-2 py-2 sm:my-5 duration-300 hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded;
 }
