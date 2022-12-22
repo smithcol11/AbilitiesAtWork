@@ -2,10 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const passport = require('passport');
-const session = require('express-session');
-const SQLiteStore = require('connect-sqlite3')(session);
-const cookieParser = require('cookie-parser');
+const passport = require("passport");
+const session = require("express-session");
+const SQLiteStore = require("connect-sqlite3")(session);
+const cookieParser = require("cookie-parser");
 const app = express();
 const port = process.env.PORT || 3000;
 const uri = process.env.ATLAS_URI;
@@ -32,19 +32,16 @@ app.use(
   })
 );
 
-app.use(cookieParser('SECRET'));
 app.use(
-  session({
+  require("express-session")({
     secret: "SECRET",
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false, // don't create session until something stored
-    //cookie: { secure: true },
-    store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI })
+    resave: false,
+    saveUninitialized: false,
   })
 );
 
 app.use(passport.initialize());
-app.use(passport.authenticate('session'));
+app.use(passport.session());
 
 app.use(require("./routes/auth_admin.js"));
 app.use(require("./routes/auth_employee.js"));
