@@ -33,7 +33,7 @@ const router = createRouter({
       component: () => import("../views/Login.vue"),
     },
     {
-      path: "/AddJOb",
+      path: "/AddJob",
       name: "AddJob",
       component: () => import("../components/AddJob.vue"),
     },
@@ -51,7 +51,7 @@ const router = createRouter({
       path: "/ViewAllJobs",
       name: "ViewAllJobs",
       component: () => import("../components/ViewAllJobs.vue"),
-    }
+    },
   ],
 });
 export default router;
