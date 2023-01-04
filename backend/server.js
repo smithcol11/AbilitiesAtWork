@@ -10,6 +10,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const uri = process.env.ATLAS_URI;
 const connection = mongoose.connection;
+const MongoStore = require("connect-mongo");
 
 mongoose
   .connect(uri, {
@@ -31,18 +32,19 @@ app.use(
   })
 );
 
-app.use(cookieParser("SECRET"));
-app.use(session({
-  secret: "SECRET",
-  resave: false, // don't save session if unmodified
-  saveUninitialized: false, // don't create session until something stored
-  store: new SQLiteStore({ db: "sessions.db", dir: "."})
-}));
+app.use(
+  require("express-session")({
+    secret: "SECRET",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(passport.initialize());
-app.use(passport.authenticate("session"));
+app.use(passport.session());
 
-app.use(require("./routes/auth.js"));
+app.use(require("./routes/auth_admin.js"));
+app.use(require("./routes/auth_employee.js"));
 
 const server = app.listen(port, () => {
   console.log(`AAW app listening on port ${port}`);
