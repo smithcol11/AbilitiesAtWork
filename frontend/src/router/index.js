@@ -52,6 +52,26 @@ const router = createRouter({
       name: "ViewAllJobs",
       component: () => import("../components/ViewAllJobs.vue"),
     },
+    {
+      path: "/AddClient",
+      name: "/AddClient",
+      component: () => import("../components/AddClient.vue"),
+    },
+    {
+      path: "/RemoveClient",
+      name: "/RemoveClient",
+      component: () => import("../components/RemoveClient.vue"),
+    },
+    {
+      path: "/EditClient",
+      name: "/EditClient",
+      component: () => import("../components/EditClient.vue"),
+    },
+    {
+      path: "/ViewAllClients",
+      name: "/ViewAllClients",
+      component: () => import("../components/ViewAllClients.vue"),
+    },
   ],
 });
 export default router;
