@@ -1,47 +1,35 @@
-<script setup></script>
+<script setup>
+function toggleNav() {
+  let nav = document.getElementById("nav-bar");
+  nav.classList.toggle("hidden");
+}
+</script>
 <template>
-  <nav>
-    <div class="sm:w-32 sm:h-screen shadow-md text-center px-1 py-5">
-      <ul
-        class="sm:pl-5 grid grid-cols-5 sm:grid-cols-1 text-xs sm:text-sm text-black"
-      >
-        <li class="">
-          <RouterLink
-            class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
-            to="/clientmenu"
-            >Client Menu</RouterLink
-          >
-        </li>
-        <li class="">
-          <RouterLink
-            class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
-            to="/jobmenu"
-            >Job Menu</RouterLink
-          >
-        </li>
-        <li class="">
-          <RouterLink
-            class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
-            to="/search"
-            >Search</RouterLink
-          >
-        </li>
-        <li class="">
-          <RouterLink
-            class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
-            to="/match"
-            >Match</RouterLink
-          >
-        </li>
-        <li class="">
-          <RouterLink
-            class="sm:flex items-center py-4 hover:text-gray-500 duration-300"
-            to="/logout"
-            >Logout</RouterLink
-          >
-        </li>
-      </ul>
+  <nav id="nav-bar" class="hidden sm:block duration-300">
+    <div class="sm:w-32 sm:h-screen shadow-sm text-center bg-light ">
+      <img class="p-3 border-b-2 hidden sm:block" src="../assets/images/logo.png">
+      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
+        to="/clientmenu">Client Menu
+      </RouterLink>
+      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/jobmenu">
+        Job Menu</RouterLink>
+      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/search">
+        Search</RouterLink>
+      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/match">
+        Match</RouterLink>
+      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/logout">
+        Logout</RouterLink>
     </div>
   </nav>
+  <button class="sm:hidden flex mx-auto border-b border-x shadow-l bg-light" @click="toggleNav()">
+    <svg class="h-7 w-32 text-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  </button>
 </template>
-<style></style>
+<style>
+
+</style>
