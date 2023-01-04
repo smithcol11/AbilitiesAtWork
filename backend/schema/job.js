@@ -11,10 +11,11 @@ const jobSchema = new Schema(
 
     detail: {
       category: { type: String, required: true },
-      type: { type: ["Full-Time", "Part-Time"], required: true }, // this was originally worded "Hours per W" from the schema document
+      type: { type: String, enum: ["Full-Time", "Part-Time"], required: true }, // this was originally worded "Hours per W" from the schema document
       shift: {
         // start times
-        type: [
+        type: String, 
+        enum: [
           "Early", // early, before 9
           "Morning", // 9-12
           "Afternoon", // 12-5
@@ -33,5 +34,7 @@ const jobSchema = new Schema(
   { timestamps: true }
 );
 
-const Job = mongoose.model("Job", jobSchema);
+// creating a model
+const Job = mongoose.model("Job", jobSchema); 
+
 module.exports = Job;

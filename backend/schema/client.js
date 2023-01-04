@@ -4,10 +4,10 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const clientSchema = new Schema({
-  userID: {type: Integer, required: true},
+  userID: {type: Number, required: true},
   initials: {type: String, required: true, minlength: 2},
   preference: {
-    industry: {type: [String], required: true},
+    industry: [{type: String, required: true}],
     hours: {type: String, enum: ['Any', 'Part-Time', 'Full-Time'], default: 'Any', required: true}
   }, 
   savedJobs: String,
@@ -23,4 +23,4 @@ const Client = mongoose.model(
   "Client",
   clientSchema
   );
-modeule.exports = Client;
+module.exports = Client;
