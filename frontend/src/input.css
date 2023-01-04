@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* CSS for Navbar */
+
+.router-link-exact-active {
+    @apply bg-accentLight;
+    @apply text-dark;
+  }
+
+/* ------------------ */
