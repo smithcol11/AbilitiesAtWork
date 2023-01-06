@@ -3,8 +3,10 @@ import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import AdminLogin from "../components/AdminLogin.vue";
 import UserLogin from "../components/UserLogin.vue";
 import { ref } from "vue";
+
 const auth = useAuthenticationStore();
 const isAdmin = ref(false);
+
 function ChangeLoginType() {
   isAdmin.value = !isAdmin.value;
 }

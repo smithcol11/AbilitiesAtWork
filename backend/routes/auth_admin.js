@@ -26,8 +26,8 @@ router.post("/loginAdmin", (req, res) => {
   const adminAuth = Admin.authenticate();
   adminAuth(req.body.username, req.body.password, (err, result) => {
     if (err) res.json(err);
-    if (result) res.redirect("/");
-    else res.redirect("/login");
+    if (result) res.json({ auth: true });
+    else res.json({ auth: false });
   });
 });
 

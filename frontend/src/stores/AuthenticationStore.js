@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { useRoute } from "vue-router";
 import { ref } from "vue";
+import router from "../router";
 
 export const useAuthenticationStore = defineStore({
   id: "authorization",
@@ -8,12 +8,13 @@ export const useAuthenticationStore = defineStore({
     isAuthUser: false,
     isAuthAdmin: false,
     username: " ",
-    name: " ",
+    firstName: " ",
+    lastName: " ",
   }),
 
   actions: {
     AdminLogin(password) {
-      fetch("http://localhost:3000/authAdmin", {
+      fetch("http://localhost:3000/loginAdmin", {
         method: "POST",
         body: JSON.stringify({
           username: this.username,
@@ -21,50 +22,41 @@ export const useAuthenticationStore = defineStore({
         }),
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-      }).then((data) => {
-        if (data.status === 200) {
-          nav("/");
-          this.isAuthAdmin = true;
-        } else {
-          console.log(data);
-          updateLoginAttempt(true);
-          //add a message to the user
-        }
-      });
-
-      console.log("Admin login method");
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.auth) {
+            this.isAuthAdmin = true;
+            router.push("/");
+          } else {
+            return false;
+          }
+        });
     },
     UserLogin() {
-      fetch("http://localhost:3000/authUser", {
+      fetch("http://localhost:3000/loginUser", {
         method: "POST",
         body: JSON.stringify({
-          username: this.name,
+          username: this.firstName,
+          password: this.lastName,
         }),
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-      }).then((data) => {
-        if (data.status === 200) {
-          nav("/");
-          this.isAuthUser = true;
-        } else {
-          console.log(data);
-          updateLoginAttempt(true);
-        }
-      });
-      console.log("User login");
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.auth) {
+            this.isAuthUser = true;
+            router.push("/");
+          } else {
+            return false;
+          }
+        });
     },
-    UserLoginDev() {
-      this.isAuthUser = !this.isAuthUser;
-      console.log("UserLoginDev func call");
-    },
-    AdminLoginDev() {
-      this.isAuthAdmin = !this.isAuthAdmin;
-      console.log("AdminLoginDev func call");
-    },
-    Logout(){
+    Logout() {
       this.isAuthAdmin = false;
       this.isAuthUser = false;
-    }
+    },
   },
   getters: {
     IsAuthorizedUser() {

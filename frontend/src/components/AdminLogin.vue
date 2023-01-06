@@ -1,30 +1,22 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
-import { ref } from "vue"
+import { ref } from "vue";
+
 const auth = useAuthenticationStore();
-const adminUser = ref('')
-const adminPassword = ref('')
+const adminUser = ref("");
+const adminPassword = ref("");
 // Actual login function for the admin account(s)
 const updateAdmin = () => {
-  auth.username = adminUser
-  auth.isAuthAdmin = true
-  retfunc = auth.AdminLogin(adminPassword.value)
-  return { retfunc }
-}
-// Test login function for admin account(s)
-const updateAdminDev = () => {
-  auth.username = adminUser
-  auth.isAuthAdmin = true
-  retfunc = auth.AdminLoginDev
-  return { retfunc }
-}
+  auth.username = adminUser;
+  let result = auth.AdminLogin(adminPassword.value);
+};
 </script>
 <template>
   <div id="Admin Login" class="">
-    <h2>Admin Login</h2>
+    <h2>Administrator Login</h2>
     <form method="post" @submit.prevent>
       <div class="py-3">
-        <label class="pr-5" for="email">Username</label>
+        <label class="pr-5" for="username">Username</label>
         <input
           class="rounded border p-1"
           type="username"
@@ -32,7 +24,7 @@ const updateAdminDev = () => {
           id="username"
           aria-describedby="usernameHelp"
           placeholder="Enter username"
-          v-model = "adminUser"
+          v-model="adminUser"
           required
         />
       </div>
@@ -44,7 +36,7 @@ const updateAdminDev = () => {
           name="password"
           id="password"
           placeholder="Enter password"
-          v-model = "adminPassword"
+          v-model="adminPassword"
           required
         />
       </div>
