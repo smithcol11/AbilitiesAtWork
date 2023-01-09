@@ -10,6 +10,7 @@
     "dev:all": "concurrently \"npm run dev --prefix ../backend\" \"npm run dev\" \"npm run tailwind\""
   },
   "dependencies": {
+    "@vueform/multiselect": "^2.5.8",
     "concurrently": "^7.5.0",
     "pinia": "^2.0.23",
     "vue": "^3.2.41",
