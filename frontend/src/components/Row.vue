@@ -1,30 +1,7 @@
  
  
 <template>
-    
-    <!--
-    <div v-for="job_alias in Jobs" 
-    class="text-red-500 flex flex-row">
-        <div class="grow">{{job_alias.organization}}</div>
-        <div class="grow">{{job_alias.detail.category}}</div>
-        <div class="grow">{{job_alias.detail.type}}</div>
-        <div>{{job_alias.detail.shift}}</div>
-        <div>{{job_alias.county}}</div>
-    </div>
-    
-
-    <tbody class="table-auto">
-        <tr>
-            <td>{{job_alias.organization}}</td>
-            <td>{{job_alias.detail.category}}</td>
-            <td>{{job_alias.detail.type}}</td>
-            <td>{{job_alias.detail.shift}}</td>
-            <td>{{job_alias.county}}</td>
-        </tr>
-    </tbody>
-    -->
     <table class="w-full border-collapse border p-2 text-xl">
-
         <tbody>
             <tr v-for="job_alias in Jobs"
             class="bg-white even:bg-gray-300">
@@ -36,7 +13,6 @@
             </tr>
     </tbody>
 </table>    
-
 </template>
  
 <script>
@@ -97,12 +73,9 @@ export default{
             },
             
         }
-}
+   }
        
 }
- 
- 
- 
 </script>
  
 <style>
