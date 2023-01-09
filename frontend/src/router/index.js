@@ -32,6 +32,11 @@ const router = createRouter({
       name: "login",
       component: () => import("../views/Login.vue"),
     },
+    {
+      path: "/jobmenu/createjob",
+      name: "createjob",
+      component: () => import("../views/CreateJob.vue"),
+    },
   ],
 });
 export default router;
