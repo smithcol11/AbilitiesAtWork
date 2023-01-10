@@ -5,10 +5,10 @@
             <tr v-for="job_alias in Jobs"
             class="bg-white even:bg-gray-300 italic">
                 <td class="py-3 pl-2">{{job_alias.organization}}</td>
-                <td class="max-[414px]:hidden">{{job_alias.detail.category}}</td>
-                <td class="max-[414px]:hidden">{{job_alias.detail.type}}</td>
-                <td class="max-[414px]:hidden">{{job_alias.detail.shift}}</td>
-                <td class="max-[414px]:hidden">{{job_alias.county}}</td>
+                <td class="max-sm:hidden">{{job_alias.detail.category}}</td>
+                <td class="max-sm:hidden">{{job_alias.detail.type}}</td>
+                <td class="max-sm:hidden">{{job_alias.detail.shift}}</td>
+                <td class="max-sm:hidden">{{job_alias.county}}</td>
                 <td><button class="text-sm hover:text-sky-700">More info</button></td>
                 <td><button class="text-sm hover:text-red-700">Delete</button></td>
             </tr>
