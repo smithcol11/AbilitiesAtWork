@@ -115,9 +115,7 @@
 
     <span>Notes:</span><br>
     <textarea>
-      v-model="name"
-      type="text"
-      placeholder=""
+     
     </textarea><br>
 
     <br>
