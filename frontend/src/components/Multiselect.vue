@@ -3,8 +3,8 @@
     <Multiselect
       class="vueform-multiselect"
       v-model="value"
-      mode="tags"
-      placeholder="Filter XYZ"
+      mode="multiple"
+      placeholder="Filter"
       :close-on-select="false"
       :groups="true"
       :options="options"

@@ -32,11 +32,6 @@ const router = createRouter({
       name: "login",
       component: () => import("../views/Login.vue"),
     },
-    {
-      path: "/test",
-      name: "test",
-      component: () => import("../components/test.vue"),
-    },
   ],
 });
 export default router;
