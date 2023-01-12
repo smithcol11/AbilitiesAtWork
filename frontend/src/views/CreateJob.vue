@@ -40,12 +40,11 @@
         contactName.value &&
         position.value &&
         contactInfo.value &&
-        selectedIndustries &&
+        selectedIndustries.value &&
         selectedHours.value &&
-        selectedShifts &&
-        selectedCounty &&
+        selectedShifts.value &&
+        selectedCounty.value &&
         address.value) {
-
         alert("New Job Submited");
       } else {
         alert("Required field missing");
@@ -58,7 +57,7 @@
 </script>
 
 <template>
-  <form>
+  <form @submit.prevent="handleSubmit">
     <div class="CreateJob">
       <div class="container ms space-y-2">
         <div class="flex flex-row gap-x-4">
