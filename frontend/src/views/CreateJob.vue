@@ -11,6 +11,8 @@ const selectedHours = ref("");
 const shifts = ref(["Morning", "Afternoon", "Night"]);
 const selectedShifts = ref([]);
 const selectedCounty = ref("");
+const address = ref("");
+const notes = ref("");
 
 //variables used in the first draft. I did not remove these
 //yet since the console will display warnings if they are not defined
@@ -35,7 +37,7 @@ window.onload = FetchIndustries();
 <template>
   <form>
     <div class="CreateJob">
-      <div class="container ms">
+      <div class="container ms space-y-2">
         <div class="flex flex-row gap-x-4">
           <div>
             <span>Business Name: </span>
@@ -109,7 +111,28 @@ window.onload = FetchIndustries();
           <option>Multnomah</option>
           <option>Washington</option>
         </select>
+        <div>
+        <span>Address: </span>
+         <input
+            class="border-2"
+            type="text"
+            v-model="address"
+            placeholder="Enter here"
+        />
+        </div>
+        <div>
+          <span>Notes: </span>
+          <input
+            class="border-2"
+            type="text"
+            v-model="notes"
+            placeholder="Enter here"
+          />
+        </div>
       </div>
+      
+
+
 
       <!--This is here to seperate what the first draft was from what is currently being created-->
       <p>|</p>
