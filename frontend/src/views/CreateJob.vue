@@ -35,15 +35,15 @@ window.onload = FetchIndustries();
 <template>
   <form>
     <div class="CreateJob">
-      <div class="container mx-auto">
-        <div class="flex flex-row">
+      <div class="container ms">
+        <div class="flex flex-row gap-x-4">
           <div>
             <span>Business Name: </span>
             <input
-              class="border-2 border-accentDark placeholder-accentLight"
+              class="border-2"
               type="text"
               v-model="businessName"
-              placeholder="Business Name"
+              placeholder="Enter here"
             />
           </div>
           <div>
@@ -56,7 +56,7 @@ window.onload = FetchIndustries();
             />
           </div>
         </div>
-        <div class="flex flex-row">
+        <div class="flex flex-row gap-x-4">
           <div>
             <span>Position: </span>
             <input
