@@ -33,6 +33,15 @@
     industries = ["Cafe", "Retail", "Food", "Janitorial"];
   }
 
+
+    function submit(){
+      if (this.businessName) {
+        alert("New Job Submited");
+      } else {
+        console.log("Required field missing");
+      }
+     }
+
   //called functions when window is loaded
   window.onload = FetchIndustries();
 
@@ -46,6 +55,7 @@
           <div>
             <span>Business Name: </span>
             <input
+              required
               class="border-2"
               type="text"
               v-model="businessName"
@@ -55,6 +65,7 @@
           <div>
             <span>Contact Name: </span>
             <input
+              required
               class="border-2"
               type="text"
               v-model="contactName"
@@ -66,6 +77,7 @@
           <div>
             <span>Position: </span>
             <input
+              required
               class="border-2"
               type="text"
               v-model="position"
@@ -75,6 +87,7 @@
           <div>
             <span>Contact Info: </span>
             <input
+              required
               class="border-2"
               type="text"
               v-model="contactInfo"
@@ -85,7 +98,7 @@
         <div class="flex flex-wrap gap-x-4">
           <span>Industry:</span>
           <div v-for="industry in industries">
-            <input 
+            <input
               type="checkbox"
               :value="industry"
               v-model="selectedIndustries"
@@ -93,10 +106,15 @@
             <span class="checkbox-label">{{ industry }}</span>
           </div>
         </div>
+
         <div class="flex flex-wrap gap-x-4">
           <span>Hours:</span>
           <div v-for="hour in hours">
-            <input type="radio" :value="hour" v-model="selectedHours" />
+            <input              
+              type="radio" 
+              :value="hour" 
+              v-model="selectedHours" 
+            />
             <span class="checkbox-label">{{ hour }}</span>
           </div>
         </div>
@@ -108,7 +126,7 @@
           </div>
         </div>
         <span> County: </span>
-        <select v-model="selectedCounty">
+        <select required v-model="selectedCounty">
           <option disabled value="">Please select one</option>
           <option>Clackamas</option>
           <option>Multnomah</option>
@@ -117,6 +135,7 @@
         <div>
         <span>Address: </span>
          <input
+            required
             class="border-2"
             type="text"
             v-model="address"
@@ -129,14 +148,14 @@
           <!-- <datePick /> -->
         </div>
 
+        <span>Notes (optional): </span>
         <div>
-          <span>Notes: </span>
-          <input
+          <textarea
             class="border-2"
             type="text"
             v-model="notes"
             placeholder=""
-          />
+          ></textarea>
         </div>
       </div>
 
