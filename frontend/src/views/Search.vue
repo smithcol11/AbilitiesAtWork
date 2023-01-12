@@ -1,85 +1,4 @@
 <script>
-
-//import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';     //optional for column grouping
-import Row from 'primevue/row'; 
-/*
-export const carsData = {
-    "data": [
-        {"brand": "Volkswagen", "year": 2012, "color": "Orange", "vin": "dsad231ff"},
-        {"brand": "Audi", "year": 2011, "color": "Black", "vin": "gwregre345"},
-        {"brand": "Renault", "year": 2005, "color": "Gray", "vin": "h354htr"},
-        {"brand": "BMW", "year": 2003, "color": "Blue", "vin": "j6w54qgh"},
-        {"brand": "Mercedes", "year": 1995, "color": "Orange", "vin": "hrtwy34"},
-        {"brand": "Volvo", "year": 2005, "color": "Black", "vin": "jejtyj"},
-        {"brand": "Honda", "year": 2012, "color": "Yellow", "vin": "g43gr"},
-        {"brand": "Jaguar", "year": 2013, "color": "Orange", "vin": "greg34"},
-        {"brand": "Ford", "year": 2000, "color": "Black", "vin": "h54hw5"},
-        {"brand": "Fiat", "year": 2013, "color": "Red", "vin": "245t2s"}
-    ]
-}
-
-const carsCol = {
-  "col": [
-            {field: 'vin', header: 'Vin'},
-            {field: 'year', header: 'Year'},
-            {field: 'brand', header: 'Brand'},
-            {field: 'color', header: 'Color'}
-        ]
-}
-
-class CarService {
-
-  getCarsSmall() {
-    return carsData;
-  }
-
-  getCarsMedium() {
-    return carsData;
-  }
-
-  getCarsLarge() {
-    return carsData;
-}
-}
-
-export default {
-    data() {
-        return {
-            columns: carsCol.col,
-            cars: [
-            {"brand": "Volkswagen", "year": 2012, "color": "Orange", "vin": "dsad231ff"},
-            {"brand": "Audi", "year": 2011, "color": "Black", "vin": "gwregre345"},
-            {"brand": "Renault", "year": 2005, "color": "Gray", "vin": "h354htr"},
-            {"brand": "BMW", "year": 2003, "color": "Blue", "vin": "j6w54qgh"},
-            {"brand": "Mercedes", "year": 1995, "color": "Orange", "vin": "hrtwy34"},
-            {"brand": "Volvo", "year": 2005, "color": "Black", "vin": "jejtyj"},
-            {"brand": "Honda", "year": 2012, "color": "Yellow", "vin": "g43gr"},
-            {"brand": "Jaguar", "year": 2013, "color": "Orange", "vin": "greg34"},
-            {"brand": "Ford", "year": 2000, "color": "Black", "vin": "h54hw5"},
-            {"brand": "Fiat", "year": 2013, "color": "Red", "vin": "245t2s"}
-                  ]
-        }
-    },
-    carService: null,
-    created() {
-        this.carService = new CarService();
-
-        this.columns = [
-            {field: 'vin', header: 'Vin'},
-            {field: 'year', header: 'Year'},
-            {field: 'brand', header: 'Brand'},
-            {field: 'color', header: 'Color'}
-        ];
-    },
-    mounted() {
-        //this.carService.getCarsSmall().then(data => this.cars = data);
-        this.cars = carsData.data;
-    }
-}
-*/
-
 export default {
     data() {
         return {
@@ -111,7 +30,7 @@ export default {
   <div class="Search">
     <h1>This is the Search page</h1>
   </div>
-  <DataTable :value="cars" :loading="loading" :paginator="true" :rows="10">
+  <DataTable :value="cars" class="p-datatable-sm pt-10" :loading="loading" :paginator="true" :rows="10">
     <template #empty>
       <h1>No records found</h1>
     </template>
