@@ -2,16 +2,31 @@
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import { ref } from "vue";
 
-const authStore = useAuthenticationStore();
+const auth = useAuthenticationStore();
 const firstName = ref("");
 const lastName = ref("");
+const render = ref(false);
+const sec = ref(3);
 // reference material: https://www.youtube.com/watch?v=0QN74j3EyQc
 // This is the function that will be used for actually logging in
-const updateUser = () => {
-  authStore.firstName = firstName;
-  authStore.lastName = lastName;
-  let result = authStore.UserLogin();
+const updateUser = async () => {
+  auth.firstName = firstName.value;
+  auth.lastName = lastName.value;
+  let result = await auth.UserLogin();
+  if (!result) errorMessage();
 };
+
+function errorMessage() {
+  render.value = true;
+  let timer = setInterval(() => {
+    sec.value--;
+    if (sec.value <= 0) {
+      sec.value = 3;
+      clearInterval(timer);
+      render.value = false;
+    }
+  }, 1000);
+}
 </script>
 <template>
   <div id="User Login" class="">
@@ -49,6 +64,21 @@ const updateUser = () => {
       >
         Sign in
       </button>
+      <button
+        type="reset"
+        class="ml-1 duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded"
+      >
+        Reset
+      </button>
     </form>
+    <Transition>
+      <div
+        v-if="render"
+        class="w-full max-w-md animate-bounce bg-rose-100 rounded-lg mt-10 px-6 py-6 mb-4 text-base"
+        role="alert"
+      >
+        First or last name incorrect.
+      </div>
+    </Transition>
   </div>
 </template>

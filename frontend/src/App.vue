@@ -7,7 +7,7 @@ const auth = useAuthenticationStore();
 </script>
 
 <template>
-  <div v-if="!auth.IsAuthorizedAdmin && !auth.IsAuthorizedUser">
+  <div v-if="!auth.isAuthAdmin && !auth.isAuthUser">
     <div class="sm:flex">
       <div class="p-5 sm:text-align-center h-screen w-full">
         <RouterView />

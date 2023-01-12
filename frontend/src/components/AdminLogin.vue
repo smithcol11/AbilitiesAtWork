@@ -5,11 +5,26 @@ import { ref } from "vue";
 const auth = useAuthenticationStore();
 const adminUser = ref("");
 const adminPassword = ref("");
+const render = ref(false);
+const sec = ref(3);
 // Actual login function for the admin account(s)
-const updateAdmin = () => {
-  auth.username = adminUser;
-  let result = auth.AdminLogin(adminPassword.value);
+const updateAdmin = async () => {
+  auth.username = adminUser.value;
+  let result = await auth.AdminLogin(adminPassword.value);
+  if (!result) errorMessage();
 };
+
+function errorMessage() {
+  render.value = true;
+  let timer = setInterval(() => {
+    sec.value--;
+    if (sec.value <= 0) {
+      sec.value = 3;
+      clearInterval(timer);
+      render.value = false;
+    }
+  }, 1000);
+}
 </script>
 <template>
   <div id="Admin Login" class="">
@@ -47,6 +62,22 @@ const updateAdmin = () => {
       >
         Sign in
       </button>
+      <button
+        type="reset"
+        class="ml-1 duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded"
+      >
+        Reset
+      </button>
     </form>
+    <Transition>
+      <div
+        v-if="render"
+        class="w-full max-w-md animate-bounce bg-rose-100 rounded-lg mt-10 px-6 py-6 mb-4 text-base"
+        role="alert"
+      >
+        Username or password incorrect.
+      </div>
+    </Transition>
   </div>
 </template>
+<!-- yamhill, mult, clackamas, wash -->

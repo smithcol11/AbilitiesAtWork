@@ -35,14 +35,14 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach(async(to)=>{
-  const publicPages = ['/login'];
+router.beforeEach(async (to) => {
+  const publicPages = ["/login"];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthenticationStore();
 
   //return to '/login' if user or admin is not authorized
-  if(authRequired && (!auth.IsAuthorizedAdmin && !auth.IsAuthorizedUser)){
-    return '/login';
+  if (authRequired && !auth.isAuthAdmin && !auth.isAuthUser) {
+    return "/login";
   }
-  })
+});
 export default router;
