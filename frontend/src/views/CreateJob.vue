@@ -76,25 +76,26 @@ window.onload = FetchIndustries();
             />
           </div>
         </div>
-        <div class="flex flex-wrap">
+        <div class="flex flex-wrap gap-x-4">
           <span>Industry:</span>
           <div v-for="industry in industries">
             <input
               type="checkbox"
               :value="industry"
               v-model="selectedIndustries"
+              
             />
             <span class="checkbox-label">{{ industry }}</span>
           </div>
         </div>
-        <div class="flex flex-wrap">
+        <div class="flex flex-wrap gap-x-4">
           <span>Hours:</span>
           <div v-for="hour in hours">
             <input type="radio" :value="hour" v-model="selectedHours" />
             <span class="checkbox-label">{{ hour }}</span>
           </div>
         </div>
-        <div class="flex flex-wrap">
+        <div class="flex flex-wrap gap-x-4">
           <span>Shift(s):</span>
           <div v-for="shift in shifts">
             <input type="checkbox" :value="shift" v-model="selectedShifts" />
