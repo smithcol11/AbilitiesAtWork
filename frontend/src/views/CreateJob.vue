@@ -49,16 +49,16 @@
               class="border-2"
               type="text"
               v-model="businessName"
-              placeholder="Enter here"
+              placeholder=""
             />
           </div>
           <div>
             <span>Contact Name: </span>
             <input
-              class="border-2 border-accentDark placeholder-accentLight"
+              class="border-2"
               type="text"
               v-model="contactName"
-              placeholder="Contact Name"
+              placeholder=""
             />
           </div>
         </div>
@@ -66,30 +66,29 @@
           <div>
             <span>Position: </span>
             <input
-              class="border-2 border-accentDark placeholder-accentLight"
+              class="border-2"
               type="text"
               v-model="position"
-              placeholder="Position"
+              placeholder=""
             />
           </div>
           <div>
             <span>Contact Info: </span>
             <input
-              class="border-2 border-accentDark placeholder-accentLight"
+              class="border-2"
               type="text"
               v-model="contactInfo"
-              placeholder="Contact Info "
+              placeholder=""
             />
           </div>
         </div>
         <div class="flex flex-wrap gap-x-4">
           <span>Industry:</span>
           <div v-for="industry in industries">
-            <input
+            <input 
               type="checkbox"
               :value="industry"
               v-model="selectedIndustries"
-              
             />
             <span class="checkbox-label">{{ industry }}</span>
           </div>
@@ -121,17 +120,14 @@
             class="border-2"
             type="text"
             v-model="address"
-            placeholder="Enter here"
+            placeholder=""
           />
         </div>
 
-        <!-- <datePick /> -->
-
-        <!-- <template>
-          <div>
-            <datePick />
-          </div>
-        </template> -->
+        <div>
+          <label>Date Posted: </label>
+          <!-- <datePick /> -->
+        </div>
 
         <div>
           <span>Notes: </span>
@@ -139,14 +135,15 @@
             class="border-2"
             type="text"
             v-model="notes"
-            placeholder="Enter here"
+            placeholder=""
           />
         </div>
       </div>
 
       <br/>
       <div>
-        <button class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 rounded">
+        <button @click="submit"
+          class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 rounded">
           SUBMIT
         </button>
       </div>
