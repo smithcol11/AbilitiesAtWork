@@ -35,10 +35,20 @@
 
 
     function submit(){
-      if (this.businessName) {
+      if (
+        businessName.value &&
+        contactName.value &&
+        position.value &&
+        contactInfo.value &&
+        selectedIndustries &&
+        selectedHours.value &&
+        selectedShifts &&
+        selectedCounty &&
+        address.value) {
+
         alert("New Job Submited");
       } else {
-        console.log("Required field missing");
+        alert("Required field missing");
       }
      }
 
@@ -110,7 +120,8 @@
         <div class="flex flex-wrap gap-x-4">
           <span>Hours:</span>
           <div v-for="hour in hours">
-            <input              
+            <input
+              required              
               type="radio" 
               :value="hour" 
               v-model="selectedHours" 
