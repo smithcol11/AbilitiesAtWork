@@ -1,7 +1,6 @@
 <script setup>
   import { ref } from "vue";
-  import Datepicker from '@vuepic/vue-datepicker';
-  import '@vuepic/vue-datepicker/src/VueDatePicker/style/main.scss';
+  import datePick from '../components/DatePick.vue';
 
   const businessName = ref("");
   const contactName = ref("");
@@ -126,10 +125,13 @@
           />
         </div>
 
-        <div>
-          <span>Date Posted:</span>
-          <!-- <Datepicker v-model="datePosted"></Datepicker> -->
-        </div>
+        <!-- <datePick /> -->
+
+        <!-- <template>
+          <div>
+            <datePick />
+          </div>
+        </template> -->
 
         <div>
           <span>Notes: </span>
@@ -142,9 +144,15 @@
         </div>
       </div>
 
-      <br />
-      <button class="btn">SUBMIT</button>
+      <br/>
+      <div>
+        <button class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 rounded">
+          SUBMIT
+        </button>
+      </div>
+      <br/>
     </div>
+    <span>---------------------------------------------</span>
     <p>businessName: {{ businessName }}</p>
     <p>Contact Name: {{ contactName }}</p>
     <p>Position: {{ position }}</p>
@@ -153,5 +161,7 @@
     <p>Selected hours: {{ selectedHours }}</p>
     <p>Selected shifts: {{ selectedShifts }}</p>
     <p>Selected county: {{ selectedCounty }}</p>
+    <p>Address: {{ address }}</p>
+    <p>Notes: {{ notes }}</p>
   </form>
 </template>
