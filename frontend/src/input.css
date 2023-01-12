@@ -18,7 +18,11 @@
   --ms-tag-bg: theme(colors.accentDark);
   --ms-tag-radius: 0px;
   --ms-ring-width: 0px;
+  --ms-font-size: theme(fontSize.sm);
+  --ms-group-label-bg-selected: theme(colors.accentDark);
   --ms-group-label-bg-selected-pointed: theme(colors.accentDark);
+  --ms-option-bg-selected: theme(colors.accentDark);
+  --ms-option-bg-selected-pointed: theme(colors.accentDark);
 }
 
 /* ------------------ */

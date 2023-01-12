@@ -6,6 +6,7 @@
       mode="multiple"
       placeholder="Filter"
       :close-on-select="false"
+      :hideSelected="false"
       :groups="true"
       :options="options"
     />
