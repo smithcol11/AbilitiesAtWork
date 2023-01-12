@@ -15,7 +15,6 @@
 
 .vueform-multiselect {
   --ms-radius: 0px;
-  --ms-tag-bg: theme(colors.accentDark);
   --ms-tag-radius: 0px;
   --ms-ring-width: 0px;
   --ms-font-size: theme(fontSize.sm);
