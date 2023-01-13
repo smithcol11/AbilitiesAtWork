@@ -124,7 +124,7 @@ window.onload = FetchIndustries();
           <input
             required
             class="border-2"
-            type="text"
+            type="date"
             v-model="date"
             placeholder="(mm/dd/yyyy)"
           />
@@ -163,5 +163,6 @@ window.onload = FetchIndustries();
     <p>Selected county: {{ selectedCounty }}</p>
     <p>Address: {{ address }}</p>
     <p>Notes: {{ notes }}</p>
+    <p>Date: {{ date }}</p>
   </form>
 </template>
