@@ -1,30 +1,25 @@
 <script setup>
 import Multiselect from "@vueform/multiselect";
-import asd from "../components/Multiselect.vue";
 import { ref } from "vue";
 
+const selectedContactName = ref("");
+let contactNameOptions = [];
+const contactInfo = ref(null);
 const selectedBusinessName = ref("");
 let businessNameOptions = [];
 let industryOptions = [];
 const selectedIndustries = ref([]);
-const selectedContactName = ref("");
-let contactNameOptions = [];
 const selectedPosition = ref("");
 let positionOptions = [];
-const countyOptions = ref(["Clackamas", "Multnomah", "Yamhill", "Washington"]);
-const selectedCounty = ref("");
-const contactName = ref("");
-const position = ref("");
-const contactInfo = ref(null);
-
-const hoursOptions = ref(["Full-Time", "Part-Time", "Both"]);
-const selectedHours = ref("");
 const shiftOptions = ref(["Morning", "Afternoon", "Night"]);
 const selectedShifts = ref([]);
-
-const address = ref("");
-const notes = ref("");
+const hoursOptions = ref(["Full-Time", "Part-Time", "Both"]);
+const selectedHours = ref("");
 const date = ref();
+const address = ref("");
+const countyOptions = ref(["Clackamas", "Multnomah", "Yamhill", "Washington"]);
+const selectedCounty = ref("");
+const notes = ref("");
 
 //Will be used to fetch industries when industries are added to the database.
 //Used dummy data in the meantime
@@ -115,6 +110,7 @@ window.onload = FetchDataOptions();
               class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
               placeholder="Enter Contact Info"
               v-model="contactInfo"
+              required
             />
           </div>
         </div>
@@ -214,6 +210,7 @@ window.onload = FetchDataOptions();
               type="date"
               class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-purple-600 focus:outline-none"
               v-model="date"
+              required
             />
           </div>
         </div>
@@ -228,6 +225,7 @@ window.onload = FetchDataOptions();
               class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
               placeholder="Enter Address"
               v-model="address"
+              required
             />
           </div>
         </div>
@@ -270,6 +268,19 @@ window.onload = FetchDataOptions();
         </button>
       </div>
     </div>
+    <br />
+    <span>---------------------------------------------</span>
+    <p>Contact Name: {{ selectedContactName }}</p>
+    <p>Contact Info: {{ contactInfo }}</p>
+    <p>Business Name: {{ selectedBusinessName }}</p>
+    <p>Industry: {{ selectedIndustries }}</p>
+    <p>Position: {{ selectedPosition }}</p>
+    <p>Selected shifts: {{ selectedShifts }}</p>
+    <p>Selected hours: {{ selectedHours }}</p>
+    <p>Date: {{ date }}</p>
+    <p>Address: {{ address }}</p>
+    <p>Selected county: {{ selectedCounty }}</p>
+    <p>Notes: {{ notes }}</p>
   </form>
 </template>
 <style src="@vueform/multiselect/themes/default.css"></style>
