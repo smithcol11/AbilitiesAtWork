@@ -1,147 +1,266 @@
 <script setup>
+import Multiselect from "@vueform/multiselect";
+import asd from "../components/Multiselect.vue";
 import { ref } from "vue";
-import Datepicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
-const businessName = ref("");
+
+const selectedBusinessName = ref("");
+let businessNameOptions = [];
+let industryOptions = [];
+const selectedIndustries = ref([]);
+const selectedContactName = ref("");
+let contactNameOptions = [];
+const selectedPosition = ref("");
+let positionOptions = [];
+const countyOptions = ref(["Clackamas", "Multnomah", "Yamhill", "Washington"]);
+const selectedCounty = ref("");
 const contactName = ref("");
 const position = ref("");
-const contactInfo = ref("");
-let industries = [];
-const selectedIndustries = ref([]);
-const hours = ref(["Full-Time", "Part-Time", "Both"]);
+const contactInfo = ref(null);
+
+const hoursOptions = ref(["Full-Time", "Part-Time", "Both"]);
 const selectedHours = ref("");
-const shifts = ref(["Morning", "Afternoon", "Night"]);
+const shiftOptions = ref(["Morning", "Afternoon", "Night"]);
 const selectedShifts = ref([]);
-const selectedCounty = ref("");
+
 const address = ref("");
 const notes = ref("");
 const date = ref();
 
 //Will be used to fetch industries when industries are added to the database.
 //Used dummy data in the meantime
+function FetchDataOptions() {
+  console.log("Called 'FetchData' function");
+  FetchIndustries();
+  FetchBusinessNames();
+  FetchContactNames();
+  FetchPositions();
+}
+function FetchContactNames() {
+  console.log("Called 'FetchContactNames' function");
+  contactNameOptions = [
+    "Keith Karrie",
+    "Byrne Earnestine",
+    "Dinah Kelsi",
+    "Caleb Cailin",
+  ];
+}
 function FetchIndustries() {
   console.log("Called 'FetchIndustries' function");
-  industries = ["Cafe", "Retail", "Food", "Janitorial"];
+  industryOptions = [
+    "Production",
+    "Manufacturing",
+    "Finance",
+    "Construction",
+    "Hospitality",
+    "Accounting",
+  ];
+}
+function FetchBusinessNames() {
+  console.log("Called 'FetchBusiness' function");
+  businessNameOptions = [
+    "Nike",
+    "Kroger",
+    "Intel",
+    "Amazon",
+    "OHSU",
+    "Autodesk",
+    "Ford",
+  ];
+}
+function FetchPositions() {
+  console.log("Called 'FetchPositions' function");
+  positionOptions = [
+    "Cashier",
+    "Cook",
+    "Clerk",
+    "Janitor",
+    "Manager",
+    "Sales Rep",
+    "Host",
+  ];
 }
 
 //called functions when window is loaded
-window.onload = FetchIndustries();
+window.onload = FetchDataOptions();
 </script>
 
 <template>
   <form @submit.prevent>
     <div class="JobCreation">
-      <div class="container ms space-y-2">
-        <div class="flex flex-row gap-x-4">
-          <div>
-            <span>Business Name: </span>
-            <input
-              class="border-2"
-              type="text"
-              v-model="businessName"
-              placeholder=""
-              required
-            />
-          </div>
-          <div>
-            <span>Contact Name: </span>
-            <input
-              class="border-2"
-              type="text"
-              v-model="contactName"
-              placeholder=""
-              required
-            />
-          </div>
+      <div class="grid grid-cols-2 gap-4 place-content-around h-84 max-w-md">
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Contact Name</label
+          >
+          <multiselect
+            class="vueform-multiselect"
+            v-model="selectedContactName"
+            :options="contactNameOptions"
+            :clear-on-select="true"
+            :preserve-search="true"
+            :searchable="true"
+            :show-labels="false"
+            placeholder="Select Contact"
+            required
+          >
+          </multiselect>
         </div>
-        <div class="flex flex-row gap-x-4">
-          <div>
-            <span>Position: </span>
+        <div>
+          <div class="basis-1/5">
+            <label class="form-label inline-block mb-2 text-gray-700"
+              >Contact Info</label
+            >
             <input
-              class="border-2"
               type="text"
-              v-model="position"
-              placeholder=""
-              required
-            />
-          </div>
-          <div>
-            <span>Contact Info: </span>
-            <input
-              class="border-2"
-              type="text"
+              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
+              placeholder="Enter Contact Info"
               v-model="contactInfo"
-              placeholder=""
-              required
             />
           </div>
         </div>
-        <div class="flex flex-wrap gap-x-4">
-          <span>Industry:</span>
-          <div v-for="industry in industries" :key="industry">
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Business Name</label
+          >
+          <multiselect
+            class="vueform-multiselect"
+            v-model="selectedBusinessName"
+            :options="businessNameOptions"
+            :close-on-select="true"
+            :searchable="true"
+            :preserve-search="true"
+            :hideSelected="false"
+            placeholder="Select Business"
+            label="selectedBusinessName"
+            required
+          >
+          </multiselect>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Industry</label
+          >
+          <multiselect
+            class="vueform-multiselect"
+            v-model="selectedIndustries"
+            :options="industryOptions"
+            :clear-on-select="true"
+            :preserve-search="true"
+            :searchable="true"
+            :show-labels="false"
+            placeholder="Select industy"
+            required
+            :multiple="true"
+          >
+          </multiselect>
+        </div>
+
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Position</label
+          >
+          <multiselect
+            class="vueform-multiselect"
+            v-model="selectedPosition"
+            :options="positionOptions"
+            :clear-on-select="true"
+            :preserve-search="true"
+            :searchable="true"
+            placeholder="Select Position"
+            track-by="selectedPosition"
+            required
+          >
+          </multiselect>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Shift</label
+          >
+          <multiselect
+            class="vueform-multiselect"
+            v-model="selectedShifts"
+            :options="shiftOptions"
+            :clear-on-select="true"
+            :preserve-search="true"
+            :searchable="true"
+            placeholder="Select Shift"
+            required
+          >
+          </multiselect>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Hours</label
+          >
+          <multiselect
+            class="vueform-multiselect"
+            v-model="selectedHours"
+            :options="hoursOptions"
+            :clear-on-select="true"
+            :preserve-search="true"
+            :searchable="true"
+            placeholder="Select Hours"
+            track-by="selectedHours"
+            required
+          >
+          </multiselect>
+        </div>
+        <div>
+          <div class="basis-1/5">
+            <label class="form-label inline-block mb-2 text-gray-700"
+              >Date Posted</label
+            >
             <input
-              type="checkbox"
-              :value="industry"
-              v-model="selectedIndustries"
+              type="date"
+              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-purple-600 focus:outline-none"
+              v-model="date"
             />
-            <span class="checkbox-label">{{ industry }}</span>
           </div>
-        </div>
-        <div class="flex flex-wrap gap-x-4">
-          <span>Hours:</span>
-          <div v-for="hour in hours" :key="hour" required>
-            <input type="radio" :value="hour" v-model="selectedHours" />
-            <span class="checkbox-label">{{ hour }}</span>
-          </div>
-        </div>
-        <div class="flex flex-wrap gap-x-4">
-          <span>Shift(s):</span>
-          <div v-for="shift in shifts" :key="shift">
-            <input type="checkbox" :value="shift" v-model="selectedShifts" />
-            <span class="checkbox-label">{{ shift }}</span>
-          </div>
-        </div>
-        <span> County: </span>
-        <select v-model="selectedCounty" required>
-          <option disabled value="">Please select one</option>
-          <option>Clackamas</option>
-          <option>Multnomah</option>
-          <option>Washington</option>
-        </select>
-        <div>
-          <span>Address: </span>
-          <input
-            required
-            class="border-2"
-            type="text"
-            v-model="address"
-            placeholder=""
-          />
         </div>
 
         <div>
-          <label>Date Posted: </label>
-          <input
-            required
-            class="border-2"
-            type="date"
-            v-model="date"
-            placeholder="(mm/dd/yyyy)"
-          />
-          <!--<Datepicker v-model="date" :enable-time-picker="false"></Datepicker>-->
+          <div class="basis-1/5">
+            <label class="form-label inline-block mb-2 text-gray-700"
+              >Address</label
+            >
+            <input
+              type="text"
+              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
+              placeholder="Enter Address"
+              v-model="address"
+            />
+          </div>
         </div>
-
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >County</label
+          >
+          <multiselect
+            class="vueform-multiselect"
+            v-model="selectedCounty"
+            :options="countyOptions"
+            :clear-on-select="true"
+            :preserve-search="true"
+            :searchable="true"
+            placeholder="Select County"
+            track-by="selectedCounty"
+            required
+          >
+          </multiselect>
+        </div>
         <div>
-          <span>Notes: </span>
-          <p style="white-space: pre-line"></p>
-          <textarea
-            v-model="notes"
-            placeholder="add notes (optional)"
-          ></textarea>
+          <div class="basis-1/5">
+            <label class="form-label inline-block mb-2 text-gray-700"
+              >Notes</label
+            >
+            <p style="white-space: pre-line"></p>
+            <textarea
+              v-model="notes"
+              placeholder="Add Notes (Optional)"
+            ></textarea>
+          </div>
         </div>
       </div>
-
-      <br />
       <div>
         <button
           @click="submit"
@@ -150,19 +269,7 @@ window.onload = FetchIndustries();
           SUBMIT
         </button>
       </div>
-      <br />
     </div>
-    <span>---------------------------------------------</span>
-    <p>businessName: {{ businessName }}</p>
-    <p>Contact Name: {{ contactName }}</p>
-    <p>Position: {{ position }}</p>
-    <p>Contact Info: {{ contactInfo }}</p>
-    <p>Selected industries: {{ selectedIndustries }}</p>
-    <p>Selected hours: {{ selectedHours }}</p>
-    <p>Selected shifts: {{ selectedShifts }}</p>
-    <p>Selected county: {{ selectedCounty }}</p>
-    <p>Address: {{ address }}</p>
-    <p>Notes: {{ notes }}</p>
-    <p>Date: {{ date }}</p>
   </form>
 </template>
+<style src="@vueform/multiselect/themes/default.css"></style>
