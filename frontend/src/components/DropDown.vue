@@ -1,7 +1,7 @@
 <script setup>
 import Multiselect from "@vueform/multiselect";
 import { ref } from "vue";
-const options = ref(["cool", "beans"]);
+const options = ref("");
 const choice = ref(["CHOICIE 1", "CHOICE 2"]);
 const placeholder = ref("");
 </script>
