@@ -1,7 +1,7 @@
 <script setup>
-import Multiselect from "@vueform/multiselect";
 import { ref } from "vue";
-
+import DropDown from "../components/DropDown.vue";
+import TextBox from "../components/TextBox.vue";
 const selectedContactName = ref("");
 let contactNameOptions = [];
 const contactInfo = ref(null);
@@ -87,131 +87,82 @@ window.onload = FetchDataOptions();
           <label class="form-label inline-block mb-2 text-gray-700"
             >Contact Name</label
           >
-          <multiselect
-            class="vueform-multiselect"
+          <DropDown
             v-model="selectedContactName"
             :options="contactNameOptions"
-            :clear-on-select="true"
-            :preserve-search="true"
-            :searchable="true"
-            :show-labels="false"
             placeholder="Select Contact"
-            required
-          >
-          </multiselect>
+          ></DropDown>
         </div>
         <div>
           <div class="basis-1/5">
             <label class="form-label inline-block mb-2 text-gray-700"
               >Contact Info</label
             >
-            <input
+            <TextBox
               type="text"
-              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
               placeholder="Enter Contact Info"
               v-model="contactInfo"
-              required
-            />
+            >
+            </TextBox>
           </div>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >Business Name</label
           >
-          <multiselect
-            class="vueform-multiselect"
+          <DropDown
             v-model="selectedBusinessName"
             :options="businessNameOptions"
-            :close-on-select="true"
-            :searchable="true"
-            :preserve-search="true"
-            :hideSelected="false"
             placeholder="Select Business"
-            label="selectedBusinessName"
-            required
-          >
-          </multiselect>
+          ></DropDown>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >Industry</label
           >
-          <multiselect
-            class="vueform-multiselect"
+          <DropDown
             v-model="selectedIndustries"
             :options="industryOptions"
-            :clear-on-select="true"
-            :preserve-search="true"
-            :searchable="true"
-            :show-labels="false"
             placeholder="Select industy"
-            required
-            :multiple="true"
-          >
-          </multiselect>
+          ></DropDown>
         </div>
 
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >Position</label
           >
-          <multiselect
-            class="vueform-multiselect"
+          <DropDown
             v-model="selectedPosition"
             :options="positionOptions"
-            :clear-on-select="true"
-            :preserve-search="true"
-            :searchable="true"
             placeholder="Select Position"
-            track-by="selectedPosition"
-            required
-          >
-          </multiselect>
+          ></DropDown>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >Shift</label
           >
-          <multiselect
-            class="vueform-multiselect"
+          <DropDown
             v-model="selectedShifts"
             :options="shiftOptions"
-            :clear-on-select="true"
-            :preserve-search="true"
-            :searchable="true"
             placeholder="Select Shift"
-            required
-          >
-          </multiselect>
+          ></DropDown>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >Hours</label
           >
-          <multiselect
-            class="vueform-multiselect"
+          <DropDown
             v-model="selectedHours"
             :options="hoursOptions"
-            :clear-on-select="true"
-            :preserve-search="true"
-            :searchable="true"
             placeholder="Select Hours"
-            track-by="selectedHours"
-            required
-          >
-          </multiselect>
+          ></DropDown>
         </div>
         <div>
           <div class="basis-1/5">
             <label class="form-label inline-block mb-2 text-gray-700"
               >Date Posted</label
             >
-            <input
-              type="date"
-              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-purple-600 focus:outline-none"
-              v-model="date"
-              required
-            />
+            <TextBox type="date" v-model="date"> </TextBox>
           </div>
         </div>
 
@@ -220,31 +171,23 @@ window.onload = FetchDataOptions();
             <label class="form-label inline-block mb-2 text-gray-700"
               >Address</label
             >
-            <input
+            <TextBox
               type="text"
-              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
-              placeholder="Enter Address"
+              placeholder="Enter Address Info"
               v-model="address"
-              required
-            />
+            >
+            </TextBox>
           </div>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >County</label
           >
-          <multiselect
-            class="vueform-multiselect"
+          <DropDown
             v-model="selectedCounty"
             :options="countyOptions"
-            :clear-on-select="true"
-            :preserve-search="true"
-            :searchable="true"
             placeholder="Select County"
-            track-by="selectedCounty"
-            required
-          >
-          </multiselect>
+          ></DropDown>
         </div>
         <div>
           <div class="basis-1/5">
@@ -283,4 +226,3 @@ window.onload = FetchDataOptions();
     <p>Notes: {{ notes }}</p>
   </form>
 </template>
-<style src="@vueform/multiselect/themes/default.css"></style>

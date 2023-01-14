@@ -1,0 +1,22 @@
+<script setup>
+import Multiselect from "@vueform/multiselect";
+import { ref } from "vue";
+const options = ref(["cool", "beans"]);
+const choice = ref(["CHOICIE 1", "CHOICE 2"]);
+const placeholder = ref("");
+</script>
+<style src="@vueform/multiselect/themes/default.css"></style>
+<template>
+  <multiselect
+    class="vueform-multiselect"
+    v-model="choice"
+    :options="options"
+    :clear-on-select="true"
+    :preserve-search="true"
+    :searchable="true"
+    :show-labels="false"
+    :placeholder="placeholder"
+    required
+  >
+  </multiselect>
+</template>
