@@ -10,11 +10,12 @@
     "dev:all": "concurrently \"npm run dev --prefix ../backend\" \"npm run dev\" \"npm run tailwind\""
   },
   "dependencies": {
+    "@vueform/multiselect": "^2.5.8",
+    "@vuepic/vue-datepicker": "^3.6.4",
     "concurrently": "^7.5.0",
     "pinia": "^2.0.23",
     "vue": "^3.2.41",
-    "vue-router": "^4.1.5",
-    "@vuepic/vue-datepicker": "^3.6.4"
+    "vue-router": "^4.1.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.2",
