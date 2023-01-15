@@ -75,6 +75,34 @@ function FetchPositions() {
   ];
 }
 
+function createPOST(){
+    console.log("POST request called");
+    // using the jsonplaceholder to test, will need to replace with actual server address
+    fetch('https://jsonplaceholder.typicode.com/posts', {
+    // fetch('https://capstone:pdxaaw@capstone.dxz1tza.mongodb.net/test/jobs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        contactName: selectedContactName,
+        contactInfo: contactInfo,
+        businessName: selectedBusinessName,
+        industry: selectedIndustries,
+        position: selectedPosition,
+        shift: selectedShifts,
+        hours: selectedHours,
+        date: date,
+        address: address,
+        county: selectedCounty,
+        notes: notes
+      })
+    })
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(errors => console.log(errors))
+  }
+
 //called functions when window is loaded
 window.onload = FetchDataOptions();
 </script>
@@ -204,7 +232,7 @@ window.onload = FetchDataOptions();
       </div>
       <div>
         <button
-          @click="submit"
+          @click.native="createPOST"
           class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 rounded"
         >
           SUBMIT
