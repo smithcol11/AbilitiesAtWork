@@ -14,9 +14,14 @@ const router = createRouter({
       component: () => import("../views/JobMenu.vue"),
     },
     {
-      path: "/search",
+      path: "/searchJobs",
       name: "search",
-      component: () => import("../views/Search.vue"),
+      component: () => import("../views/SearchJobs.vue"),
+    },
+    {
+      path: "/searchClients",
+      name: "searchClient",
+      component: () => import("../views/SearchClients.vue"),
     },
     {
       path: "/match",
@@ -48,11 +53,6 @@ const router = createRouter({
       component: () => import("../components/EditJob.vue"),
     },
     {
-      path: "/ViewAllJobs",
-      name: "ViewAllJobs",
-      component: () => import("../components/ViewAllJobs.vue"),
-    },
-    {
       path: "/AddClient",
       name: "/AddClient",
       component: () => import("../components/AddClient.vue"),
@@ -66,11 +66,6 @@ const router = createRouter({
       path: "/EditClient",
       name: "/EditClient",
       component: () => import("../components/EditClient.vue"),
-    },
-    {
-      path: "/ViewAllClients",
-      name: "/ViewAllClients",
-      component: () => import("../components/ViewAllClients.vue"),
     },
   ],
 });

@@ -8,20 +8,14 @@ const JobOption = ref(0);
 </script>
 
 <template>
-  <div
-    class="mx-auto text-2xl rounded w-2/3 max-w-xl h-100 bg-light p-5 shadow-lg text-center border"
-  >
-    <h1>Job Menu</h1>
-    <div class="pt-6 text-lg">
-      <p>Please select from the following options:</p>
-    </div>
-    <div class="grid grid-cols-1 mx-auto w-40">
-      <RouterLink to="/AddJob" class="menuButton"> Add Job </RouterLink>
-      <RouterLink to="/RemoveJob" class="menuButton"> Remove Job </RouterLink>
-      <RouterLink to="/EditJob" class="menuButton"> Edit Job </RouterLink>
-      <RouterLink to="/ViewAllJobs" class="menuButton">
-        View All Jobs
+
+  <div class="flex justify-center whitespace-nowrap">
+    
+          <RouterLink class="block border-solid border-2 border-black rounded w-20 text-center  mt-2 mb-2 mr-4 ml-4 text-sm md:text-base lg:text-lg hover:bg-accentDark hover:text-light"
+        to="/AddJob">Add Job
       </RouterLink>
-    </div>
-  </div>
+      <RouterLink class="block mt-2 mb-2 mr-4 ml-4 border-solid border-2 border-black rounded w-30 text-sm md:text:base lg:text-lg hover:bg-accentDark hover:text-light"  to="/searchJobs">
+        Search/Filter Jobs</RouterLink>  
+        </div>
+ 
 </template>

@@ -9,12 +9,10 @@ function toggleNav() {
     <div class="sm:w-32 sm:h-screen shadow-sm text-center bg-light ">
       <img class="p-3 border-b-2 hidden sm:block" src="../assets/images/logo.png">
       <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
-        to="/clientmenu">Client Menu
+        to="/searchClients">Client Menu
       </RouterLink>
-      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/jobmenu">
+      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/searchJobs">
         Job Menu</RouterLink>
-      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/search">
-        Search</RouterLink>
       <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/match">
         Match</RouterLink>
       <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/logout">

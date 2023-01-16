@@ -8,21 +8,14 @@ const JobOption = ref(0);
 </script>
 
 <template>
-  <div
-    class="mx-auto text-2xl rounded w-2/3 max-w-xl h-100 bg-light p-5 shadow-lg text-center border"
-  >
-    <h1>Client Menu</h1>
-    <div class="pt-6 text-lg">
-      <p>Please select from the following options:</p>
-    </div>
-    <div class="grid grid-cols-1 mx-auto w-40">
-      <RouterLink to="/AddClient" class="menuButton"> Add Client </RouterLink>
-      <RouterLink to="/RemoveClient" class="menuButton"> Remove Client </RouterLink>
-      <RouterLink to="/EditClient" class="menuButton"> Edit Client </RouterLink>
-      <RouterLink to="/ViewAllClients" class="menuButton">
-        View All Clients
+  <div class="flex justify-center whitespace-nowrap">
+          <RouterLink class="block border-solid border-2 border-black rounded text-center w-25 mt-2 mb-2 mr-4 ml-4 sm:text-sm md:text-base lg:text-lg hover:bg-accentDark hover:text-light"
+        to="/AddClient">Add Client
       </RouterLink>
-    </div>
-  </div>
+      <RouterLink class="block mt-2 mb-2 mr-4 ml-4 border-solid border-2 border-black rounded w-30 sm:text-sm md:text-base lg:text-lg hover:bg-accentDark hover:text-light"  to="/searchClients">
+        Search/Filter Clients</RouterLink>  
+        </div>
+   
+  
 </template>
 

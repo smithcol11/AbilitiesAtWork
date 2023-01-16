@@ -15,8 +15,8 @@ let isAuthUser = false;
     </div>
   </div>
   <div v-else>
-    <div class="sm:flex">
-      <div class="">
+    <div class="flex">
+      <div>
         <NavBar />
       </div>
       <div class="p-5 sm:text-align-center h-screen w-full">
