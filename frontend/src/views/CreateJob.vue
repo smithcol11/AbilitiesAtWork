@@ -55,16 +55,6 @@ function createPOST() {
       <div class="grid grid-cols-2 gap-4 place-content-around h-84 max-w-md">
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
-            >Contact Name</label
-          >
-          <DropDown
-            v-model="contactName"
-            :options="jobStore.GetContactNames()"
-            placeholder="Select Contact"
-          ></DropDown>
-        </div>
-        <div class="basis-1/5">
-          <label class="form-label inline-block mb-2 text-gray-700"
             >Business Name</label
           >
           <DropDown
@@ -73,7 +63,16 @@ function createPOST() {
             placeholder="Select Business"
           ></DropDown>
         </div>
-
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Contact Name</label
+          >
+          <DropDown
+            v-model="contactName"
+            :options="jobStore.GetContactNames()"
+            placeholder="Select Contact"
+          ></DropDown>
+        </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >Contact Phone Number</label
@@ -122,7 +121,27 @@ function createPOST() {
           <DropDown
             v-model="zip"
             :options="jobStore.GetZipCodes()"
-            placeholder="Enter Zip Code"
+            placeholder="Select Zip Code"
+          ></DropDown>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >County</label
+          >
+          <DropDown
+            v-model="county"
+            :options="jobStore.GetCounties()"
+            placeholder="Select County"
+          ></DropDown>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Position</label
+          >
+          <DropDown
+            v-model="position"
+            :options="jobStore.GetPostions()"
+            placeholder="Select Position"
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -133,17 +152,6 @@ function createPOST() {
             v-model="industry"
             :options="jobStore.GetIndustries()"
             placeholder="Select Industy"
-          ></DropDown>
-        </div>
-
-        <div class="basis-1/5">
-          <label class="form-label inline-block mb-2 text-gray-700"
-            >Position</label
-          >
-          <DropDown
-            v-model="position"
-            :options="jobStore.GetPostions()"
-            placeholder="Select Position"
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -177,16 +185,6 @@ function createPOST() {
 
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
-            >County</label
-          >
-          <DropDown
-            v-model="county"
-            :options="jobStore.GetCounties()"
-            placeholder="Select County"
-          ></DropDown>
-        </div>
-        <div class="basis-1/5">
-          <label class="form-label inline-block mb-2 text-gray-700"
             >Notes</label
           >
           <p style="white-space: pre-line"></p>
@@ -207,17 +205,19 @@ function createPOST() {
     </div>
     <br />
     <span>---------------------------------------------</span>
-    <p>Contact Name: {{ contactName }}</p>
-    <p>Contact Phonenumber: {{ contactPhoneNumber }}</p>
-    <p>Contact email: {{ contactEmail }}</p>
     <p>Business Name: {{ businessName }}</p>
-    <p>Industry: {{ industry }}</p>
-    <p>Position: {{ position }}</p>
-    <p>Selected shift: {{ shift }}</p>
-    <p>Selected hours: {{ hours }}</p>
-    <p>Date: {{ date }}</p>
+    <p>Contact Name: {{ contactName }}</p>
+    <p>Contact Phone number: {{ contactPhoneNumber }}</p>
+    <p>Contact email: {{ contactEmail }}</p>
     <p>Address: {{ address }}</p>
-    <p>Selected county: {{ county }}</p>
+    <p>City: {{ city }}</p>
+    <p>Zip: {{ zip }}</p>
+    <p>County: {{ county }}</p>
+    <p>Position: {{ position }}</p>
+    <p>Industry: {{ industry }}</p>
+    <p>Shift: {{ shift }}</p>
+    <p>Hours: {{ hours }}</p>
+    <p>Date: {{ date }}</p>
     <p>Notes: {{ notes }}</p>
   </form>
 </template>
