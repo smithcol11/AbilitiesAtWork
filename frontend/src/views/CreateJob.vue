@@ -2,109 +2,51 @@
 import { ref } from "vue";
 import DropDown from "../components/DropDown.vue";
 import TextBox from "../components/TextBox.vue";
-const selectedContactName = ref("");
-let contactNameOptions = [];
-const contactInfo = ref(null);
-const selectedBusinessName = ref("");
-let businessNameOptions = [];
-let industryOptions = [];
-const selectedIndustries = ref([]);
-const selectedPosition = ref("");
-let positionOptions = [];
-const shiftOptions = ref(["Morning", "Afternoon", "Night"]);
-const selectedShifts = ref([]);
-const hoursOptions = ref(["Full-Time", "Part-Time", "Both"]);
-const selectedHours = ref("");
-const date = ref();
+import { useJobDataStore } from "../stores/JobData";
+const jobStore = useJobDataStore();
+const contactName = ref("");
+const businessName = ref("");
+const industry = ref("");
+const position = ref("");
+const shift = ref("");
+const hours = ref("");
+const city = ref("");
+const zip = ref("");
+const date = ref("");
 const address = ref("");
-const countyOptions = ref(["Clackamas", "Multnomah", "Yamhill", "Washington"]);
-const selectedCounty = ref("");
+const county = ref("");
 const notes = ref("");
+const contactPhoneNumber = ref("");
+const contactEmail = ref("");
 
-//Will be used to fetch industries when industries are added to the database.
-//Used dummy data in the meantime
-function FetchDataOptions() {
-  console.log("Called 'FetchData' function");
-  FetchIndustries();
-  FetchBusinessNames();
-  FetchContactNames();
-  FetchPositions();
-}
-function FetchContactNames() {
-  console.log("Called 'FetchContactNames' function");
-  contactNameOptions = [
-    "Keith Karrie",
-    "Byrne Earnestine",
-    "Dinah Kelsi",
-    "Caleb Cailin",
-  ];
-}
-function FetchIndustries() {
-  console.log("Called 'FetchIndustries' function");
-  industryOptions = [
-    "Production",
-    "Manufacturing",
-    "Finance",
-    "Construction",
-    "Hospitality",
-    "Accounting",
-  ];
-}
-function FetchBusinessNames() {
-  console.log("Called 'FetchBusiness' function");
-  businessNameOptions = [
-    "Nike",
-    "Kroger",
-    "Intel",
-    "Amazon",
-    "OHSU",
-    "Autodesk",
-    "Ford",
-  ];
-}
-function FetchPositions() {
-  console.log("Called 'FetchPositions' function");
-  positionOptions = [
-    "Cashier",
-    "Cook",
-    "Clerk",
-    "Janitor",
-    "Manager",
-    "Sales Rep",
-    "Host",
-  ];
-}
-
-function createPOST(){
-    console.log("POST request called");
-    // using the jsonplaceholder to test, will need to replace with actual server address
-    fetch('https://jsonplaceholder.typicode.com/posts', {
+function createPOST() {
+  console.log("POST request called");
+  // using the jsonplaceholder to test, will need to replace with actual server address
+  fetch("https://jsonplaceholder.typicode.com/posts", {
     // fetch('https://capstone:pdxaaw@capstone.dxz1tza.mongodb.net/test/jobs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        contactName: selectedContactName,
-        contactInfo: contactInfo,
-        businessName: selectedBusinessName,
-        industry: selectedIndustries,
-        position: selectedPosition,
-        shift: selectedShifts,
-        hours: selectedHours,
-        date: date,
-        address: address,
-        county: selectedCounty,
-        notes: notes
-      })
-    })
-    .then(response => response.json())
-    .then(response => console.log(response))
-    .catch(errors => console.log(errors))
-  }
-
-//called functions when window is loaded
-window.onload = FetchDataOptions();
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contactName: contactName,
+      contactPhoneNumber: contactPhoneNumber,
+      contactEmail: contactEmail,
+      businessName: businessName,
+      industry: industry,
+      position: position,
+      shift: shift,
+      hours: hours,
+      date: date,
+      address: address,
+      county: county,
+      notes: notes,
+    }),
+  })
+    .then((response) => response.json())
+    .then((response) => console.log(response))
+    .catch((errors) => console.log(errors));
+}
 </script>
 
 <template>
@@ -116,32 +58,71 @@ window.onload = FetchDataOptions();
             >Contact Name</label
           >
           <DropDown
-            v-model="selectedContactName"
-            :options="contactNameOptions"
+            v-model="contactName"
+            :options="jobStore.GetContactNames()"
             placeholder="Select Contact"
           ></DropDown>
-        </div>
-        <div>
-          <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Contact Info</label
-            >
-            <TextBox
-              type="text"
-              placeholder="Enter Contact Info"
-              v-model="contactInfo"
-            >
-            </TextBox>
-          </div>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >Business Name</label
           >
           <DropDown
-            v-model="selectedBusinessName"
-            :options="businessNameOptions"
+            v-model="businessName"
+            :options="jobStore.GetBusinessNames()"
             placeholder="Select Business"
+          ></DropDown>
+        </div>
+
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Contact Phone Number</label
+          >
+          <TextBox
+            type="text"
+            placeholder="Enter Contact Phone"
+            v-model="contactPhoneNumber"
+          >
+          </TextBox>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Contact Email</label
+          >
+          <TextBox
+            type="email"
+            placeholder="Enter Contact Email"
+            v-model="contactEmail"
+          >
+          </TextBox>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Address</label
+          >
+          <TextBox
+            type="text"
+            placeholder="Enter Address Info"
+            v-model="address"
+          >
+          </TextBox>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700">City</label>
+          <DropDown
+            v-model="city"
+            :options="jobStore.GetCities()"
+            placeholder="Select City"
+          ></DropDown>
+        </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Zip Code</label
+          >
+          <DropDown
+            v-model="zip"
+            :options="jobStore.GetZipCodes()"
+            placeholder="Enter Zip Code"
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -149,9 +130,9 @@ window.onload = FetchDataOptions();
             >Industry</label
           >
           <DropDown
-            v-model="selectedIndustries"
-            :options="industryOptions"
-            placeholder="Select industy"
+            v-model="industry"
+            :options="jobStore.GetIndustries()"
+            placeholder="Select Industy"
           ></DropDown>
         </div>
 
@@ -160,8 +141,8 @@ window.onload = FetchDataOptions();
             >Position</label
           >
           <DropDown
-            v-model="selectedPosition"
-            :options="positionOptions"
+            v-model="position"
+            :options="jobStore.GetPostions()"
             placeholder="Select Position"
           ></DropDown>
         </div>
@@ -170,8 +151,8 @@ window.onload = FetchDataOptions();
             >Shift</label
           >
           <DropDown
-            v-model="selectedShifts"
-            :options="shiftOptions"
+            v-model="shift"
+            :options="jobStore.GetShifts()"
             placeholder="Select Shift"
           ></DropDown>
         </div>
@@ -180,8 +161,8 @@ window.onload = FetchDataOptions();
             >Hours</label
           >
           <DropDown
-            v-model="selectedHours"
-            :options="hoursOptions"
+            v-model="hours"
+            :options="jobStore.GetHours()"
             placeholder="Select Hours"
           ></DropDown>
         </div>
@@ -194,40 +175,25 @@ window.onload = FetchDataOptions();
           </div>
         </div>
 
-        <div>
-          <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Address</label
-            >
-            <TextBox
-              type="text"
-              placeholder="Enter Address Info"
-              v-model="address"
-            >
-            </TextBox>
-          </div>
-        </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >County</label
           >
           <DropDown
-            v-model="selectedCounty"
-            :options="countyOptions"
+            v-model="county"
+            :options="jobStore.GetCounties()"
             placeholder="Select County"
           ></DropDown>
         </div>
-        <div>
-          <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Notes</label
-            >
-            <p style="white-space: pre-line"></p>
-            <textarea
-              v-model="notes"
-              placeholder="Add Notes (Optional)"
-            ></textarea>
-          </div>
+        <div class="basis-1/5">
+          <label class="form-label inline-block mb-2 text-gray-700"
+            >Notes</label
+          >
+          <p style="white-space: pre-line"></p>
+          <textarea
+            v-model="notes"
+            placeholder="Add Notes (Optional)"
+          ></textarea>
         </div>
       </div>
       <div>
@@ -241,16 +207,17 @@ window.onload = FetchDataOptions();
     </div>
     <br />
     <span>---------------------------------------------</span>
-    <p>Contact Name: {{ selectedContactName }}</p>
-    <p>Contact Info: {{ contactInfo }}</p>
-    <p>Business Name: {{ selectedBusinessName }}</p>
-    <p>Industry: {{ selectedIndustries }}</p>
-    <p>Position: {{ selectedPosition }}</p>
-    <p>Selected shifts: {{ selectedShifts }}</p>
-    <p>Selected hours: {{ selectedHours }}</p>
+    <p>Contact Name: {{ contactName }}</p>
+    <p>Contact Phonenumber: {{ contactPhoneNumber }}</p>
+    <p>Contact email: {{ contactEmail }}</p>
+    <p>Business Name: {{ businessName }}</p>
+    <p>Industry: {{ industry }}</p>
+    <p>Position: {{ position }}</p>
+    <p>Selected shift: {{ shift }}</p>
+    <p>Selected hours: {{ hours }}</p>
     <p>Date: {{ date }}</p>
     <p>Address: {{ address }}</p>
-    <p>Selected county: {{ selectedCounty }}</p>
+    <p>Selected county: {{ county }}</p>
     <p>Notes: {{ notes }}</p>
   </form>
 </template>
