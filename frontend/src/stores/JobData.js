@@ -6,7 +6,25 @@ export const useJobDataStore = defineStore("createJob", () => {
   let businessNameOptions = [];
   let industryOptions = [];
   let positionOptions = [];
-  const cityOptions = ["Tigard", "Portland", "Beaverton", "Hillsboro"];
+  let cities = [
+    // Clackamas county cities:
+    "Barlow", "Canby", "Estacada", "Gladstone", "Happy Valley", "Johnson City", 
+    "Lake Oswego", "Milwaukie", "Molalla", "Oregon City", "Portland", "Rivergrove", 
+    "Sandy", "Tualatin", "West Linn", "Wilsonville",
+    // Multnomah county cities:
+    "Fairview", "Gresham", "Maywood Park", 
+    "Troutdale", "Wood Village",
+    // Yamhill county cities:
+    "Amity", "Carlton", "Dayton", "Dundee", "Lafayette", "McMinnville", "Newberg", 
+    "Sheridan", "Willamina", "Yamhill",
+    // Washington county cities:
+    "Banks", "Beaverton", "Cornelius", "Durham", "Forest Grove", "Gaston", "Hillsboro", 
+    "King City", "North Plains", "Sherwood", 
+    "Tigard"
+  ];
+  // sort alphabetically and to visually detect if a duplicate city is added
+  const cityOptions = cities.sort();
+
   const zipCodeOptions = ["97223", "97007", "97504"];
   const shiftOptions = ["Morning", "Afternoon", "Night"];
   const hoursOptions = ["Full-Time", "Part-Time", "Full-Time or Part-Time"];
