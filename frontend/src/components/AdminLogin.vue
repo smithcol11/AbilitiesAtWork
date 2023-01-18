@@ -7,7 +7,7 @@ const adminUser = ref("");
 const adminPassword = ref("");
 const render = ref(false);
 const sec = ref(3);
-// Actual login function for the admin account(s)
+
 const updateAdmin = async () => {
   auth.username = adminUser.value;
   let result = await auth.AdminLogin(adminPassword.value);

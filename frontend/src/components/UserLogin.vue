@@ -7,8 +7,7 @@ const firstName = ref("");
 const lastName = ref("");
 const render = ref(false);
 const sec = ref(3);
-// reference material: https://www.youtube.com/watch?v=0QN74j3EyQc
-// This is the function that will be used for actually logging in
+
 const updateUser = async () => {
   auth.firstName = firstName.value;
   auth.lastName = lastName.value;
@@ -28,6 +27,7 @@ function errorMessage() {
   }, 1000);
 }
 </script>
+
 <template>
   <div id="User Login" class="">
     <h2>User Login</h2>

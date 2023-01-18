@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -45,4 +46,5 @@ router.beforeEach(async (to) => {
     return "/login";
   }
 });
+
 export default router;

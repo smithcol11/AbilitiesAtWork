@@ -9,25 +9,12 @@ export const useAuthenticationStore = defineStore("authorization", () => {
   const firstName = ref("");
   const lastName = ref("");
 
-  if (localStorage.getItem("authAdmin") == "true") {
-    isAuthAdmin.value = true;
-  }
+  validateJWT();
 
-  if (localStorage.getItem("authUser") == "true") {
-    isAuthUser.value = true;
+  if (localStorage.getItem("firstName") == true) {
     firstName.value = localStorage.getItem("firstName");
     lastName.value = localStorage.getItem("lastName");
   }
-
-  watch(isAuthAdmin, () => {
-    localStorage.setItem("authAdmin", isAuthAdmin.value);
-  });
-
-  watch(isAuthUser, () => {
-    localStorage.setItem("authUser", isAuthUser.value);
-    localStorage.setItem("firstName", firstName.value);
-    localStorage.setItem("lastName", lastName.value);
-  });
 
   async function AdminLogin(password) {
     await fetch("http://localhost:3000/loginAdmin", {
@@ -50,6 +37,8 @@ export const useAuthenticationStore = defineStore("authorization", () => {
   }
 
   async function UserLogin() {
+    localStorage.setItem("firstName", firstName.value);
+    localStorage.setItem("lastName", lastName.value);
     await fetch("http://localhost:3000/loginUser", {
       method: "POST",
       body: JSON.stringify({
@@ -69,9 +58,30 @@ export const useAuthenticationStore = defineStore("authorization", () => {
     return isAuthUser.value;
   }
 
+  async function validateJWT() {
+    await fetch("http://localhost:3000/verifyJWT", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.admin) {
+          isAuthAdmin.value = true;
+          router.push("/");
+        } else if (data.auth) {
+          isAuthUser.value = true;
+          router.push("/");
+        }
+      });
+  }
+
   function Logout() {
     isAuthAdmin.value = false;
     isAuthUser.value = false;
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+    document.cookie = "token=;Max-Age=-1";
   }
 
   return {
@@ -83,5 +93,6 @@ export const useAuthenticationStore = defineStore("authorization", () => {
     AdminLogin,
     UserLogin,
     Logout,
+    validateJWT,
   };
 });
