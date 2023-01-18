@@ -38,12 +38,4 @@ function ChangeLoginType() {
       </form>
     </div>
   </div>
-  <!-- For testing to see if authStore is working properly
-  <div>
-    <p>isAuthAdmin: {{ auth.isAuthAdmin }}</p>
-    <p>isAuthUser: {{ auth.isAuthUser }}</p>
-    <p>username: {{ auth.username }}</p>
-    <p>name: {{ auth.name }}</p>
-  </div>
-  -->
 </template>
