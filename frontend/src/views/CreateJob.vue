@@ -1,23 +1,59 @@
 <script setup>
-import { ref } from "vue";
+import { reactive, ref, computed } from "vue";
 import DropDown from "../components/DropDown.vue";
 import TextBox from "../components/TextBox.vue";
 import { useJobDataStore } from "../stores/JobData";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email, minLength } from "@vuelidate/validators";
+
 const jobStore = useJobDataStore();
-const contactName = ref("");
-const businessName = ref("");
-const industry = ref("");
-const position = ref("");
-const shift = ref("");
-const hours = ref("");
-const city = ref("");
-const zip = ref("");
-const date = ref("");
-const address = ref("");
-const county = ref("");
-const notes = ref("");
-const contactPhoneNumber = ref("");
-const contactEmail = ref("");
+
+const formData = reactive({
+  contactName: "",
+  businessName: "",
+  industry: "",
+  position: "",
+  shift: "",
+  hours: "",
+  city: "",
+  zip: "",
+  date: "",
+  address: "",
+  county: "",
+  notes: "",
+  contactEmail: "",
+  contactPhoneNumber: "",
+});
+
+const rules = computed(() => {
+  return {
+    contactName: { required },
+    businessName: { required },
+    industry: { required },
+    position: { required },
+    shift: { required },
+    hours: { required },
+    city: { required },
+    zip: { required },
+    date: { required },
+    address: { required },
+    county: { required },
+    contactPhoneNumber: { required },
+    contactEmail: { required, email },
+    notes: "",
+  };
+});
+
+//pass the data and rules the data must follow
+const v$ = useVuelidate(rules, formData);
+
+const SubmitForm = async () => {
+  //check that all required fields have valid input
+  const result = await v$.value.$validate();
+  if (result) {
+    createPOST();
+  }
+};
 
 function createPOST() {
   console.log("POST request called");
@@ -29,18 +65,18 @@ function createPOST() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      contactName: contactName,
-      contactPhoneNumber: contactPhoneNumber,
-      contactEmail: contactEmail,
-      businessName: businessName,
-      industry: industry,
-      position: position,
-      shift: shift,
-      hours: hours,
-      date: date,
-      address: address,
-      county: county,
-      notes: notes,
+      contactName: formData.contactName,
+      contactPhoneNumber: formData.contactPhoneNumber,
+      contactEmail: formData.contactEmail,
+      businessName: formData.businessName,
+      industry: formData.industry,
+      position: formData.position,
+      shift: formData.shift,
+      hours: formData.hours,
+      date: formData.date,
+      address: formData.address,
+      county: formData.county,
+      notes: formData.notes,
     }),
   })
     .then((response) => response.json())
@@ -58,7 +94,7 @@ function createPOST() {
             >Business Name</label
           >
           <DropDown
-            v-model="businessName"
+            v-model="formData.businessName"
             :options="jobStore.GetBusinessNames()"
             placeholder="Select Business"
           ></DropDown>
@@ -68,7 +104,7 @@ function createPOST() {
             >Contact Name</label
           >
           <DropDown
-            v-model="contactName"
+            v-model="formData.contactName"
             :options="jobStore.GetContactNames()"
             placeholder="Select Contact"
           ></DropDown>
@@ -80,7 +116,7 @@ function createPOST() {
           <TextBox
             type="text"
             placeholder="Enter Contact Phone"
-            v-model="contactPhoneNumber"
+            v-model="formData.contactPhoneNumber"
           >
           </TextBox>
         </div>
@@ -91,7 +127,7 @@ function createPOST() {
           <TextBox
             type="email"
             placeholder="Enter Contact Email"
-            v-model="contactEmail"
+            v-model="formData.contactEmail"
           >
           </TextBox>
         </div>
@@ -102,14 +138,14 @@ function createPOST() {
           <TextBox
             type="text"
             placeholder="Enter Address Info"
-            v-model="address"
+            v-model="formData.address"
           >
           </TextBox>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700">City</label>
           <DropDown
-            v-model="city"
+            v-model="formData.city"
             :options="jobStore.GetCities()"
             placeholder="Select City"
           ></DropDown>
@@ -119,7 +155,7 @@ function createPOST() {
             >Zip Code</label
           >
           <DropDown
-            v-model="zip"
+            v-model="formData.zip"
             :options="jobStore.GetZipCodes()"
             placeholder="Select Zip Code"
           ></DropDown>
@@ -129,7 +165,7 @@ function createPOST() {
             >County</label
           >
           <DropDown
-            v-model="county"
+            v-model="formData.county"
             :options="jobStore.GetCounties()"
             placeholder="Select County"
           ></DropDown>
@@ -139,7 +175,7 @@ function createPOST() {
             >Position</label
           >
           <DropDown
-            v-model="position"
+            v-model="formData.position"
             :options="jobStore.GetPostions()"
             placeholder="Select Position"
           ></DropDown>
@@ -149,7 +185,7 @@ function createPOST() {
             >Industry</label
           >
           <DropDown
-            v-model="industry"
+            v-model="formData.industry"
             :options="jobStore.GetIndustries()"
             placeholder="Select Industy"
           ></DropDown>
@@ -159,7 +195,7 @@ function createPOST() {
             >Shift</label
           >
           <DropDown
-            v-model="shift"
+            v-model="formData.shift"
             :options="jobStore.GetShifts()"
             placeholder="Select Shift"
           ></DropDown>
@@ -169,7 +205,7 @@ function createPOST() {
             >Hours</label
           >
           <DropDown
-            v-model="hours"
+            v-model="formData.hours"
             :options="jobStore.GetHours()"
             placeholder="Select Hours"
           ></DropDown>
@@ -179,7 +215,7 @@ function createPOST() {
             <label class="form-label inline-block mb-2 text-gray-700"
               >Date Posted</label
             >
-            <TextBox type="date" v-model="date"> </TextBox>
+            <TextBox type="date" v-model="formData.date"> </TextBox>
           </div>
         </div>
 
@@ -189,35 +225,20 @@ function createPOST() {
           >
           <p style="white-space: pre-line"></p>
           <textarea
-            v-model="notes"
+            class="form-control block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-accentLight"
+            v-model="formData.notes"
             placeholder="Add Notes (Optional)"
           ></textarea>
         </div>
       </div>
       <div>
         <button
-          @click.native="createPOST"
+          @click="SubmitForm()"
           class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 rounded"
         >
           SUBMIT
         </button>
       </div>
     </div>
-    <br />
-    <span>---------------------------------------------</span>
-    <p>Business Name: {{ businessName }}</p>
-    <p>Contact Name: {{ contactName }}</p>
-    <p>Contact Phone number: {{ contactPhoneNumber }}</p>
-    <p>Contact email: {{ contactEmail }}</p>
-    <p>Address: {{ address }}</p>
-    <p>City: {{ city }}</p>
-    <p>Zip: {{ zip }}</p>
-    <p>County: {{ county }}</p>
-    <p>Position: {{ position }}</p>
-    <p>Industry: {{ industry }}</p>
-    <p>Shift: {{ shift }}</p>
-    <p>Hours: {{ hours }}</p>
-    <p>Date: {{ date }}</p>
-    <p>Notes: {{ notes }}</p>
   </form>
 </template>

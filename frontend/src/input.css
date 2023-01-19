@@ -8,21 +8,4 @@
   @apply bg-accentLight;
   @apply text-dark;
 }
-
-/* CSS for multiselect dropdowns */
-
-.vueform-multiselect {
-  --ms-radius: 0px;
-  --hover:bg-violet-600
-  --ms-tag-radius: 0px;
-  --ms-ring-width: 0px;
-  --ms-dropdown-radius: 0px;
-  --ms-font-size: theme(fontSize.sm);
-  --ms-max-height: 100rem;
-  --ms-group-label-bg-selected: theme(colors.accentDark);
-  --ms-group-label-bg-selected-pointed: theme(colors.accentDark);
-  --ms-option-bg-selected: theme(colors.accentDark);
-  --ms-option-bg-selected-pointed: theme(colors.accentDark);
-}
-
 /* ------------------ */
