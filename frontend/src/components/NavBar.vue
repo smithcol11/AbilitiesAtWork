@@ -1,10 +1,17 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
+import { ref } from "vue";
+
 const auth = useAuthenticationStore();
+let showLogout = ref(false);
 
 function toggleNav() {
   let nav = document.getElementById("nav-bar");
   nav.classList.toggle("hidden");
+}
+
+function toggleLogout() {
+  showLogout.value = !showLogout.value;
 }
 </script>
 
@@ -38,13 +45,12 @@ function toggleNav() {
       >
         Match</RouterLink
       >
-      <RouterLink
-        class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
-        to="/logout"
-        @click="auth.Logout()"
+      <button
+        class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
+        @click="toggleLogout()"
       >
-        Logout</RouterLink
-      >
+        Logout
+      </button>
     </div>
   </nav>
   <button
@@ -65,6 +71,28 @@ function toggleNav() {
       <line x1="3" y1="18" x2="21" y2="18" />
     </svg>
   </button>
+  <div
+    v-if="showLogout"
+    class="absolute top-0 w-screen h-screen bg-opacity-50 bg-dark mx-auto text-center"
+  >
+    <div class="w-72 h-32 shadow-lg mx-auto bg-light mt-24 p-5">
+      Do you want to logout?
+      <div>
+        <button
+          @click="auth.Logout()"
+          class="bg-rose-600 text-light shadow p-3 rounded-lg mt-5 mx-1 hover:bg-rose-700 duration-200"
+        >
+          Logout
+        </button>
+        <button
+          @click="toggleLogout()"
+          class="bg-slate-300 text-dark shadow p-3 rounded-lg mt-5 mx-1 hover:bg-slate-200 duration-200"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style></style>

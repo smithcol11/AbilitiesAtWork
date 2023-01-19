@@ -82,6 +82,7 @@ export const useAuthenticationStore = defineStore("authorization", () => {
     localStorage.removeItem("firstName");
     localStorage.removeItem("lastName");
     document.cookie = "token=;Max-Age=-1";
+    router.push("/login");
   }
 
   return {
