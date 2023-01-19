@@ -14,31 +14,8 @@ export default {
   components: {
     Filter,
   },
-  data() {
-    return {
-      filters: [
-        {
-          title: "Organization: ",
-          options: ['Option A', 'Option B', 'Option Q', 'Option Z'],
-        },
-        {
-          title: "Position: ",
-          options: ['Option C', 'Option D', 'Option V', 'Option Y', 'Option R'],
-        },
-        {
-          title: "Shift: ",
-          options: ['Option E', 'Option F', 'Option J'],
-        },
-        {
-          title: "County: ",
-          options: ['Option G', 'Option H', 'Option M', 'Option E'],
-        },
-        {
-          title: "Contact: ",
-          options: ['Option I', 'Option P'],
-        },
-      ]
-    }
+  props: {
+    filters: Object,
   },
 };
 </script>

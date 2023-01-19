@@ -6,9 +6,9 @@
 /* CSS for Navbar */
 
 .router-link-exact-active {
-    @apply bg-accentLight;
-    @apply text-dark;
-  }
+  @apply bg-accentLight;
+  @apply text-dark;
+}
 
 
 /* CSS for multiselect dropdowns */
@@ -25,6 +25,24 @@
   --ms-ring-width: 0;
   --ms-tag-radius: 0;
 }
+
+
+/* CSS for buttons */
+
+.simple-button {
+  @apply duration-300;
+  @apply bg-accentDark;
+  @apply hover:bg-accentLight;
+  @apply px-4;
+  @apply py-1;
+  @apply my-1;
+  @apply font-bold;
+  @apply text-base;
+  @apply text-light;
+  @apply hover:text-dark;
+  @apply rounded;
+}
+
 
 /* ------------------ */
 
