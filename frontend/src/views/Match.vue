@@ -1,17 +1,15 @@
 <script>
-import Multiselect from "../components/Multiselect.vue";
 
 export default {
   name: "App",
   components: {
-    Multiselect,
   },
 };
 </script>
 
 <template>
   <div class="Match">
-    <div class="p-4 bg-light">
+    <!-- <div class="p-4 bg-light">
       <div class="p-2">
         <div class="py-2">
           <div class="flex flex-row items-center pb-4">
@@ -59,7 +57,7 @@ export default {
         </div>
         <div class="w-1/6"></div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
