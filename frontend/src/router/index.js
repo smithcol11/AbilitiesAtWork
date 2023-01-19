@@ -32,11 +32,6 @@ const router = createRouter({
       name: "login",
       component: () => import("../views/Login.vue"),
     },
-    {
-      path: "/temp",
-      name: "temp",
-      component: () => import("../components/FilterRow.vue"),
-    },
   ],
 });
 export default router;
