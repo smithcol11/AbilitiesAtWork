@@ -1,47 +1,85 @@
 <script>
+import { FilterMatchMode, FilterOperator } from 'primevue/api';
+
+import { ref } from 'vue';
+
 export default {
-    data() {
-        return {
-            columns: [
-            {field: 'vin', header: 'Vin'},
-            {field: 'year', header: 'Year'},
-            {field: 'brand', header: 'Brand'},
-            {field: 'color', header: 'Color'}
-        ],
-            cars: [
-            {"brand": "Volkswagen", "year": 2012, "color": "Orange", "vin": "dsad231ff"},
-            {"brand": "Audi", "year": 2011, "color": "Black", "vin": "gwregre345"},
-            {"brand": "Renault", "year": 2005, "color": "Gray", "vin": "h354htr"},
-            {"brand": "BMW", "year": 2003, "color": "Blue", "vin": "j6w54qgh"},
-            {"brand": "Mercedes", "year": 1995, "color": "Orange", "vin": "hrtwy34"},
-            {"brand": "Volvo", "year": 2005, "color": "Black", "vin": "jejtyj"},
-            {"brand": "Honda", "year": 2012, "color": "Yellow", "vin": "g43gr"},
-            {"brand": "Jaguar", "year": 2013, "color": "Orange", "vin": "greg34"},
-            {"brand": "Ford", "year": 2000, "color": "Black", "vin": "h54hw5"},
-            {"brand": "Fiat", "year": 2013, "color": "Red", "vin": "245t2s"}
-        ]
-        }
+  setup() {
+
+    const loading = ref(false);
+    const selectedJob = null;
+    const filters1 = ref({
+      'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+      'company': { value: null, matchMode: FilterMatchMode.CONTAINS },
+      'city': { value: null, matchMode: FilterMatchMode.CONTAINS },
+      'zip': { value: null, matchMode: FilterMatchMode.CONTAINS },
+      'county': { value: null, matchMode: FilterMatchMode.CONTAINS },
+      'industry': { value: null, matchMode: FilterMatchMode.CONTAINS },
+      'hours': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    });
+    const columns = ref([
+      { field: 'company', header: 'Company' },
+      { field: 'city', header: 'City' },
+      { field: 'zip', header: 'Zip' },
+      { field: 'county', header: 'County' },
+      { field: 'industry', header: 'Industry' },
+      { field: 'hours', header: 'Hours' },
+
+    ]);
+    const jobs = ref([
+      { "id": 5, "company": "ABC Inc.", "city": "Portland", "zip": "97223", "county": "Washington", "industry": "Manufacturing", "hours": "Full Time" },
+      { "company": "XYZ Co.", "city": "Beaverton", "zip": "97002", "county": "Multnomah", "industry": "Retail", "hours": "Part Time" },
+      { "company": "Might Ent.", "city": "Dalles", "zip": "99696", "county": "Washington", "industry": "Buisness", "hours": "Part Time" },
+      { "company": "GoodieMax", "city": "Dalles", "zip": "98868", "county": "Washington", "industry": "Manufacturing", "hours": "Full Time" },
+      { "company": "TempCo", "city": "Portland", "zip": "97223", "county": "Washington", "industry": "Buisness", "hours": "Part Time" },
+      { "company": "DiceCity", "city": "Portland", "zip": "97223", "county": "Washington", "industry": "Retail", "hours": "Part Time" },
+      { "company": "BigMeyer", "city": "Portland", "zip": "97223", "county": "Washington", "industry": "Retail", "hours": "Full Time" },
+      { "company": "WorstPlace", "city": "Eugene", "zip": "93556", "county": "Washington", "industry": "Buisness", "hours": "Full Time" },
+    ]);
+
+    function onRowSelect(event) {
+      console.log(event.data.company)
+
     }
+    function onRowUnselect(event) {
+
+    }
+    return {jobs , filters1, onRowSelect, onRowUnselect, columns, loading, selectedJob}
+  }
 }
 </script>
 
-
 <template>
-  <div class="Search">
-    <h1>This is the Search page</h1>
-  </div>
-  <DataTable :value="cars" class="p-datatable-sm pt-10" :loading="loading" :paginator="true" :rows="10">
-    <template #empty>
-      <h1>No records found</h1>
-    </template>
-    <template #loading>
+  <div class="card">
+    <DataTable :value="jobs" class="p-datatable-sm" stripedRows @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
+      v-model:selection="this.selectedJob" selectionMode="single" v-model:filters="filters1" filterDisplay="row"
+      :loading="loading" :paginator="true" :rows="5" :globalFilterFields="['company', 'city', 'industry', 'hours', 'zip', 'county']">
+      <template #header>
+        <div class="flex justify-content-between">
+          <button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined"
+            @click="clearFilter1()" />
+          <span class="">
+            <i class="pi pi-search pr-3" />
+            <InputText v-model="filters1['global'].value" placeholder="Keyword Search" />
+          </span>
+        </div>
+      </template>
+      <template #empty>
+        <h1>No records found</h1>
+      </template>
+      <template #loading>
         Loading records, please wait...
-    </template>
-    <Column field="vin" header="Vin"></Column>
-    <Column field="year" header="Year"></Column>
-    <Column field="brand" header="Brand"></Column>
-    <Column field="color" header="Color"></Column>
-</DataTable>
+      </template>
+      <Column v-for="col of columns" :field="col.field" :header="col.header" :key="col.field" :sortable="true">
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText type="text" v-model="filters1[col.field].value" @keydown.enter="filterCallback()"
+            class="p-column-filter" placeholder="Search by" />
+        </template>
+      </Column>
+    </DataTable>
+  </div>
 </template>
 
-<style></style>
+<style>
+
+</style>
