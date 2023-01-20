@@ -8,6 +8,7 @@ const placeholder = ref("");
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
   <multiselect
+    class="vueform-multiselect"
     v-model="choice"
     :options="options"
     :clear-on-select="true"

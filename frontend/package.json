@@ -17,6 +17,7 @@
     "concurrently": "^7.5.0",
     "pinia": "^2.0.23",
     "vue": "^3.2.41",
+    "vue-multiselect": "^2.1.6",
     "vue-router": "^4.1.5"
   },
   "devDependencies": {
