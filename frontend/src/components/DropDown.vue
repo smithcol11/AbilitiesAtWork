@@ -6,7 +6,7 @@ const choice = ref("Choice");
 const placeholder = ref("");
 </script>
 <style src="@vueform/multiselect/themes/default.css"></style>
-<template class="hover:bg-purple-700">
+<template>
   <multiselect
     v-model="choice"
     :options="options"
@@ -14,7 +14,6 @@ const placeholder = ref("");
     :preserve-search="true"
     :searchable="true"
     :placeholder="placeholder"
-    required
   >
   </multiselect>
 </template>

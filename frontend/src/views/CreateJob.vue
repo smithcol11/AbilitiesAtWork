@@ -4,7 +4,7 @@ import DropDown from "../components/DropDown.vue";
 import TextBox from "../components/TextBox.vue";
 import { useJobDataStore } from "../stores/JobData";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, minLength } from "@vuelidate/validators";
+import { required, email } from "@vuelidate/validators";
 
 const jobStore = useJobDataStore();
 
@@ -93,21 +93,25 @@ function createPOST() {
           <label class="form-label inline-block mb-2 text-gray-700"
             >Business Name</label
           >
-          <DropDown
+          <TextBox
+            type="text"
+            placeholder="Enter Business Name"
             v-model="formData.businessName"
-            :options="jobStore.GetBusinessNames()"
-            placeholder="Select Business"
-          ></DropDown>
+            required
+          >
+          </TextBox>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >Contact Name</label
           >
-          <DropDown
+          <TextBox
+            type="text"
+            placeholder="Enter Contact Name "
             v-model="formData.contactName"
-            :options="jobStore.GetContactNames()"
-            placeholder="Select Contact"
-          ></DropDown>
+            required
+          >
+          </TextBox>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -117,6 +121,7 @@ function createPOST() {
             type="text"
             placeholder="Enter Contact Phone"
             v-model="formData.contactPhoneNumber"
+            required
           >
           </TextBox>
         </div>
@@ -128,6 +133,7 @@ function createPOST() {
             type="email"
             placeholder="Enter Contact Email"
             v-model="formData.contactEmail"
+            required
           >
           </TextBox>
         </div>
@@ -139,6 +145,7 @@ function createPOST() {
             type="text"
             placeholder="Enter Address Info"
             v-model="formData.address"
+            required
           >
           </TextBox>
         </div>
@@ -148,6 +155,7 @@ function createPOST() {
             v-model="formData.city"
             :options="jobStore.GetCities()"
             placeholder="Select City"
+            required
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -158,6 +166,7 @@ function createPOST() {
             v-model="formData.zip"
             :options="jobStore.GetZipCodes()"
             placeholder="Select Zip Code"
+            required
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -168,6 +177,7 @@ function createPOST() {
             v-model="formData.county"
             :options="jobStore.GetCounties()"
             placeholder="Select County"
+            required
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -178,6 +188,7 @@ function createPOST() {
             v-model="formData.position"
             :options="jobStore.GetPostions()"
             placeholder="Select Position"
+            required
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -188,6 +199,7 @@ function createPOST() {
             v-model="formData.industry"
             :options="jobStore.GetIndustries()"
             placeholder="Select Industy"
+            required
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -198,6 +210,7 @@ function createPOST() {
             v-model="formData.shift"
             :options="jobStore.GetShifts()"
             placeholder="Select Shift"
+            required
           ></DropDown>
         </div>
         <div class="basis-1/5">
@@ -208,6 +221,7 @@ function createPOST() {
             v-model="formData.hours"
             :options="jobStore.GetHours()"
             placeholder="Select Hours"
+            required
           ></DropDown>
         </div>
         <div>
@@ -215,7 +229,7 @@ function createPOST() {
             <label class="form-label inline-block mb-2 text-gray-700"
               >Date Posted</label
             >
-            <TextBox type="date" v-model="formData.date"> </TextBox>
+            <TextBox type="date" v-model="formData.date" required> </TextBox>
           </div>
         </div>
 
@@ -239,6 +253,21 @@ function createPOST() {
           SUBMIT
         </button>
       </div>
+      <span>---------------------------------------------</span>
+      <p>Business Name: {{ formData.businessName }}</p>
+      <p>Contact Name: {{ formData.contactName }}</p>
+      <p>Contact Phone number: {{ formData.contactPhoneNumber }}</p>
+      <p>Contact email: {{ formData.contactEmail }}</p>
+      <p>Address: {{ formData.address }}</p>
+      <p>City: {{ formData.city }}</p>
+      <p>Zip: {{ formData.zip }}</p>
+      <p>County: {{ formData.county }}</p>
+      <p>Position: {{ formData.position }}</p>
+      <p>Industry: {{ formData.industry }}</p>
+      <p>Shift: {{ formData.shift }}</p>
+      <p>Hours: {{ formData.hours }}</p>
+      <p>Date: {{ formData.date }}</p>
+      <p>Notes: {{ formData.notes }}</p>
     </div>
   </form>
 </template>

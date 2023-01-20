@@ -2,10 +2,11 @@ import { defineStore } from "pinia";
 import { computed } from "vue";
 
 export const useJobDataStore = defineStore("createJob", () => {
-  let contactNameOptions = [];
-  let businessNameOptions = [];
   let industryOptions = [];
   let positionOptions = [];
+  const shiftOptions = ["Early", "Morning", "Afternoon", "Night"];
+  const hoursOptions = ["Full-Time", "Part-Time", "Any"];
+  const countyOptions = ["Clackamas", "Multnomah", "Yamhill", "Washington"];
   let cities = [
     // Clackamas county cities:
     "Aurora",
@@ -203,16 +204,11 @@ export const useJobDataStore = defineStore("createJob", () => {
   // sort alphabetically and to visually detect if a duplicate city is added
   const zipCodeOptions = zipCodes.sort();
 
-  const shiftOptions = ["Morning", "Afternoon", "Night"];
-  const hoursOptions = ["Full-Time", "Part-Time", "Full-Time or Part-Time"];
-  const countyOptions = ["Clackamas", "Multnomah", "Yamhill", "Washington"];
-
   function FetchJobOptions() {
-    FetchBusinessNames();
-    FetchContactNames();
     FetchPositions();
     FetchIndustries();
   }
+
   function FetchIndustries() {
     industryOptions = [
       "Production",
@@ -223,25 +219,7 @@ export const useJobDataStore = defineStore("createJob", () => {
       "Accounting",
     ];
   }
-  function FetchContactNames() {
-    contactNameOptions = [
-      "Keith Karrie",
-      "Byrne Earnestine",
-      "Dinah Kelsi",
-      "Caleb Cailin",
-    ];
-  }
-  function FetchBusinessNames() {
-    businessNameOptions = [
-      "Nike",
-      "Kroger",
-      "Intel",
-      "Amazon",
-      "OHSU",
-      "Autodesk",
-      "Ford",
-    ];
-  }
+
   function FetchPositions() {
     positionOptions = [
       "Cashier",
@@ -259,16 +237,6 @@ export const useJobDataStore = defineStore("createJob", () => {
       return industryOptions;
     },
   });
-  const ComputedContactNames = computed({
-    get() {
-      return contactNameOptions;
-    },
-  });
-  const ComputedBusinessNames = computed({
-    get() {
-      return businessNameOptions;
-    },
-  });
   const ComputedPositions = computed({
     get() {
       return positionOptions;
@@ -277,34 +245,26 @@ export const useJobDataStore = defineStore("createJob", () => {
   function GetIndustries() {
     return ComputedIndustries;
   }
-  const GetContactNames = function () {
-    return contactNameOptions;
-  };
-  const GetShifts = function () {
+  function GetShifts() {
     return shiftOptions;
-  };
-  const GetPostions = function () {
-    return positionOptions;
-  };
-  const GetBusinessNames = function () {
-    return businessNameOptions;
-  };
-  const GetHours = function () {
+  }
+  function GetPostions() {
+    return ComputedPositions;
+  }
+  function GetHours() {
     return hoursOptions;
-  };
-  const GetCities = function () {
+  }
+  function GetCities() {
     return cityOptions;
-  };
-  const GetZipCodes = function () {
+  }
+  function GetZipCodes() {
     return zipCodeOptions;
-  };
-  const GetCounties = function () {
+  }
+  function GetCounties() {
     return countyOptions;
-  };
+  }
 
   return {
-    GetContactNames,
-    GetBusinessNames,
     GetCities,
     GetZipCodes,
     GetIndustries,
