@@ -239,7 +239,7 @@ function createPOST() {
           >
           <p style="white-space: pre-line"></p>
           <textarea
-            class="form-control block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-accentLight"
+            class="form-control block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
             v-model="formData.notes"
             placeholder="Add Notes (Optional)"
           ></textarea>
