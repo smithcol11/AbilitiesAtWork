@@ -57,9 +57,8 @@ const SubmitForm = async () => {
 
 function createPOST() {
   console.log("POST request called");
-  // using the jsonplaceholder to test, will need to replace with actual server address
-  fetch("https://jsonplaceholder.typicode.com/posts", {
-    // fetch('https://capstone:pdxaaw@capstone.dxz1tza.mongodb.net/test/jobs', {
+  // will need routing in the backend for this to work
+  fetch('http://localhost:3000/createJob', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
