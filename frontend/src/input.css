@@ -12,15 +12,10 @@
 /* CSS for multiselect dropdowns */
 
 .vueform-multiselect {
-  --ms-dropdown-radius: 0;
-  --ms-font-size: theme(fontSize.sm);
   --ms-group-label-bg-selected: theme(colors.accentDark);
   --ms-group-label-bg-selected-pointed: theme(colors.accentDark);
   --ms-max-height: 15rem;
   --ms-option-bg-selected: theme(colors.accentDark);
   --ms-option-bg-selected-pointed: theme(colors.accentDark);
-  --ms-radius: 0;
-  --ms-ring-width: 0;
-  --ms-tag-radius: 0;
   --ms-option-bg-pointed: theme(colors.accentLight);
 }
