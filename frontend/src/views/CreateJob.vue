@@ -51,6 +51,7 @@ const SubmitForm = async () => {
   //check that all required fields have valid input
   const result = await v$.value.$validate();
   if (result) {
+    alert("Form submitted!");
     createPOST();
   }
 };
@@ -58,7 +59,7 @@ const SubmitForm = async () => {
 function createPOST() {
   console.log("POST request called");
   // will need routing in the backend for this to work
-  fetch('http://localhost:3000/createJob', {
+  fetch("http://localhost:3000/createJob", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -96,9 +97,14 @@ function createPOST() {
             type="text"
             placeholder="Enter Business Name"
             v-model="formData.businessName"
-            required
           >
           </TextBox>
+          <span
+            class="text-red-700"
+            @blur="v$.businessName.$touch"
+            v-if="v$.businessName.$error"
+            >Enter a Business Name!</span
+          >
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -108,9 +114,11 @@ function createPOST() {
             type="text"
             placeholder="Enter Contact Name "
             v-model="formData.contactName"
-            required
           >
           </TextBox>
+          <span class="text-red-700" v-if="v$.contactName.$error"
+            >Enter a Contact Name!</span
+          >
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -120,9 +128,11 @@ function createPOST() {
             type="text"
             placeholder="Enter Contact Phone"
             v-model="formData.contactPhoneNumber"
-            required
           >
           </TextBox>
+          <span class="text-red-700" v-if="v$.contactPhoneNumber.$error"
+            >Enter a Phone Number!</span
+          >
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -132,9 +142,11 @@ function createPOST() {
             type="email"
             placeholder="Enter Contact Email"
             v-model="formData.contactEmail"
-            required
           >
           </TextBox>
+          <span class="text-red-700" v-if="v$.contactEmail.$error"
+            >Enter a Valid Email!</span
+          >
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -144,9 +156,11 @@ function createPOST() {
             type="text"
             placeholder="Enter Address Info"
             v-model="formData.address"
-            required
           >
           </TextBox>
+          <span class="text-red-700" v-if="v$.address.$error"
+            >Enter Address Info!</span
+          >
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700">City</label>
@@ -154,8 +168,8 @@ function createPOST() {
             v-model="formData.city"
             :options="jobStore.GetCities()"
             placeholder="Select City"
-            required
           ></DropDown>
+          <span class="text-red-700" v-if="v$.city.$error">Select City!</span>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -165,9 +179,12 @@ function createPOST() {
             v-model="formData.zip"
             :options="jobStore.GetZipCodes()"
             placeholder="Select Zip Code"
-            required
           ></DropDown>
+          <span class="text-red-700" v-if="v$.zip.$error"
+            >Select Zip Code!</span
+          >
         </div>
+
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
             >County</label
@@ -176,8 +193,11 @@ function createPOST() {
             v-model="formData.county"
             :options="jobStore.GetCounties()"
             placeholder="Select County"
-            required
           ></DropDown>
+
+          <span class="text-red-700" v-if="v$.county.$error"
+            >Select County!</span
+          >
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -187,8 +207,10 @@ function createPOST() {
             v-model="formData.position"
             :options="jobStore.GetPostions()"
             placeholder="Select Position"
-            required
           ></DropDown>
+          <span class="text-red-700" v-if="v$.position.$error"
+            >Select Position!</span
+          >
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -198,8 +220,10 @@ function createPOST() {
             v-model="formData.industry"
             :options="jobStore.GetIndustries()"
             placeholder="Select Industy"
-            required
           ></DropDown>
+          <span class="text-red-700" v-if="v$.industry.$error"
+            >Select Industry!</span
+          >
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -209,8 +233,8 @@ function createPOST() {
             v-model="formData.shift"
             :options="jobStore.GetShifts()"
             placeholder="Select Shift"
-            required
           ></DropDown>
+          <span class="text-red-700" v-if="v$.shift.$error">Select Shift!</span>
         </div>
         <div class="basis-1/5">
           <label class="form-label inline-block mb-2 text-gray-700"
@@ -220,15 +244,16 @@ function createPOST() {
             v-model="formData.hours"
             :options="jobStore.GetHours()"
             placeholder="Select Hours"
-            required
           ></DropDown>
+          <span class="text-red-700" v-if="v$.hours.$error">Select Hours!</span>
         </div>
         <div>
           <div class="basis-1/5">
             <label class="form-label inline-block mb-2 text-gray-700"
               >Date Posted</label
             >
-            <TextBox type="date" v-model="formData.date" required> </TextBox>
+            <TextBox type="date" v-model="formData.date"> </TextBox>
+            <span class="text-red-700" v-if="v$.date.$error">Select Date!</span>
           </div>
         </div>
 
