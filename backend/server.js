@@ -3,14 +3,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const passport = require("passport");
-const session = require("express-session");
-const SQLiteStore = require("connect-sqlite3")(session);
 const cookieParser = require("cookie-parser");
 const app = express();
 const port = process.env.PORT || 3000;
 const uri = process.env.ATLAS_URI;
 const connection = mongoose.connection;
-const MongoStore = require("connect-mongo");
 
 mongoose
   .connect(uri, {
@@ -23,10 +20,11 @@ mongoose
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:8080",
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
     credentials: true,
   })
@@ -34,7 +32,7 @@ app.use(
 
 app.use(
   require("express-session")({
-    secret: "SECRET",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
@@ -43,8 +41,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(require("./routes/auth_admin.js"));
-app.use(require("./routes/auth_employee.js"));
+app.use(require("./routes/authAdmin.js"));
+app.use(require("./routes/authEmployee.js"));
 
 const server = app.listen(port, () => {
   console.log(`AAW app listening on port ${port}`);
