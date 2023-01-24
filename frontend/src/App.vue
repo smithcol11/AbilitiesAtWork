@@ -9,7 +9,7 @@ const auth = useAuthenticationStore();
 <template>
   <div v-if="!auth.isAuthAdmin && !auth.isAuthUser">
     <div class="sm:flex">
-      <div class="p-5 sm:text-align-center h-screen w-full">
+      <div class="sm:text-align-center">
         <RouterView />
       </div>
     </div>
@@ -19,7 +19,7 @@ const auth = useAuthenticationStore();
       <div class="">
         <NavBar />
       </div>
-      <div class="p-5 sm:text-align-center h-screen w-full">
+      <div class="sm:text-align-center h-screen w-full">
         <RouterView />
       </div>
     </div>
