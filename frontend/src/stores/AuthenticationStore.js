@@ -68,10 +68,14 @@ export const useAuthenticationStore = defineStore("authorization", () => {
       .then((data) => {
         if (data.admin) {
           isAuthAdmin.value = true;
-          router.push("/");
+          return true;
+          // router.push("/");
         } else if (data.auth) {
           isAuthUser.value = true;
-          router.push("/");
+          return true;
+          // router.push("/");
+        } else {
+          return false;
         }
       });
   }
