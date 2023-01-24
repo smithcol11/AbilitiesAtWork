@@ -5,8 +5,7 @@
 /* CSS for Navbar */
 
 .router-link-exact-active {
-  @apply bg-accentLight;
-  @apply text-dark;
+  @apply bg-accentLight text-dark;
 }
 /* ------------------ */
 /* CSS for multiselect dropdowns */
@@ -20,3 +19,11 @@
   --ms-ring-color: theme(colors.accentLight);
   --ms-option-bg-pointed: theme(colors.accentLight);
 }
+
+/* CSS for buttons */
+
+.simple-button {
+  @apply duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded;
+}
+
+/* ------------------ */
