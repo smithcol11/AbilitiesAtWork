@@ -8,45 +8,59 @@ import { beforeAll, describe, expect, it } from "vitest";
 set("strictQuery", false);
 
 const exampleJob1 = {
-  id: "12345",
-  postedBy: "John Doe",
-  postedOn: new Date(),
-  editedBy: "Jane Doe",
-  editedOn: new Date(),
+  openingDate: new Date(),
+  enteredBy: "John Doe",
+  updatedBy: "Jane Doe",
 
   detail: {
-    category: "Delivery", // { type: String, required: true },
-    type: "Full-Time", // { type: String, enum: ["Full-Time", "Part-Time"], required: true }, // this was originally worded "Hours per W" from the schema document
+    employer: "TriMet",
+    industry: "Transportation",
+    position: "Bus Driver",
+    timeCommitment: "Full-Time",
     shift: "Morning",
-    pay: 20.0,
+    hourlyWage: 27.0,
     benefits: "Paid time off",
-    notes: "n/a", //description
+    notes: "n/a",
   },
+
   address: "123 Main st",
   city: "Portland",
+  zip: "97201",
   county: "Multnomah",
-  // { timestamps: true }
+
+  contact: {
+    email: "abc@xyz.com",
+    name: "Buzz Lightyear",
+    phone: "0008675309",
+  },
 };
 
 const exampleJob2 = {
-  id: "54321",
-  postedBy: "John Smith",
-  postedOn: new Date(),
-  editedBy: "Jane Smith",
-  editedOn: new Date(),
+  openingDate: new Date(),
+  enteredBy: "John Smith",
+  updatedBy: "Jane Smith",
 
   detail: {
-    category: "Clerk", // { type: String, required: true },
-    type: "Part-Time", // { type: String, enum: ["Full-Time", "Part-Time"], required: true }, // this was originally worded "Hours per W" from the schema document
+    employer: "City of Portland",
+    industry: "Administrative",
+    position: "Clerk",
+    timeCommitment: "Part-Time",
     shift: "Afternoon",
-    pay: 21.0,
+    hourlyWage: 21.0,
     benefits: "Health insurance",
     notes: "n/a", //description
   },
+
   address: "1 First st",
   city: "Hillsboro",
+  zip: "97201",
   county: "Washington",
-  // { timestamps: true }
+
+  contact: {
+    email: "abc@xyz.com",
+    name: "Buzz Lightyear",
+    phone: "0008675309",
+  },
 };
 
 beforeAll(async () => {
@@ -58,8 +72,9 @@ describe("Job document", () => {
     "can be saved and retrieved",
     testInSession(async (session) => {
       await Job.create([exampleJob1], { session });
-      const savedJob = await Job.findOne().session(session);
-      expect(savedJob.id).toBe(exampleJob1.id);
+      const criteria = { enteredBy: exampleJob1.enteredBy };
+      const savedJob = await Job.findOne(criteria).session(session);
+      expect(savedJob.updatedBy).toBe(exampleJob1.updatedBy);
     })
   );
 
@@ -71,10 +86,10 @@ describe("Job document", () => {
       });
       expect(new Set(savedJobs).size).toEqual(2);
 
-      const jobToFind = await Job.findOne({ postedBy: "John Smith" }).session(
+      const jobToFind = await Job.findOne({ enteredBy: "John Smith" }).session(
         session
       );
-      expect(jobToFind.id).toBe(exampleJob2.id);
+      expect(jobToFind.enteredBy).toBe(exampleJob2.enteredBy);
     })
   );
 
@@ -86,7 +101,9 @@ describe("Job document", () => {
       });
       expect(new Set(savedJobs).size).toEqual(2);
 
-      const jobToFind = await Job.findOne({ editedBy: "Ben" }).session(session);
+      const jobToFind = await Job.findOne({ updatedBy: "Ben" }).session(
+        session
+      );
       expect(jobToFind).toBe(null);
     })
   );
