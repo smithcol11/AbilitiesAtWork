@@ -4,13 +4,24 @@ import DropDown from "../components/DropDown.vue";
 import TextBox from "../components/TextBox.vue";
 import { useJobDataStore } from "../stores/JobData";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email } from "@vuelidate/validators";
+import { required, email, integer } from "@vuelidate/validators";
 import successBanner from "../components/SuccessBanner.vue";
 import errorBanner from "../components/ErrorBanner.vue";
+
 const jobStore = useJobDataStore();
-const displaySuccess = ref(false);
-const displayFailed = ref(false);
-const sec = ref(4);
+
+const banner = reactive({
+  displaySuccess: {
+    type: Boolean,
+    default: false,
+  },
+  displayFailed: {
+    type: Boolean,
+    default: false,
+  },
+  duration: 4,
+});
+
 const formData = reactive({
   contactName: "",
   businessName: "",
@@ -51,8 +62,8 @@ const rules = computed(() => {
 const v$ = useVuelidate(rules, formData);
 
 const SubmitForm = async () => {
-  displaySuccess.value = false;
-  displayFailed.value = false;
+  banner.displaySuccess = false;
+  banner.displayFailed = false;
   //check that all required fields have valid input
   const result = await v$.value.$validate();
   if (result) {
@@ -63,20 +74,19 @@ const SubmitForm = async () => {
   } else {
     DisplayBanner("failed");
   }
-  console.log("success " + displaySuccess);
-  console.log("failed " + displayFailed);
 };
 
-function DisplayBanner(banner) {
-  if (banner == "success") displaySuccess.value = true;
-  else displayFailed.value = true;
+function DisplayBanner(bannerType) {
+  if (bannerType == "success") banner.displaySuccess = true;
+  else banner.displayFailed = true;
+
   let timer = setInterval(() => {
-    sec.value--;
-    if (sec.value <= 0) {
-      sec.value = 3;
+    banner.duration--;
+    if (banner.duration <= 0) {
+      banner.duration = 4;
       clearInterval(timer);
-      displaySuccess.value = false;
-      displayFailed.value = false;
+      banner.displaySuccess = false;
+      banner.displayFailed = false;
     }
   }, 1000);
 }
@@ -133,13 +143,13 @@ function ResetFormValues() {
       <div class="h-84 max-w-md">
         <Transition>
           <div role="alert">
-            <div v-if="displaySuccess">
+            <div v-if="banner.displaySuccess == true">
               <successBanner
                 topText="Job has been successfully created"
                 bottomText="Job was added to the available jobs! "
               ></successBanner>
             </div>
-            <div v-if="displayFailed">
+            <div v-if="banner.displayFailed == true">
               <errorBanner
                 topText="ERROR: Invalid data field!"
                 bottomText="One or more data fields is missing or incorrect!"
