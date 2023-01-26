@@ -1,13 +1,15 @@
 <script>
+
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import Dropdown from 'primevue/dropdown';
 
 
 import { ref } from 'vue';
 
+
+
 export default {
   setup() {
-
     const loading = ref(false);
     const selectedJob = null;
     const filters1 = ref({
@@ -49,6 +51,7 @@ export default {
       console.log(event.data.company)
 
     }
+
     function onRowUnselect(event) {
 
     }
@@ -113,11 +116,17 @@ export default {
           }
 
         }
+   
   }
+  
 }
 </script>
 
+
+
 <template>
+  
+
   <div class="card">
     <DataTable :value="jobs" class="p-datatable-sm" stripedRows @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
       v-model:selection="this.selectedJob" selectionMode="single" v-model:filters="filters1" filterDisplay="row"
