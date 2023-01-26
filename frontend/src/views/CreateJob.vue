@@ -56,19 +56,20 @@ const SubmitForm = async () => {
   }
 };
 
-function createPOST() {
+async function createPOST() {
   console.log("POST request called");
   // will need routing in the backend for this to work
-  fetch("http://localhost:3000/createJob", {
+  await fetch("http://localhost:3000/createJob", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({
       contactName: formData.contactName,
       contactPhoneNumber: formData.contactPhoneNumber,
       contactEmail: formData.contactEmail,
       businessName: formData.businessName,
+      city: formData.city,
+      zip: formData.zip,
       industry: formData.industry,
       position: formData.position,
       shift: formData.shift,
@@ -277,6 +278,8 @@ function createPOST() {
           SUBMIT
         </button>
       </div>
+    <p>City: {{ formData.city }}</p>
+    <p>Zip: {{ formData.zip }}</p>
     </div>
   </form>
 </template>
