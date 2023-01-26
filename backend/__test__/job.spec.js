@@ -14,39 +14,47 @@ const exampleJob1 = {
   editedBy: "Jane Doe",
   editedOn: new Date(),
 
-  detail: {
-    category: "Delivery", // { type: String, required: true },
-    type: "Full-Time", // { type: String, enum: ["Full-Time", "Part-Time"], required: true }, // this was originally worded "Hours per W" from the schema document
-    shift: "Morning",
-    pay: 20.0,
-    benefits: "Paid time off",
-    notes: "n/a", //description
-  },
-  address: "123 Main st",
+  contactName: "abc",
+  contactEmail: "abc@pdx.edu",
+  contactPhoneNumber: "0008675309",
+
+  businessName: "venusaur",
+  position: "best",
+  industry: "pokemon",
+  shift: "Morning",
+  hours: "Full-Time",
+  pay: 20.0,
   city: "Portland",
+  zip: "11111",
+  date: new Date(),
+  address: "123 Main st",
   county: "Multnomah",
-  // { timestamps: true }
+  notes: "n/a",
 };
 
 const exampleJob2 = {
-  id: "54321",
+  id: "12345",
   postedBy: "John Smith",
   postedOn: new Date(),
   editedBy: "Jane Smith",
   editedOn: new Date(),
 
-  detail: {
-    category: "Clerk", // { type: String, required: true },
-    type: "Part-Time", // { type: String, enum: ["Full-Time", "Part-Time"], required: true }, // this was originally worded "Hours per W" from the schema document
-    shift: "Afternoon",
-    pay: 21.0,
-    benefits: "Health insurance",
-    notes: "n/a", //description
-  },
-  address: "1 First st",
+  contactName: "abcx",
+  contactEmail: "abcx@pdx.edu",
+  contactPhoneNumber: "0008675309",
+
+  businessName: "business",
+  position: "clerk",
+  industry: "industry",
+  shift: "Afternoon",
+  hours: "Full-Time",
+  pay: 21.0,
   city: "Hillsboro",
+  zip: "11111",
+  date: new Date(),
+  address: "1 First st",
   county: "Washington",
-  // { timestamps: true }
+  notes: "n/a",
 };
 
 beforeAll(async () => {
@@ -58,7 +66,8 @@ describe("Job document", () => {
     "can be saved and retrieved",
     testInSession(async (session) => {
       await Job.create([exampleJob1], { session });
-      const savedJob = await Job.findOne().session(session);
+      const criteria = { postedBy: exampleJob1.postedBy };
+      const savedJob = await Job.findOne(criteria).session(session);
       expect(savedJob.id).toBe(exampleJob1.id);
     })
   );
