@@ -1,15 +1,23 @@
 <script setup>
 import Multiselect from "@vueform/multiselect";
-import { ref } from "vue";
-const options = ref(["OPTION-1", "OPTION-2"]);
-const choice = ref("Choice");
-const placeholder = ref("");
+const props = defineProps({
+  options: {
+    default: ["OPTION-1", "OPTION-2"],
+  },
+  placeholder: {
+    type: String,
+    default: "Place holder text",
+  },
+  label: {
+    type: String,
+    default: "",
+  },
+});
 </script>
-<style src="@vueform/multiselect/themes/default.css"></style>
+
 <template>
   <multiselect
     class="vueform-multiselect"
-    v-model="choice"
     :options="options"
     :clear-on-select="true"
     :preserve-search="true"
@@ -18,3 +26,4 @@ const placeholder = ref("");
   >
   </multiselect>
 </template>
+<style src="@vueform/multiselect/themes/default.css"></style>
