@@ -16,12 +16,12 @@ const router = createRouter({
     {
       path: "/searchJobs",
       name: "search",
-      component: () => import("../views/SearchJobs.vue"),
+      component: () => import("../components/SearchJobs.vue"),
     },
     {
       path: "/searchClients",
       name: "searchClient",
-      component: () => import("../views/SearchClients.vue"),
+      component: () => import("../components/SearchClient.vue"),
     },
     {
       path: "/match",

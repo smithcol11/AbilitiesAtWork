@@ -1,21 +1,42 @@
-<script setup>
-import { useAuthStore } from "../stores/Authentication";
-import AddClientScreen from "../components/AddClient.vue";
-import UserLogin from "../components/UserLogin.vue";
-import { ref } from "vue";
-const auth = useAuthStore();
-const JobOption = ref(0);
-</script>
 
+<script setup>
+import JobAdd from "../components/AddClient.vue";
+import SearchView from "../components/SearchClient.vue";
+import { ref } from "vue";
+
+const isSearchOption = ref(true);
+const isAddOption = ref(false);
+
+function ChangePageView() {
+  isAddOption.value = !isAddOption.value;
+  isSearchOption.value = !isSearchOption.value;
+  console.log(isSearchOption.value)
+}
+
+</script>
 <template>
-  <div class="flex justify-center whitespace-nowrap">
-          <RouterLink class="block border-solid border-2 border-black rounded text-center w-25 mt-2 mb-2 mr-4 ml-4 sm:text-sm md:text-base lg:text-lg hover:bg-accentDark hover:text-light"
-        to="/AddClient">Add Client
-      </RouterLink>
-      <RouterLink class="block mt-2 mb-2 mr-4 ml-4 border-solid border-2 border-black rounded w-30 sm:text-sm md:text-base lg:text-lg hover:bg-accentDark hover:text-light"  to="/searchClients">
-        Search/Filter Clients</RouterLink>  
+  <div class=" text-center ">
+  <button class="duration-300 mr-5 bg-accentDark hover:bg-accentLight  px-4 py-1 my-5 font-bold text-base text-light hover:text-dark rounded" 
+  @click="ChangePageView()"
+  >
+      Add Client
+</button>
+<button class="duration-300 ml-5 bg-accentDark hover:bg-accentLight px-4 py-1 my-5 font-bold text-base text-light hover:text-dark rounded" 
+@click="ChangePageView()"
+>
+      Search Clients
+</button>
+<form>
+        <div v-if="isSearchOption">
+          <SearchView />
         </div>
-   
-  
+        <div v-if="isAddOption">
+          <JobAdd />
+        </div>
+      </form>
+ </div>
+ 
 </template>
+
+<style></style>
 
