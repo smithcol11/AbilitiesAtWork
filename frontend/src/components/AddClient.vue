@@ -4,6 +4,8 @@ import router from "../router/index";
 const clientInitials = ref('')
 const clientIndustry = ref('')
 const clientHours = ref("0")
+let success = ref(false)
+let visible = ref(false)
 
 const data = {
       initials: clientInitials.value,
@@ -21,9 +23,11 @@ async function postClient() {
   })
     .then((response) => response.json())
     .then((data) => {
+      success = true;
       console.log('Success', data);
     })
     .catch((error) => {
+      success = false;
       console.log('Error: ', error);
     });
 }
@@ -32,6 +36,13 @@ async function postClient() {
 
 
 <template>
+  <div v-if="!success && visible" class="p-5 rounded bg-green-400 max-w-xl animation-delay:2s ">
+    <h1 class="text-green-700 text-center"><b>Successfully added client!</b></h1>
+  </div>
+  <!--
+  <div v-if="!success && visible" class="p-5 rounded bg-red-400 max-w-xl transition-opacity 5s">
+    <h1 class="text-red-700 text-center"><b>Error: Something went wrong.</b></h1>
+  </div>-->
   <form method="post" @submit.prevent>
     <div class="px-1 sm:px-1 max-w-xl py-5 w-full">
       <div class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border">
@@ -78,7 +89,7 @@ async function postClient() {
         </div>
         <button
         class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
-        @click="postClient"
+        @click="postClient; visible=true"
       >
         Add client
       </button>
