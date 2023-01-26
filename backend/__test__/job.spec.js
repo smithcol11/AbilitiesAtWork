@@ -50,7 +50,8 @@ describe("Job document", () => {
     "can be saved and retrieved",
     testInSession(async (session) => {
       await Job.create([exampleJob1], { session });
-      const savedJob = await Job.findOne().session(session);
+      const criteria = { contactName: exampleJob1.contactName };
+      const savedJob = await Job.findOne(criteria).session(session);
       expect(savedJob.contactName).toBe(exampleJob1.contactName);
     })
   );
