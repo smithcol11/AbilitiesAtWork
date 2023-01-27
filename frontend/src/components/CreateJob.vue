@@ -1,12 +1,12 @@
 <script setup>
 import { reactive, ref, computed } from "vue";
-import DropDown from "../components/DropDown.vue";
-import TextBox from "../components/TextBox.vue";
+import DropDown from "./DropDown.vue";
+import TextBox from "./TextBox.vue";
 import { useJobDataStore } from "../stores/JobData";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, integer } from "@vuelidate/validators";
-import successBanner from "../components/SuccessBanner.vue";
-import errorBanner from "../components/ErrorBanner.vue";
+import successBanner from "./SuccessBanner.vue";
+import errorBanner from "./ErrorBanner.vue";
 
 const jobStore = useJobDataStore();
 
@@ -20,6 +20,14 @@ const banner = reactive({
     default: false,
   },
   duration: 4,
+  timeRemaining: {
+    type: Number,
+    default: 4,
+  },
+  timer: {
+    type: Number,
+    default: 4,
+  },
 });
 
 const formData = reactive({
@@ -64,6 +72,7 @@ const v$ = useVuelidate(rules, formData);
 const SubmitForm = async () => {
   banner.displaySuccess = false;
   banner.displayFailed = false;
+
   //check that all required fields have valid input
   const result = await v$.value.$validate();
   if (result) {
@@ -80,11 +89,14 @@ function DisplayBanner(bannerType) {
   if (bannerType == "success") banner.displaySuccess = true;
   else banner.displayFailed = true;
 
-  let timer = setInterval(() => {
-    banner.duration--;
-    if (banner.duration <= 0) {
-      banner.duration = 4;
-      clearInterval(timer);
+  clearInterval(banner.timer);
+  banner.timeRemaining = banner.duration;
+
+  //create a timer to display banner
+  banner.timer = setInterval(() => {
+    banner.timeRemaining--;
+    if (banner.timeRemaining <= 0) {
+      clearInterval(banner.timer);
       banner.displaySuccess = false;
       banner.displayFailed = false;
     }
