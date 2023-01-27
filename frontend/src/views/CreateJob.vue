@@ -325,20 +325,6 @@ function ResetFormValues() {
             SUBMIT
           </button>
         </div>
-        <p>Business Name: {{ formData.businessName }}</p>
-        <p>Contact Name: {{ formData.contactName }}</p>
-        <p>Contact Phone number: {{ formData.contactPhoneNumber }}</p>
-        <p>Contact email: {{ formData.contactEmail }}</p>
-        <p>Address: {{ formData.address }}</p>
-        <p>City: {{ formData.city }}</p>
-        <p>Zip: {{ formData.zip }}</p>
-        <p>County: {{ formData.county }}</p>
-        <p>Position: {{ formData.position }}</p>
-        <p>Industry: {{ formData.industry }}</p>
-        <p>Shift: {{ formData.shift }}</p>
-        <p>Hours: {{ formData.hours }}</p>
-        <p>Date: {{ formData.date }}</p>
-        <p>Notes: {{ formData.notes }}</p>
       </div>
     </div>
   </form>
