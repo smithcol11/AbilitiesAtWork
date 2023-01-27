@@ -4,17 +4,45 @@ import router from "../router/index";
 const clientInitials = ref('')
 const clientIndustry = ref('')
 const clientHours = ref("0")
-let success = ref(false)
-let visible = ref(false)
+const success = ref(false)
+const visible = ref(false)
 
-const data = {
-      initials: clientInitials.value,
-      preference: {
-        industry: clientIndustry.value,
-        hours: clientHours.value,
-      }};
+  const data = {
+    initials: clientInitials.value,
+    preference: {
+      industry: clientIndustry.value,
+      hours: clientHours.value,
+    }
+  };
+
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve,time));
+}
+
+const resetForm = () => {
+  clientHours.value = "0"
+  clientInitials.value = ''
+  clientIndustry.value = ''
+}
+
+const displaySuccess = () => {
+  success.value = false;
+  visible.value = true;
+  console.log("Success started");
+  setTimeout(() => {visible.value = false}, 3000);
+  console.log("Success finished");
+  resetForm();
+}
+
+const displayError = () => {
+  success.value = false;
+  visible.value = true;
+  setTimeout(() => {visible.value = false}, 3000);
+  resetForm();
+}
 
 async function postClient() {
+  console.log("Please work");
   await fetch("https://localhost:3000/addClient", {
     method: "POST",
     body: JSON.stringify(data),
@@ -23,27 +51,25 @@ async function postClient() {
   })
     .then((response) => response.json())
     .then((data) => {
-      success = true;
       console.log('Success', data);
+      displaySuccess();
     })
     .catch((error) => {
-      success = false;
       console.log('Error: ', error);
+      displayError();
     });
 }
 
 </script>
 
-
 <template>
-  <div v-if="!success && visible" class="p-5 rounded bg-green-400 max-w-xl animation-delay:2s ">
+  <div v-if="success && visible" class="p-5 rounded bg-green-400 max-w-xl">
     <h1 class="text-green-700 text-center"><b>Successfully added client!</b></h1>
   </div>
-  <!--
-  <div v-if="!success && visible" class="p-5 rounded bg-red-400 max-w-xl transition-opacity 5s">
+  <div v-if="!success && visible" class="p-5 rounded bg-red-400 max-w-xl">
     <h1 class="text-red-700 text-center"><b>Error: Something went wrong.</b></h1>
-  </div>-->
-  <form method="post" @submit.prevent>
+  </div>
+  <form method="post" ref="clientForm" @submit.prevent>
     <div class="px-1 sm:px-1 max-w-xl py-5 w-full">
       <div class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border">
         <div>
@@ -88,14 +114,14 @@ async function postClient() {
           </div>
         </div>
         <button
-        class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
-        @click="postClient; visible=true"
+        class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded "
+        @click="postClient"
       >
         Add client
       </button>
       <button
         class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 font-bold text-base text-light hover:text-dark rounded"
-        type="reset"
+        type="reset" @click="resetForm"
       >
         Reset form
       </button>
@@ -103,3 +129,4 @@ async function postClient() {
     </div>
   </form>
 </template>
+
