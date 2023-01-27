@@ -220,10 +220,8 @@ function ResetFormValues() {
             >
           </div>
           <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >City</label
-            >
             <DropDown
+              label="City"
               v-model="formData.city"
               :options="jobStore.GetCities()"
               placeholder="Select City"
@@ -231,10 +229,8 @@ function ResetFormValues() {
             <span class="text-red-700" v-if="v$.city.$error">Select City!</span>
           </div>
           <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Zip Code</label
-            >
             <DropDown
+              label="Zip Code"
               v-model="formData.zip"
               :options="jobStore.GetZipCodes()"
               placeholder="Select Zip Code"
@@ -245,10 +241,8 @@ function ResetFormValues() {
           </div>
 
           <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >County</label
-            >
             <DropDown
+              label="County"
               v-model="formData.county"
               :options="jobStore.GetCounties()"
               placeholder="Select County"
@@ -259,10 +253,8 @@ function ResetFormValues() {
             >
           </div>
           <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Position</label
-            >
             <DropDown
+              label="Position"
               v-model="formData.position"
               :options="jobStore.GetPostions()"
               placeholder="Select Position"
@@ -272,10 +264,8 @@ function ResetFormValues() {
             >
           </div>
           <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Industry</label
-            >
             <DropDown
+              label="Industry"
               v-model="formData.industry"
               :options="jobStore.GetIndustries()"
               placeholder="Select Industy"
@@ -285,10 +275,8 @@ function ResetFormValues() {
             >
           </div>
           <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Shift</label
-            >
             <DropDown
+              label="Shift"
               v-model="formData.shift"
               :options="jobStore.GetShifts()"
               placeholder="Select Shift"
@@ -298,10 +286,8 @@ function ResetFormValues() {
             >
           </div>
           <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Hours</label
-            >
             <DropDown
+              label="Hours"
               v-model="formData.hours"
               :options="jobStore.GetHours()"
               placeholder="Select Hours"
@@ -312,35 +298,47 @@ function ResetFormValues() {
           </div>
           <div>
             <div class="basis-1/5">
-              <label class="form-label inline-block mb-2 text-gray-700"
-                >Date Posted</label
-              >
-              <TextBox type="date" v-model="formData.date"> </TextBox>
+              <TextBox type="date" v-model="formData.date" label="Date Posted">
+              </TextBox>
               <span class="text-red-700" v-if="v$.date.$error"
                 >Select Date!</span
               >
             </div>
           </div>
-
-        <div class="basis-1/5">
-          <label class="form-label inline-block mb-2 text-gray-700"
-            >Notes</label
-          >
-          <p style="white-space: pre-line"></p>
-          <textarea
-            class="form-control block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
-            v-model="formData.notes"
-            placeholder="Add Notes (Optional)"
-          ></textarea>
+          <div class="basis-1/5">
+            <label class="form-label inline-block mb-2 text-gray-700"
+              >Notes</label
+            >
+            <p style="white-space: pre-line"></p>
+            <textarea
+              class="form-control block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
+              v-model="formData.notes"
+              placeholder="Add Notes (Optional)"
+            ></textarea>
+          </div>
         </div>
-      </div>
-      <div>
-        <button
-          @click="SubmitForm()"
-          class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 rounded"
-        >
-          SUBMIT
-        </button>
+        <div>
+          <button
+            @click="SubmitForm()"
+            class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 rounded"
+          >
+            SUBMIT
+          </button>
+        </div>
+        <p>Business Name: {{ formData.businessName }}</p>
+        <p>Contact Name: {{ formData.contactName }}</p>
+        <p>Contact Phone number: {{ formData.contactPhoneNumber }}</p>
+        <p>Contact email: {{ formData.contactEmail }}</p>
+        <p>Address: {{ formData.address }}</p>
+        <p>City: {{ formData.city }}</p>
+        <p>Zip: {{ formData.zip }}</p>
+        <p>County: {{ formData.county }}</p>
+        <p>Position: {{ formData.position }}</p>
+        <p>Industry: {{ formData.industry }}</p>
+        <p>Shift: {{ formData.shift }}</p>
+        <p>Hours: {{ formData.hours }}</p>
+        <p>Date: {{ formData.date }}</p>
+        <p>Notes: {{ formData.notes }}</p>
       </div>
     </div>
   </form>

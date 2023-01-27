@@ -16,7 +16,13 @@ const props = defineProps({
 </script>
 
 <template>
+  <div v-if="label != null">
+    <label class="form-label inline-block mb-2 text-gray-700">{{
+      label
+    }}</label>
+  </div>
   <multiselect
+    v-bind="$attrs"
     class="vueform-multiselect"
     :options="options"
     :clear-on-select="true"
