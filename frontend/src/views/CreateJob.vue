@@ -53,7 +53,7 @@ const rules = computed(() => {
     address: { required },
     county: { required },
     contactPhoneNumber: { required },
-    contactEmail: { required, email },
+    contactEmail: { email },
     notes: "",
   };
 });
