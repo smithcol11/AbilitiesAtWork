@@ -9,10 +9,8 @@ set("strictQuery", false);
 
 const client1Test = {
   initials: "EX",
-  preference: {
-    industry: ["EX", "AM", "PLE"],
-    hours: "Part-Time",
-  },
+  industry: ["EX", "AM", "PLE"],
+  hours: "Part-Time",
   appliedJobs: [],
   enteredBy: "EXAMPLE",
   updatedBy: "EXAMPLE",
@@ -32,15 +30,15 @@ describe("Client model", () => {
       expect(savedClient.initials).toBe(client1Test.initials);
       expect(savedClient.initials.length).toBeGreaterThanOrEqual(2);
 
-      expect(savedClient.preference.industry.length).toBeGreaterThanOrEqual(1);
-      savedClient.preference.industry.forEach((item) => {
-        expect(client1Test.preference.industry).toContain(item);
+      expect(savedClient.industry.length).toBeGreaterThanOrEqual(1);
+      savedClient.industry.forEach((item) => {
+        expect(client1Test.industry).toContain(item);
       });
-      expect(Array.isArray(savedClient.preference.industry));
-      expect(savedClient.preference.industry.isMongooseArray);
-      expect(savedClient.preference.industry.isMongooseDocumentArray);
+      expect(Array.isArray(savedClient.industry));
+      expect(savedClient.industry.isMongooseArray);
+      expect(savedClient.industry.isMongooseDocumentArray);
 
-      expect(savedClient.preference.hours).toBe(client1Test.preference.hours);
+      expect(savedClient.hours).toBe(client1Test.hours);
 
       expect(savedClient.appliedJobs).toStrictEqual(client1Test.appliedJobs);
 

@@ -11,23 +11,18 @@ const exampleJob1 = {
   openingDate: new Date(),
   enteredBy: "John Doe",
   updatedBy: "Jane Doe",
-
-  detail: {
-    employer: "TriMet",
-    industry: "Transportation",
-    position: "Bus Driver",
-    timeCommitment: "Full-Time",
-    shift: "Morning",
-    hourlyWage: 27.0,
-    benefits: "Paid time off",
-    notes: "n/a",
-  },
-
+  employer: "TriMet",
+  industry: "Transportation",
+  position: "Bus Driver",
+  timeCommitment: "Full-Time",
+  shift: "Morning",
+  hourlyWage: 27.0,
+  benefits: "Paid time off",
+  notes: "n/a",
   address: "123 Main st",
   city: "Portland",
   zip: "97201",
   county: "Multnomah",
-
   contact: {
     email: "abc@xyz.com",
     name: "Buzz Lightyear",
@@ -39,23 +34,18 @@ const exampleJob2 = {
   openingDate: new Date(),
   enteredBy: "John Smith",
   updatedBy: "Jane Smith",
-
-  detail: {
-    employer: "City of Portland",
-    industry: "Administrative",
-    position: "Clerk",
-    timeCommitment: "Part-Time",
-    shift: "Afternoon",
-    hourlyWage: 21.0,
-    benefits: "Health insurance",
-    notes: "n/a", //description
-  },
-
+  employer: "City of Portland",
+  industry: "Administrative",
+  position: "Clerk",
+  timeCommitment: "Part-Time",
+  shift: "Afternoon",
+  hourlyWage: 21.0,
+  benefits: "Health insurance",
+  notes: "n/a", //description
   address: "1 First st",
   city: "Hillsboro",
   zip: "97201",
   county: "Washington",
-
   contact: {
     email: "abc@xyz.com",
     name: "Buzz Lightyear",
