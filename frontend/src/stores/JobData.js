@@ -222,13 +222,18 @@ export const useJobDataStore = defineStore("createJob", () => {
 
   function FetchPositions() {
     positionOptions = [
-      "Cashier",
-      "Cook",
-      "Clerk",
-      "Janitor",
-      "Manager",
-      "Sales Rep",
-      "Host",
+      "Cafe",
+      "Assisted Living",
+      "Guest Experience",
+      "Medical",
+      "Retail",
+      "Grocery",
+      "Restraunt",
+      "Janitorial",
+      "Food",
+      "Restaurant",
+      "Entertainment",
+      "Uniform",
     ];
   }
 

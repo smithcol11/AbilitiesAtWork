@@ -9,9 +9,6 @@ const props = defineProps({
     default: "Something bad happened!",
   },
 });
-function CloseBanner() {
-  this.$emit("asd", false);
-}
 </script>
 <template>
   <div class="bg-red-100 rounded-md p-3 flex">
