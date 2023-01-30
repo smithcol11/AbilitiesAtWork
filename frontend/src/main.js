@@ -5,6 +5,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column'
 import Dropdown from 'primevue/dropdown'
 import MultiSelect from 'primevue/multiselect'
+import Chips from 'primevue/chips';
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 
@@ -24,6 +25,7 @@ app.component('DataTable', DataTable);
 app.component('Column', Column);
 app.component('Dropdown', Dropdown);
 app.component('MultiSelect', MultiSelect)
+app.component('Chips', Chips)
 app.component('Button', Button)
 app.component('InputText', InputText)
 
