@@ -9,55 +9,58 @@ const isAddOption = ref(false);
 const activeBtnClass = ["bg-accentLight", "text-dark"];
 
 function ChangePageView1() {
-  if (event.target.id == "addJob") {
-    return;
-  } else {
+  let otherBtn1 = document.getElementById("addJob");
+  let otherBtn = document.getElementById("searchJob");
+  otherBtn1.classList.add(...activeBtnClass)
+  otherBtn.classList.remove(...activeBtnClass);
+    if(isAddOption.value) return;
+    else
+    {
+      isAddOption.value = !isAddOption.value;
+      isSearchOption.value = !isSearchOption.value;
+    }
+  }
+
+function ChangePageView2(){
+  let otherBtn = document.getElementById("searchJob");
+  let otherBtn1 = document.getElementById("addJob");
+  otherBtn.classList.add(...activeBtnClass)
+  otherBtn1.classList.remove(...activeBtnClass);
+    if(isSearchOption.value) return
+    else
+    {
     isAddOption.value = !isAddOption.value;
     isSearchOption.value = !isSearchOption.value;
-    let otherBtn = document.getElementById("searchJob");
-    event.target.classList.add(...activeBtnClass);
-    otherBtn.classList.remove(...activeBtnClass);
-  }
+    }
 }
 
-function ChangePageView2() {
-  if (isSearchOption.value) {
-    return;
-  } else {
-    isAddOption.value = !isAddOption.value;
-    isSearchOption.value = !isSearchOption.value;
-    let activeBtn = document.getElementById("searchJob");
-    let otherBtn = document.getElementById("addJob");
-    activeBtn.classList.add(...activeBtnClass);
-    otherBtn.classList.remove(...activeBtnClass);
-  }
-}
+
 </script>
 <template>
   <div class="text-center">
     <button
-      class="duration-300 mr-5 bg-accentDark hover:bg-accentLight px-4 py-1 my-5 font-bold text-base text-light hover:text-dark rounded"
-      @click="ChangePageView1()"
+      class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+  @click="ChangePageView1()"
       id="addJob"
-    >
+  > 
       Add Job
-    </button>
+</button>
     <button
-      class="duration-300 ml-5 bg-accentDark hover:bg-accentLight px-4 py-1 my-5 font-bold text-base text-light hover:text-dark rounded"
-      @click="ChangePageView2()"
+      class="duration-300 ml-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+@click="ChangePageView2()"
       id="searchJob"
-    >
+>
       Search Jobs
-    </button>
-    <form>
-      <div v-if="isSearchOption">
-        <SearchView />
-      </div>
-      <div v-if="isAddOption">
-        <JobAdd />
-      </div>
-    </form>
-  </div>
+</button>
+<form>
+        <div v-if="isSearchOption">
+          <SearchView />
+        </div>
+        <div v-if="isAddOption">
+          <JobAdd />
+        </div>
+      </form>
+ </div>
 </template>
 
 <style></style>
