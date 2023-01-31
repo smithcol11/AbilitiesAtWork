@@ -7,22 +7,42 @@ import { ref } from "vue";
 const isSearchOption = ref(true);
 const isAddOption = ref(false);
 
-function ChangePageView() {
+function ChangePageView1() {
+  
+  if(isAddOption.value)
+  {
+    return;
+  }
+  else
+  {
   isAddOption.value = !isAddOption.value;
   isSearchOption.value = !isSearchOption.value;
-  console.log(isSearchOption.value)
+  }
+  }
+
+function ChangePageView2(){
+  if(isSearchOption.value)
+  {
+    return;
+  }
+  else
+  {
+  isAddOption.value = !isAddOption.value;
+  isSearchOption.value = !isSearchOption.value;
+  }
+
 }
 
 </script>
 <template>
   <div class=" text-center ">
   <button class="duration-300 mr-5 bg-accentDark hover:bg-accentLight  px-4 py-1 my-5 font-bold text-base text-light hover:text-dark rounded" 
-  @click="ChangePageView()"
+  @click="ChangePageView1()"
   >
       Add Client
 </button>
 <button class="duration-300 ml-5 bg-accentDark hover:bg-accentLight px-4 py-1 my-5 font-bold text-base text-light hover:text-dark rounded" 
-@click="ChangePageView()"
+@click="ChangePageView2()"
 >
       Search Clients
 </button>
