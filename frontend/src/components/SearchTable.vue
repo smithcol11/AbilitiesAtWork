@@ -193,7 +193,7 @@ export default {
         <template #filter="{filterModel, filterCallback}">
           <MultiSelect v-model="selectedFilter.county" @change="filterCallback()" :options="filterData.county" :filter="false" optionLabel="county" label="county" placeholder="Any" display="chip">
             <template #value="slotProps">
-                <span :class="p-chip" display="chip" v-if="slotProps.value">{{slotProps.value.join(', ')}}</span>
+                <span :class="p-chip" display="chip" v-if="slotProps.value && slotProps.value.length > 0">{{slotProps.value.join(', ')}}</span>
                 <span v-else>{{slotProps.placeholder}}</span>
             </template>
             <template #option="slotProps">
