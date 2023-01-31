@@ -165,7 +165,7 @@ export default {
         <template #filter="{filterModel, filterCallback}">
           <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="filterData.city" :filter="false" :showClear="true" optionLabel="city" placeholder="Any" class="p-column-filter">
             <template #value="slotProps">
-                <span :class="'p-dropdown' + slotProps.value" v-if="slotProps.value">{{slotProps.value.join(', ')}}</span>
+                <span :class="'p-dropdown' + slotProps.value" v-if="slotProps.value && slotProps.value.length > 0">{{slotProps.value.join(', ')}}</span>
                 <span v-else>{{slotProps.placeholder}}</span>
             </template>
             <template #option="slotProps">
