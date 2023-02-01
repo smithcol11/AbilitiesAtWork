@@ -127,7 +127,6 @@ async function createPOST() {
       notes: formData.notes,
     }),
   })
-    .then((response) => response.json())
     .then((response) => console.log(response))
     .catch((errors) => console.log(errors));
 }

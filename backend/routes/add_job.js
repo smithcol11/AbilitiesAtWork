@@ -7,7 +7,6 @@ const Job = require("../schema/job");
 
 // Add Job
 router.post("/createJob", async (req, res) => {
-  // console.log(req.body);
   await Job.insertMany({
     contactName: req.body.contactName,
     businessName: req.body.businessName,
@@ -25,15 +24,7 @@ router.post("/createJob", async (req, res) => {
     contactPhoneNumber: req.body.contactPhoneNumber,
   });
 
-  // the line below would create an exception for Unexpected end of JSON input
-  // but still give the correct status 201. There is something wrong with res that seems
-  // to trigger Unexpected end of JSON
-
-  // if we are not sending anything back, the request still successfully add new
-  // data to database but will result in Failed to fetch error for a timeout pending fetch
-
   res.status(201).send();
-
 });
 
 module.exports = router;
