@@ -1,19 +1,17 @@
 <script setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import router from "../router/index";
-const clientInitials = ref('')
-const clientIndustry = ref('')
+const clientInitials = ref("")
+const clientIndustry = ref("")
 const clientHours = ref("0")
 const success = ref(false)
 const visible = ref(false)
 
-  const data = {
-    initials: clientInitials.value,
-    preference: {
-      industry: clientIndustry.value,
-      hours: clientHours.value,
-    }
-  };
+  const data = reactive({
+    initials: "",
+    industry: "",
+    hours: "0",
+  });
 
 function delay(time) {
   return new Promise(resolve => setTimeout(resolve,time));
@@ -42,16 +40,15 @@ const displayError = () => {
 }
 
 async function postClient() {
-  console.log("Please work");
-  await fetch("https://localhost:3000/addClient", {
+  await fetch("http://localhost:3000/addClient", {
     method: "POST",
-    body: JSON.stringify({
-      initials: data.initials,
-      hours: data.preference.hours,
-      industry: data.preference.industry,
-    }),
     headers: {"Content-Type": "application/json"},
     credentials: "include",
+    body: JSON.stringify({
+      initials: data.initials,
+      hours: data.hours,
+      industry: data.industry,
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -84,7 +81,7 @@ async function postClient() {
             name="initials"
             id="initials"
             placeholder="Enter initials"
-            v-model="clientInitials"
+            v-model="data.initials"
             required
             />
         </div>
@@ -97,7 +94,7 @@ async function postClient() {
               name="industry"
               id="industry"
               placeholder="Enter industry"
-              v-model="clientIndustry"
+              v-model="data.industry"
               required
               />
           </div>
@@ -108,7 +105,7 @@ async function postClient() {
             name="hours"
             id="hours"
             v-bind:value="1"
-            v-model="clientHours"
+            v-model="data.hours"
             required
             >
               <option class="block w-full" value="0">Any</option>
