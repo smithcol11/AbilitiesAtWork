@@ -227,4 +227,13 @@ export default {
 
 <style>
 
+.p-multiselect {
+    max-width: 16rem;
+}
+
+.p-filter-column {
+    max-width: 12rem;
+}
+
+
 </style>
