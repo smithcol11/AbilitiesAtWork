@@ -45,7 +45,11 @@ async function postClient() {
   console.log("Please work");
   await fetch("https://localhost:3000/addClient", {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      initials: data.initials,
+      hours: data.preference.hours,
+      industry: data.preference.industry,
+    }),
     headers: {"Content-Type": "application/json"},
     credentials: "include",
   })
