@@ -1,44 +1,60 @@
 <script setup>
-import { reactive, ref } from "vue";
-import router from "../router/index";
-const clientInitials = ref("")
-const clientIndustry = ref("")
-const clientHours = ref("0")
-const success = ref(false)
-const visible = ref(false)
+import { reactive, ref, computed } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
-  const data = reactive({
-    initials: "",
-    industry: "",
-    hours: "0",
-  });
+const banner = reactive({
+  success: {
+    type: Boolean,
+    default: false
+  },
+  failure: {
+    type: Boolean,
+    default: false
+  },
+  visible: {
+    type: Boolean,
+    default: false
+  },
+})
 
-function delay(time) {
-  return new Promise(resolve => setTimeout(resolve,time));
-}
+const hourString = ["Any", "Part-Time", "Full-Time"]
 
+const data = reactive({
+  initials: "",
+  industry: "",
+  hours: "0",
+});
+
+const rules = computed(() => {
+  return {
+    initials: { required },
+    industry: { required },
+    hours: { required },
+  };
+});
+
+// reset form values to default or empty values
 const resetForm = () => {
-  clientHours.value = "0"
-  clientInitials.value = ''
-  clientIndustry.value = ''
+  data.hours = "0";
+  data.initials = '';
+  data.industry = '';
 }
 
+
+// display success banner if post succeeded
 const displaySuccess = () => {
-  success.value = false;
-  visible.value = true;
-  console.log("Success started");
-  setTimeout(() => {visible.value = false}, 3000);
-  console.log("Success finished");
-  resetForm();
+  banner.success = true;
+  setTimeout(() => {banner.success = false}, 3000);
 }
 
+// display error banner if post failed
 const displayError = () => {
-  success.value = false;
-  visible.value = true;
-  setTimeout(() => {visible.value = false}, 3000);
-  resetForm();
+  banner.failure = true;
+  setTimeout(() => {banner.failure = false}, 3000);
 }
 
+// create the post request and send it to the backend
 async function postClient() {
   await fetch("http://localhost:3000/addClient", {
     method: "POST",
@@ -46,28 +62,38 @@ async function postClient() {
     credentials: "include",
     body: JSON.stringify({
       initials: data.initials,
-      hours: data.hours,
-      industry: data.industry,
+      hours: hourString[parseInt(data.hours)],
+      industry: data.industry
     }),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Success', data);
-      displaySuccess();
-    })
-    .catch((error) => {
-      console.log('Error: ', error);
-      displayError();
-    });
+    .then((response) => console.log(response))
+    .catch((errors) => console.log(errors));
+}
+
+// use the rules the data must follow
+const v$ = useVuelidate(rules, data);
+
+const submitForm = async () => {
+
+  // check that the data matches requirements
+  const result = await v$.value.$validate();
+  console.log(result)
+  if(result) {
+    postClient();
+    resetForm();
+    displaySuccess();
+  } else {
+    displayError();
+  }
 }
 
 </script>
 
 <template>
-  <div v-if="success && visible" class="p-5 rounded bg-green-400 max-w-xl">
+  <div v-if="banner.success == true" class="p-5 rounded bg-green-400 max-w-xl">
     <h1 class="text-green-700 text-center"><b>Successfully added client!</b></h1>
   </div>
-  <div v-if="!success && visible" class="p-5 rounded bg-red-400 max-w-xl">
+  <div v-if="banner.failure == true" class="p-5 rounded bg-red-400 max-w-xl">
     <h1 class="text-red-700 text-center"><b>Error: Something went wrong.</b></h1>
   </div>
   <form method="post" ref="clientForm" @submit.prevent>
@@ -116,7 +142,7 @@ async function postClient() {
         </div>
         <button
         class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded "
-        @click="postClient"
+        @click="submitForm"
       >
         Add client
       </button>

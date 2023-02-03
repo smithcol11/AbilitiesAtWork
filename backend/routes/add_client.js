@@ -5,12 +5,11 @@ const router = express.Router();
 const Client = require("../schema/client");
 
 router.post("/addClient", async (req, res) => {
-  await Client.insertOne({
-    intials: req.body.initials,
-    preferece: {
-      hours: req.body.hours,
-      industry: req.body.industry
-    }
+  console.log("Hours: ", req.body.hours);
+  await Client.insertMany({
+    initials: req.body.initials,
+    hours: req.body.hours,
+    industry: req.body.industry,
   });
   res.status(201).send();
 });
