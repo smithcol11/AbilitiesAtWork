@@ -8,37 +8,49 @@ import { beforeAll, describe, expect, it } from "vitest";
 set("strictQuery", false);
 
 const exampleJob1 = {
-  contactName: "Jane Doe",
-  businessName: "Sample Company 1",
-  industry: "Sample Industry",
-  position: "Temp position",
-  shift: "Moring",
-  hours: "9-5",
+  openingDate: new Date(),
+  enteredBy: "John Doe",
+  updatedBy: "Jane Doe",
+  employer: "TriMet",
+  industry: "Transportation",
+  position: "Bus Driver",
+  timeCommitment: "Full-Time",
+  shift: "Morning",
+  hourlyWage: 27.0,
+  benefits: "Paid time off",
+  notes: "n/a",
+  address: "123 Main st",
   city: "Portland",
   zip: "97201",
-  date: new Date(),
-  address: "123 Main",
   county: "Multnomah",
-  notes: "n/a",
-  contactEmail: "123@456.com",
-  contactPhoneNumber: "123-456-7890",
+  contact: {
+    email: "abc@xyz.com",
+    name: "Buzz Lightyear",
+    phone: "0008675309",
+  },
 };
 
 const exampleJob2 = {
-  contactName: "John Smith",
-  businessName: "Sample Company 2",
-  industry: "Sample Industry",
-  position: "Temp position",
-  shift: "Moring",
-  hours: "9-5",
-  city: "Portland",
+  openingDate: new Date(),
+  enteredBy: "John Smith",
+  updatedBy: "Jane Smith",
+  employer: "City of Portland",
+  industry: "Administrative",
+  position: "Clerk",
+  timeCommitment: "Part-Time",
+  shift: "Afternoon",
+  hourlyWage: 21.0,
+  benefits: "Health insurance",
+  notes: "n/a", //description
+  address: "1 First st",
+  city: "Hillsboro",
   zip: "97201",
-  date: new Date(),
-  address: "123 Main",
-  county: "Multnomah",
-  notes: "n/a",
-  contactEmail: "123@456.com",
-  contactPhoneNumber: "123-456-7890",
+  county: "Washington",
+  contact: {
+    email: "abc@xyz.com",
+    name: "Buzz Lightyear",
+    phone: "0008675309",
+  },
 };
 
 beforeAll(async () => {
@@ -50,9 +62,9 @@ describe("Job document", () => {
     "can be saved and retrieved",
     testInSession(async (session) => {
       await Job.create([exampleJob1], { session });
-      const criteria = { contactName: exampleJob1.contactName };
+      const criteria = { enteredBy: exampleJob1.enteredBy };
       const savedJob = await Job.findOne(criteria).session(session);
-      expect(savedJob.contactName).toBe(exampleJob1.contactName);
+      expect(savedJob.updatedBy).toBe(exampleJob1.updatedBy);
     })
   );
 
@@ -64,10 +76,10 @@ describe("Job document", () => {
       });
       expect(new Set(savedJobs).size).toEqual(2);
 
-      const jobToFind = await Job.findOne({ contactName: "John Smith" }).session(
+      const jobToFind = await Job.findOne({ enteredBy: "John Smith" }).session(
         session
       );
-      expect(jobToFind.businessName).toBe(exampleJob2.businessName);
+      expect(jobToFind.enteredBy).toBe(exampleJob2.enteredBy);
     })
   );
 
@@ -79,7 +91,9 @@ describe("Job document", () => {
       });
       expect(new Set(savedJobs).size).toEqual(2);
 
-      const jobToFind = await Job.findOne({ contactName: "Ben" }).session(session);
+      const jobToFind = await Job.findOne({ updatedBy: "Ben" }).session(
+        session
+      );
       expect(jobToFind).toBe(null);
     })
   );
