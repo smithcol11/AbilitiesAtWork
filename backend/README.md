@@ -20,5 +20,5 @@ npm run dev
 ### Run Unit Tests
 
 ```sh
-npm run test:unit
+npm run test
 ```

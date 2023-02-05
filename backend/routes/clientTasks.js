@@ -1,3 +1,5 @@
+//update client data and delete a client
+
 const express = require('express');
 const Client = require('../schema/client');
 const router = express.Router();
