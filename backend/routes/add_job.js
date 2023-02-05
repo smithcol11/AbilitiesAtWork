@@ -24,9 +24,9 @@ router.post("/createJob", async (req, res) => {
     address: req.body.address,
     county: req.body.county,
     notes: req.body.notes,
+    hourlyWage: 0,
     enteredBy: "FIX ME",
     updatedBy: "FIX ME",
-    hourlyWage: 0,
     benefits: "FIX ME",
   });
 
