@@ -2,10 +2,10 @@ const express = require('express');
 const Client = require('../schema/client');
 const router = express.Router();
 
-router.put('/:clientID', async (req, res) => {
+router.put('/:userID', async (req, res) => {
   try {
-    const clientId = req.params.clientID;
-    const client = await Client.findByIdAndUpdate(clientId, req.body, { new: true });
+    const userID = req.params.userID;
+    const client = await Client.findByIdAndUpdate(userID, req.body, { new: true });
     if (!client) return res.status(404).send('The client with the given ID was not found.');
 
     res.send(client);
@@ -14,10 +14,10 @@ router.put('/:clientID', async (req, res) => {
   }
 });
 
-router.delete('/:clientID', async (req, res) => {
+router.delete('/:userID', async (req, res) => {
   try {
-    const clientId = req.params.clientID;
-    const client = await Client.findByIdAndDelete(clientId);
+    const userID = req.params.userID;
+    const client = await Client.findByIdAndDelete(userID);
     if (!client) return res.status(404).send('The client with the given ID was not found.');
 
     res.send(client);

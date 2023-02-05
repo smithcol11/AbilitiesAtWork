@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const clientSchema = new Schema({
-  clientID: {type: Number, required: true},
+  userID: {type: Number, required: true},
   initials: {type: String, required: true, minlength: 2},
   preference: {
     industry: [{type: String, required: true}],
