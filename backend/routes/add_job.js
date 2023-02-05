@@ -8,20 +8,26 @@ const Job = require("../schema/job");
 // Add Job
 router.post("/createJob", async (req, res) => {
   await Job.insertMany({
-    contactName: req.body.contactName,
-    businessName: req.body.businessName,
+    contact: {
+      email: req.body.contactEmail,
+      name: req.body.contactName,
+      phone: req.body.contactPhoneNumber,
+    },
+    employer: req.body.businessName,
     industry: req.body.industry,
     position: req.body.position,
     shift: req.body.shift,
-    hours: req.body.hours,
+    timeCommitment: req.body.hours,
     city: req.body.city,
     zip: req.body.zip,
-    date: req.body.date,
+    openingDate: req.body.date,
     address: req.body.address,
     county: req.body.county,
     notes: req.body.notes,
-    contactEmail: req.body.contactEmail,
-    contactPhoneNumber: req.body.contactPhoneNumber,
+    enteredBy: "FIX ME",
+    updatedBy: "FIX ME",
+    hourlyWage: 0,
+    benefits: "FIX ME",
   });
 
   res.status(201).send();

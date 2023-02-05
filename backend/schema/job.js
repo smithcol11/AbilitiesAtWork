@@ -30,8 +30,6 @@ const jobSchema = new Schema(
     address: { type: String, required: true },
     zip: { type: String, required: true },
     city: { type: String, required: true },
-    zip: { type: String, required: true },
-    address: { type: String, required: true },
     county: { type: String, required: true },
     contact: {
       email: { type: String, trim: true, lowercase: true },
