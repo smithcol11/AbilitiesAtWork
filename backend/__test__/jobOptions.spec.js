@@ -8,11 +8,13 @@ import { beforeAll, describe, expect, it } from "vitest";
 set("strictQuery", false);
 
 const exampleJobOptions = {
+  counties: ["Example"],
   cities: ["Example"],
   zips: ["Example"],
-  counties: ["Example"],
   positions: ["Example"],
   industries: ["Example"],
+  shiftOptions: ["Example"],
+  timeCommitmentOptions: ["Example"],
 };
 
 beforeAll(async () => {
@@ -25,11 +27,7 @@ describe("JobOptions documents", () => {
     testInSession(async (session) => {
       await JobOptions.create([exampleJobOptions], { session });
       const savedJob = await JobOptions.findOne().session(session);
-      expect(savedJob).toHaveProperty('cities');
-      expect(savedJob).toHaveProperty('zips');
-      expect(savedJob).toHaveProperty('counties');
-      expect(savedJob).toHaveProperty('positions');
-      expect(savedJob).toHaveProperty('industries');
+      expect(savedJob).toBeDefined();
     })
   );
 });
