@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const jobDataSchema = new Schema(
+const jobOptionsSchema = new Schema(
   {
     cities: [{ type: String }],
     zips: [{ type: String }],
@@ -11,4 +11,4 @@ const jobDataSchema = new Schema(
   { timestamps: true } 
 );
 
-module.exports = model("JobData", jobDataSchema);
+module.exports = model("JobOptions", jobOptionsSchema);
