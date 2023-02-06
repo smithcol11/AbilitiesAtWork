@@ -1,6 +1,6 @@
 "use strict";
 
-import JobOptions from "../schema/jobOptions"; // this is the model
+import JobOptions from "../schema/jobOptions"; 
 import { connectDatabase, testInSession } from "./db-test";
 import { set } from "mongoose";
 import { beforeAll, describe, expect, it } from "vitest";
