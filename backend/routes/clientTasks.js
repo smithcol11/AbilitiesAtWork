@@ -1,30 +1,32 @@
 //update client data and delete a client
 
-const express = require('express');
-const Client = require('../schema/client');
+const express = require("express");
 const router = express.Router();
+const Client = require("../schema/client")
 
-router.put('/:userID', async (req, res) => {
+router.put('/edit/:initials', async (req, res) => {
   try {
-    const userID = req.params.userID;
-    const client = await Client.findByIdAndUpdate(userID, req.body, { new: true });
-    if (!client) return res.status(404).send('The client with the given ID was not found.');
+    const client = await Client.findOneAndUpdate({ initials: req.params.initials }, req.body, { new: true });
+    if (!client) {
+      return res.status(404).send({ error: 'Client not found' });
+    }
 
     res.send(client);
   } catch (error) {
-    res.status(500).send('An error occurred while updating the client.');
+    res.status(500).send({ error: 'Error updating client' });
   }
 });
 
-router.delete('/:userID', async (req, res) => {
+router.delete('/delete/:initials', async (req, res) => {
   try {
-    const userID = req.params.userID;
-    const client = await Client.findByIdAndDelete(userID);
-    if (!client) return res.status(404).send('The client with the given ID was not found.');
+    const client = await Client.findOneAndRemove({ initials: req.params.initials });
+    if (!client) {
+      return res.status(404).send({ error: 'Client not found' });
+    }
 
     res.send(client);
   } catch (error) {
-    res.status(500).send('An error occurred while deleting the client.');
+    res.status(500).send({ error: 'Error deleting client' });
   }
 });
 
