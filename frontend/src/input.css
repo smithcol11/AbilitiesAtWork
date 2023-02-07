@@ -5,8 +5,15 @@
 /* CSS for Navbar */
 
 .router-link-exact-active {
-  @apply bg-accentLight text-dark;
+  @apply bg-accentLight;
+  @apply text-dark;
 }
+
+/* ------------------ */
+.menuButton {
+  @apply w-40 bg-accentDark my-2 py-2 sm:my-5 duration-300 hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded;
+}
+
 /* ------------------ */
 /* CSS for multiselect dropdowns */
 

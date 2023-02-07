@@ -1,114 +1,145 @@
 <script setup>
-import { ref } from "vue";
-import router from "../router/index";
-const clientInitials = ref('')
-const clientIndustry = ref('')
-const clientHours = ref("0")
-const success = ref(false)
-const visible = ref(false)
+import { reactive, ref, computed } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
-  const data = {
-    initials: clientInitials.value,
-    preference: {
-      industry: clientIndustry.value,
-      hours: clientHours.value,
-    }
+const banner = reactive({
+  success: {
+    type: Boolean,
+    default: false,
+  },
+  failure: {
+    type: Boolean,
+    default: false,
+  },
+  visible: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const hourString = ["Any", "Part-Time", "Full-Time"];
+
+const data = reactive({
+  initials: "",
+  industry: "",
+  hours: "0",
+});
+
+const rules = computed(() => {
+  return {
+    initials: { required },
+    industry: { required },
+    hours: { required },
   };
+});
 
-function delay(time) {
-  return new Promise(resolve => setTimeout(resolve,time));
-}
-
+// reset form values to default or empty values
 const resetForm = () => {
-  clientHours.value = "0"
-  clientInitials.value = ''
-  clientIndustry.value = ''
-}
+  data.hours = "0";
+  data.initials = "";
+  data.industry = "";
+};
 
+// display success banner if post succeeded
 const displaySuccess = () => {
-  success.value = false;
-  visible.value = true;
-  console.log("Success started");
-  setTimeout(() => {visible.value = false}, 3000);
-  console.log("Success finished");
-  resetForm();
-}
+  banner.success = true;
+  setTimeout(() => {
+    banner.success = false;
+  }, 3000);
+};
 
+// display error banner if post failed
 const displayError = () => {
-  success.value = false;
-  visible.value = true;
-  setTimeout(() => {visible.value = false}, 3000);
-  resetForm();
-}
+  banner.failure = true;
+  setTimeout(() => {
+    banner.failure = false;
+  }, 3000);
+};
 
+// create the post request and send it to the backend
 async function postClient() {
-  await fetch("https://localhost:3000/addClient", {
+  await fetch("http://localhost:3000/addClient", {
     method: "POST",
-    body: JSON.stringify({
-      hours: data.preference.hours,
-      initials: data.initials,
-      industry: data.preference.industry,
-    }),
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     credentials: "include",
+    body: JSON.stringify({
+      initials: data.initials,
+      hours: hourString[parseInt(data.hours)],
+      industry: data.industry,
+    }),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Success', data);
-      displaySuccess();
-    })
-    .catch((error) => {
-      console.log('Error: ', error);
-      displayError();
-    });
+    .then((response) => console.log(response))
+    .catch((errors) => console.log(errors));
 }
 
+// use the rules the data must follow
+const v$ = useVuelidate(rules, data);
+
+const submitForm = async () => {
+  // check that the data matches requirements
+  const result = await v$.value.$validate();
+  console.log(result);
+  if (result) {
+    postClient();
+    resetForm();
+    displaySuccess();
+  } else {
+    displayError();
+  }
+};
 </script>
 
 <template>
-  <div v-if="success && visible" class="p-5 rounded bg-green-400 max-w-xl">
-    <h1 class="text-green-700 text-center"><b>Successfully added client!</b></h1>
+  <div v-if="banner.success == true" class="p-5 rounded bg-green-400 max-w-xl">
+    <h1 class="text-green-700 text-center">
+      <b>Successfully added client!</b>
+    </h1>
   </div>
-  <div v-if="!success && visible" class="p-5 rounded bg-red-400 max-w-xl">
-    <h1 class="text-red-700 text-center"><b>Error: Something went wrong.</b></h1>
+  <div v-if="banner.failure == true" class="p-5 rounded bg-red-400 max-w-xl">
+    <h1 class="text-red-700 text-center">
+      <b>Error: Something went wrong.</b>
+    </h1>
   </div>
   <form method="post" ref="clientForm" @submit.prevent>
     <div class="px-1 sm:px-1 max-w-xl py-5 w-full">
-      <div class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border">
+      <div
+        class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border"
+      >
         <div>
-            <label class="block px-1 py-1">Initials</label>
-            <input
+          <label class="block px-1 py-1">Initials</label>
+          <input
             class="rounded border px-1 py-1 sm:w-3/4 w-full"
             type="text"
             name="initials"
             id="initials"
             placeholder="Enter initials"
-            v-model="clientInitials"
+            v-model="data.initials"
             required
-            />
+          />
         </div>
         <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div class="w-full">
             <label class="block px-1 pt-1">Industry</label>
-              <input
+            <input
               class="rounded border px-1 py-1 sm:w-full w-full"
               type="text"
               name="industry"
               id="industry"
               placeholder="Enter industry"
-              v-model="clientIndustry"
+              v-model="data.industry"
               required
-              />
+            />
           </div>
           <div class="w-full sm:w-1/2">
             <label class="block text-left px-1 pt-1">Hours</label>
             <select
-            class="rounded bg-white pl-2 pt-1 pb-2 border w-full"
-            name="hours"
-            id="hours"
-            v-bind:value="1"
-            v-model="clientHours"
-            required
+              class="rounded bg-white pl-2 pt-1 pb-2 border w-full"
+              name="hours"
+              id="hours"
+              v-bind:value="1"
+              v-model="data.hours"
+              required
             >
               <option class="block w-full" value="0">Any</option>
               <option class="block w-full" value="1">Part-Time</option>
@@ -117,19 +148,19 @@ async function postClient() {
           </div>
         </div>
         <button
-        class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded "
-        @click="postClient"
-      >
-        Add client
-      </button>
-      <button
-        class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 font-bold text-base text-light hover:text-dark rounded"
-        type="reset" @click="resetForm"
-      >
-        Reset form
-      </button>
+          class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
+          @click="submitForm"
+        >
+          Add client
+        </button>
+        <button
+          class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 font-bold text-base text-light hover:text-dark rounded"
+          type="reset"
+          @click="resetForm"
+        >
+          Reset form
+        </button>
       </div>
     </div>
   </form>
 </template>
-

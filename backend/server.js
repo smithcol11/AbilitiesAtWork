@@ -43,6 +43,7 @@ app.use(passport.session());
 
 app.use(require("./routes/authAdmin.js"));
 app.use(require("./routes/authEmployee.js"));
+app.use(require("./routes/addClient.js"));
 app.use(require("./routes/addJob.js"));
 
 app.use(require("./routes/getJobs.js"));

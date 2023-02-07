@@ -15,18 +15,9 @@ const router = createRouter({
       component: () => import("../views/JobMenu.vue"),
     },
     {
-      path: "/search",
-      name: "search",
-      component: () => import("../views/Search.vue"),
-    },
-    {
       path: "/match",
       name: "match",
       component: () => import("../views/Match.vue"),
-    },
-    {
-      path: "/logout",
-      name: "logout",
     },
     {
       path: "/login",
