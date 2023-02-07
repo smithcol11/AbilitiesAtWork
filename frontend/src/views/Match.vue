@@ -1,33 +1,39 @@
-<script setup></script>
+<script>
+import ClientInfo from "../components/ClientInfo.vue";
+
+export default {
+  name: "App",
+  components: {
+    ClientInfo,
+  },
+  data() {
+    return {
+      exampleClient: {
+        initials: "ABC",
+        preferences: "things",
+        industry: "stuff",
+        hours: "some",
+        appliedJobs: "many",
+      },
+    };
+  },
+};
+</script>
+
 <template>
-  <div
-    id="Job Match"
-    class="mx-auto rounded w-1/2 max-w-xl h-50 bg-light p-5 text-center shadow-lg border"
-  >
-    <h2 class="text-center">Client-Job Match</h2>
-    <form method="post" @submit.prevent>
-      <div class="p-5 text-center">
-        <label class="px-5" for="client">Initials:</label>
-        <input
-          class="rounded border w-3/4 p-1"
-          type="text"
-          name="initials"
-          id="initials"
-          aria-describedby="initialEntry"
-          placeholder="Enter the client's initials"
-          required
-        />
+  <div class="Match">
+    <div class="p-4 bg-light">
+      <div class="p-2 py-2 flex flex-row items-center">
+        <div>
+          <ClientInfo :client="exampleClient" />
+        </div>
+        <div class="px-20 self-start">
+          <button type="submit" class="simple-button" @click="">
+            Search new client
+          </button>
+        </div>
       </div>
-      <div class="text-center">
-        <button
-          type="match"
-          class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded"
-          @click=""
-        >
-          Match
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </template>
 
