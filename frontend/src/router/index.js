@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import("../views/JobMenu.vue"),
     },
     {
+      path: "/JobAdd",
+      name: "JobAdd",
+      component: () => import("../components/AddJob.vue"),
+    },
+    {
       path: "/search",
       name: "search",
       component: () => import("../views/Search.vue"),
