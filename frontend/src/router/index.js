@@ -42,7 +42,7 @@ router.beforeEach(async (to) => {
   const auth = useAuthenticationStore();
 
   //return to '/login' if user or admin is not authorized
-  if (authRequired && !auth.isAuthAdmin && !auth.isAuthUser) {
+  if (authRequired && (await auth.validateJWT())) {
     return "/login";
   }
 });

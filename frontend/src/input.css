@@ -7,6 +7,18 @@
 .router-link-exact-active {
   @apply bg-accentLight text-dark;
 }
+/* ------------------ */
+/* CSS for multiselect dropdowns */
+
+.vueform-multiselect {
+  --ms-group-label-bg-selected: theme(colors.accentDark);
+  --ms-group-label-bg-selected-pointed: theme(colors.accentDark);
+  --ms-max-height: 15rem;
+  --ms-option-bg-selected: theme(colors.accentDark);
+  --ms-option-bg-selected-pointed: theme(colors.accentDark);
+  --ms-ring-color: theme(colors.accentLight);
+  --ms-option-bg-pointed: theme(colors.accentLight);
+}
 
 /* CSS for buttons */
 

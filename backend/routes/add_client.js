@@ -9,6 +9,8 @@ router.post("/addClient", async (req, res) => {
     initials: req.body.initials,
     hours: req.body.hours,
     industry: req.body.industry,
+    enteredBy: "FIX ME",
+    updatedBy: "FIX ME",
   });
   res.status(201).send();
 });
