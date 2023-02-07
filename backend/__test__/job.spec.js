@@ -62,15 +62,9 @@ describe("Job document", () => {
     "can be saved and retrieved",
     testInSession(async (session) => {
       await Job.create([exampleJob1], { session });
-<<<<<<< HEAD
-      const criteria = { postedBy: exampleJob1.postedBy };
-      const savedJob = await Job.findOne(criteria).session(session);
-      expect(savedJob.id).toBe(exampleJob1.id);
-=======
       const criteria = { enteredBy: exampleJob1.enteredBy };
       const savedJob = await Job.findOne(criteria).session(session);
       expect(savedJob.updatedBy).toBe(exampleJob1.updatedBy);
->>>>>>> main
     })
   );
 
