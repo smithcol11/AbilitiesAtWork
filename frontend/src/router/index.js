@@ -15,63 +15,14 @@ const router = createRouter({
       component: () => import("../views/JobMenu.vue"),
     },
     {
-      path: "/JobAdd",
-      name: "JobAdd",
-      component: () => import("../components/AddJob.vue"),
-    },
-    {
-      path: "/searchJobs",
-      name: "searchJobs",
-      component: () => import("../components/SearchJobs.vue"),
-    },
-    {
-      path: "/searchClients",
-      name: "searchClient",
-      component: () => import("../components/SearchClient.vue"),
-    },
-    {
       path: "/match",
       name: "match",
       component: () => import("../views/Match.vue"),
     },
     {
-      path: "/logout",
-      name: "logout",
-    },
-    {
       path: "/login",
       name: "login",
       component: () => import("../views/Login.vue"),
-    },
-    {
-      path: "/AddJob",
-      name: "AddJob",
-      component: () => import("../components/AddJob.vue"),
-    },
-    {
-      path: "/RemoveJob",
-      name: "RemoveJob",
-      component: () => import("../components/RemoveJob.vue"),
-    },
-    {
-      path: "/EditJob",
-      name: "EditJob",
-      component: () => import("../components/EditJob.vue"),
-    },
-    {
-      path: "/AddClient",
-      name: "/AddClient",
-      component: () => import("../components/AddClient.vue"),
-    },
-    {
-      path: "/RemoveClient",
-      name: "/RemoveClient",
-      component: () => import("../components/RemoveClient.vue"),
-    },
-    {
-      path: "/EditClient",
-      name: "/EditClient",
-      component: () => import("../components/EditClient.vue"),
     },
   ],
 });

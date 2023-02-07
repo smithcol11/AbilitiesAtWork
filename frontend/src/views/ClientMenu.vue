@@ -1,10 +1,6 @@
 <script setup>
-import AddClient from "../components/AddClient.vue";
-</script>
-
-<script setup>
 import ClientAdd from "../components/AddClient.vue";
-import SearchView from "../components/SearchClient.vue";
+import SearchTable from "../components/SearchTable.vue";
 import { ref } from "vue";
 
 const currentView = ref("Search");
@@ -40,14 +36,14 @@ function toggleView(view) {
     >
       Search Clients
     </button>
-    <form>
+    <div>
       <div v-if="currentView === 'Search'">
-        <SearchView />
+        <SearchTable />
       </div>
-      <div v-else-if="currentView === 'Add'">
+      <div v-else-if="currentView === 'Add'" class="mx-auto max-w-lg">
         <ClientAdd />
       </div>
-    </form>
+    </div>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup>
-import SearchView from "../components/SearchJobs.vue";
+import SearchTable from "../components/SearchTable.vue";
 import { ref } from "vue";
 import CreateJob from "../components/CreateJob.vue";
 
@@ -38,9 +38,9 @@ function toggleView(view) {
     </button>
     <form>
       <div v-if="currentView === 'Search'">
-        <SearchView />
+        <SearchTable />
       </div>
-      <div v-else-if="currentView === 'Add'">
+      <div v-else-if="currentView === 'Add'" class="mx-auto max-w-xl">
         <CreateJob />
       </div>
     </form>

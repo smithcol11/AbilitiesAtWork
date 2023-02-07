@@ -9,8 +9,6 @@ export const useAuthenticationStore = defineStore("authorization", () => {
   const firstName = ref("");
   const lastName = ref("");
 
-  validateJWT();
-
   if (localStorage.getItem("firstName") == true) {
     firstName.value = localStorage.getItem("firstName");
     lastName.value = localStorage.getItem("lastName");
@@ -66,17 +64,19 @@ export const useAuthenticationStore = defineStore("authorization", () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        let result;
         if (data.admin) {
           isAuthAdmin.value = true;
-          return true;
+          result = true;
           // router.push("/");
         } else if (data.auth) {
           isAuthUser.value = true;
-          return true;
+          result = true;
           // router.push("/");
         } else {
-          return false;
+          result = false;
         }
+        return result;
       });
   }
 
