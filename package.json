@@ -4,6 +4,7 @@
     "test:all": "concurrently \"npm run test --prefix ./backend\" \"npm run test --prefix ./frontend\""
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^3.6.4",
     "concurrently": "^7.6.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -22,6 +23,7 @@
     "@vitejs/plugin-vue": "^3.1.2",
     "@vue/test-utils": "^2.1.0",
     "jsdom": "^20.0.1",
+    "sass": "^1.57.1",
     "vitest": "^0.24.3"
   }
 }

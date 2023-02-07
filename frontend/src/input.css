@@ -2,12 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* CSS for Navbar */
 
 .router-link-exact-active {
-    @apply bg-accentLight;
-    @apply text-dark;
-  }
+  @apply bg-accentLight text-dark;
+}
+/* ------------------ */
+/* CSS for multiselect dropdowns */
+
+.vueform-multiselect {
+  --ms-group-label-bg-selected: theme(colors.accentDark);
+  --ms-group-label-bg-selected-pointed: theme(colors.accentDark);
+  --ms-max-height: 15rem;
+  --ms-option-bg-selected: theme(colors.accentDark);
+  --ms-option-bg-selected-pointed: theme(colors.accentDark);
+  --ms-ring-color: theme(colors.accentLight);
+  --ms-option-bg-pointed: theme(colors.accentLight);
+}
+
+/* CSS for buttons */
+
+.simple-button {
+  @apply duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded;
+}
 
 /* ------------------ */
