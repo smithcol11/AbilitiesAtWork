@@ -69,7 +69,7 @@ describe("Job document", () => {
   );
 
   it(
-    "should find and return correct job id using postedBy",
+    "should find and return correct job id using contactName",
     testInSession(async (session) => {
       const savedJobs = await Job.create([exampleJob1, exampleJob2], {
         session,
@@ -84,7 +84,7 @@ describe("Job document", () => {
   );
 
   it(
-    "should find and return null if job does not exist using editedBy",
+    "should find and return null if job does not exist using contactName",
     testInSession(async (session) => {
       const savedJobs = await Job.create([exampleJob1, exampleJob2], {
         session,
