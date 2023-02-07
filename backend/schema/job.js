@@ -1,4 +1,6 @@
-import { model, Schema } from "mongoose";
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const model = mongoose.model;
 
 const jobSchema = new Schema(
   {
@@ -10,7 +12,7 @@ const jobSchema = new Schema(
     position: { type: String, trim: true, required: true },
     timeCommitment: {
       type: String,
-      enum: ["Full-Time", "Part-Time"],
+      enum: ["Full-Time", "Part-Time", "Any"],
       required: true,
     },
     shift: {
@@ -30,8 +32,6 @@ const jobSchema = new Schema(
     address: { type: String, required: true },
     zip: { type: String, required: true },
     city: { type: String, required: true },
-    zip: { type: String, required: true },
-    address: { type: String, required: true },
     county: { type: String, required: true },
     contact: {
       email: { type: String, trim: true, lowercase: true },
