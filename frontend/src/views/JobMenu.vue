@@ -1,11 +1,49 @@
 <script setup>
+import SearchTable from "../components/SearchTable.vue";
+import { ref } from "vue";
 import CreateJob from "../components/CreateJob.vue";
-</script>
 
+const currentView = ref("Search");
+const activeBtnClass = ["bg-accentLight", "text-dark"];
+
+function toggleView(view) {
+  currentView.value = view;
+  let otherBtn = document.getElementById("searchJob");
+  let otherBtn1 = document.getElementById("addJob");
+
+  if (view === "Add") {
+    otherBtn1.classList.add(...activeBtnClass);
+    otherBtn.classList.remove(...activeBtnClass);
+  } else if (view === "Search") {
+    otherBtn.classList.add(...activeBtnClass);
+    otherBtn1.classList.remove(...activeBtnClass);
+  }
+}
+</script>
 <template>
-  <div class="Job Menu">
-    <h1>This is the Job Menu page</h1>
-    <CreateJob></CreateJob>
+  <div class="text-center">
+    <button
+      class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+      @click="toggleView('Add')"
+      id="addJob"
+    >
+      Add Job
+    </button>
+    <button
+      class="duration-300 ml-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+      @click="toggleView('Search')"
+      id="searchJob"
+    >
+      Search Jobs
+    </button>
+    <form>
+      <div v-if="currentView === 'Search'">
+        <SearchTable />
+      </div>
+      <div v-else-if="currentView === 'Add'" class="mx-auto max-w-xl">
+        <CreateJob />
+      </div>
+    </form>
   </div>
 </template>
 

@@ -24,27 +24,22 @@ function toggleLogout() {
       />
       <RouterLink
         class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
-        to="/clientmenu"
-        >Client Menu
+        to="/clientMenu"
+      >
+        Client Menu
       </RouterLink>
       <RouterLink
         class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
-        to="/jobmenu"
+        to="/JobMenu"
       >
-        Job Menu</RouterLink
-      >
-      <RouterLink
-        class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
-        to="/search"
-      >
-        Search</RouterLink
-      >
+        Job Menu
+      </RouterLink>
       <RouterLink
         class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
         to="/match"
       >
-        Match</RouterLink
-      >
+        Match
+      </RouterLink>
       <button
         class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
         @click="toggleLogout()"
@@ -73,7 +68,7 @@ function toggleLogout() {
   </button>
   <div
     v-if="showLogout"
-    class="absolute top-0 w-screen h-screen bg-opacity-50 bg-dark mx-auto text-center"
+    class="absolute top-0 w-screen h-screen bg-opacity-50 bg-dark mx-auto text-center z-10"
   >
     <div class="w-72 h-32 shadow-lg mx-auto bg-light mt-24 p-5">
       Do you want to logout?

@@ -151,8 +151,8 @@ function ResetFormValues() {
 
 <template>
   <form @submit.prevent>
-    <div class="JobCreation">
-      <div class="h-84 max-w-md">
+    <div class="JobCreation shadow-lg border bg-light">
+      <div class="h-84 p-5">
         <Transition>
           <div role="alert">
             <div v-if="banner.displaySuccess == true">
@@ -331,7 +331,7 @@ function ResetFormValues() {
         <div>
           <button
             @click="SubmitForm()"
-            class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 rounded"
+            class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mt-5 rounded"
           >
             SUBMIT
           </button>
