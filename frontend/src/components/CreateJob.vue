@@ -1,14 +1,11 @@
 <script setup>
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed, onBeforeMount } from "vue";
 import DropDown from "./DropDown.vue";
 import TextBox from "./TextBox.vue";
-import { useJobDataStore } from "../stores/JobData";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, integer } from "@vuelidate/validators";
 import successBanner from "./SuccessBanner.vue";
 import errorBanner from "./ErrorBanner.vue";
-
-const jobStore = useJobDataStore();
 
 const banner = reactive({
   displaySuccess: {
@@ -45,6 +42,16 @@ const formData = reactive({
   notes: "",
   contactEmail: "",
   contactPhoneNumber: "",
+});
+
+const formOptions = reactive({
+  counties: [],
+  cities: [],
+  zips: [],
+  positions: [],
+  industries: [],
+  shiftOptions: [],
+  timeCommitmentOptions: [],
 });
 
 const rules = computed(() => {
@@ -147,6 +154,21 @@ function ResetFormValues() {
     (formData.contactEmail = ""),
     (formData.contactPhoneNumber = "");
 }
+
+let requestFormOptions = async () => {
+  await fetch("http://localhost:3000/GetJobOptions")
+    .then(res => res.json())
+    .then(newOptions => {
+      for(const key in formOptions) {
+        formOptions[key] = newOptions[key];
+      };
+    })
+    .catch((err) => console.log(err));;
+};
+
+onBeforeMount(async () => {
+  await requestFormOptions();
+});
 </script>
 
 <template>
@@ -234,7 +256,7 @@ function ResetFormValues() {
             <DropDown
               label="City"
               v-model="formData.city"
-              :options="jobStore.GetCities()"
+              :options="formOptions.cities"
               placeholder="Select City"
             ></DropDown>
             <span class="text-red-700" v-if="v$.city.$error">Select City!</span>
@@ -243,7 +265,7 @@ function ResetFormValues() {
             <DropDown
               label="Zip Code"
               v-model="formData.zip"
-              :options="jobStore.GetZipCodes()"
+              :options="formOptions.zips"
               placeholder="Select Zip Code"
             ></DropDown>
             <span class="text-red-700" v-if="v$.zip.$error"
@@ -255,7 +277,7 @@ function ResetFormValues() {
             <DropDown
               label="County"
               v-model="formData.county"
-              :options="jobStore.GetCounties()"
+              :options="formOptions.counties"
               placeholder="Select County"
             ></DropDown>
 
@@ -267,7 +289,7 @@ function ResetFormValues() {
             <DropDown
               label="Position"
               v-model="formData.position"
-              :options="jobStore.GetPostions()"
+              :options="formOptions.positions"
               placeholder="Select Position"
             ></DropDown>
             <span class="text-red-700" v-if="v$.position.$error"
@@ -278,7 +300,7 @@ function ResetFormValues() {
             <DropDown
               label="Industry"
               v-model="formData.industry"
-              :options="jobStore.GetIndustries()"
+              :options="formOptions.industries"
               placeholder="Select Industy"
             ></DropDown>
             <span class="text-red-700" v-if="v$.industry.$error"
@@ -289,7 +311,7 @@ function ResetFormValues() {
             <DropDown
               label="Shift"
               v-model="formData.shift"
-              :options="jobStore.GetShifts()"
+              :options="formOptions.shiftOptions"
               placeholder="Select Shift"
             ></DropDown>
             <span class="text-red-700" v-if="v$.shift.$error"
@@ -300,7 +322,7 @@ function ResetFormValues() {
             <DropDown
               label="Hours"
               v-model="formData.hours"
-              :options="jobStore.GetHours()"
+              :options="formOptions.timeCommitmentOptions"
               placeholder="Select Hours"
             ></DropDown>
             <span class="text-red-700" v-if="v$.hours.$error"
