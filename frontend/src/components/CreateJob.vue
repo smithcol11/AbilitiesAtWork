@@ -197,7 +197,7 @@ function ResetFormValues() {
           <div class="basis-1/5">
             <TextBox
               label="Contact Phone Number"
-              type="text"
+              type="number"
               placeholder="Enter Contact Phone"
               v-model="formData.contactPhoneNumber"
             >
