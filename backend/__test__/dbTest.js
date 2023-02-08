@@ -1,6 +1,6 @@
 "use strict";
 
-import { connect, connection } from "mongoose";
+const { connect, connection } = require("mongoose");
 
 require("dotenv").config();
 const uri = process.env.ATLAS_URI;
