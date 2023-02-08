@@ -73,6 +73,21 @@ async function postClient() {
     .catch((errors) => console.log(errors));
 }
 
+async function getClient() {
+  await fetch("http://localhost:3000/getClient", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      initials: data.initials,
+      hours: hourString[parseInt(data.hours)],
+      industry: data.industry,
+    }),
+  })
+    .then((response) => console.log(response))
+    .catch((errors) => console.log(errors));
+}
+
 // use the rules the data must follow
 const v$ = useVuelidate(rules, data);
 
