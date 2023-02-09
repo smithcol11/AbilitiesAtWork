@@ -5,8 +5,8 @@ const router = express.Router();
 const Job = require("../schema/job");
 module.exports = router;
 
-// Add Job
-router.post("/createJob", async (req, res) => {
+// Add  a job
+router.post("/jobs", async (req, res) => {
   await Job.insertMany({
     contact: {
       email: req.body.contactEmail,
@@ -33,7 +33,8 @@ router.post("/createJob", async (req, res) => {
   res.status(201).send();
 });
 
-router.get("/GetAllJobs", (req, res) => {
+// Gell all jobs
+router.get("/jobs", (req, res) => {
   Job.find({})
     .then((data) => {
       console.log(data);
@@ -42,7 +43,32 @@ router.get("/GetAllJobs", (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Get a job
+router.get("/jobs/:id", getJob, (req, res) => {
+  res.send(res.job.employer)
+})
+
 // update a job
+router.patch("/updateJob", (req, res) => {
+
+})
 
 // delete a job
+router.delete("/", (req, res) => {
 
+})
+
+// function to return a job by id
+async function getJob(req, res, next) {
+  let job
+  try {
+    job = await Job.findById(req.params.id)
+    if (job == null) {
+      return res.status(404).json({ message: "Cannot find job"})
+    }
+  } catch(error) {
+    return res.status(500).json({ message: error.message})
+  }
+  res.job = job
+  next()
+}

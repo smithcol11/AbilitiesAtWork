@@ -113,7 +113,7 @@ function DisplayBanner(bannerType) {
 async function addJob() {
   console.log("POST request called");
   // will need routing in the backend for this to work
-  await fetch("http://localhost:3000/createJob", {
+  await fetch("http://localhost:3000/jobs", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
