@@ -15,5 +15,31 @@ PATCH http://localhost:3000/jobs/63e518332f11d95818fb034f
 Content-Type: application/json
 
 {
-    "employer": "New Employer"
+    # be sure to double check the ',' when testing
+    # to align with json format
+
+    "contact": {
+        "email": "newEmail@mail.com",
+        "name": "new name"
+        # passing a number is having a problem
+        #"phone": 333
+    },
+    # "openingDate": "someDate",
+    # "enteredBy": "Name A",
+    # "updatedBy": "Name B",
+    # "employer": "Some Company",
+    # "industry": "Cafe",
+    # "position": "Assisted Living",
+    # "timeCommitment": "Full-Time",
+    # "shift": "Afternoon",
+    # issues with testing hourlyWafe because of type number
+    # "hourlyWage": 10,
+    # "benefits": "some benefits",
+    # "notes": "some notes",
+    # "address": "some street address",
+    # "zip": "12345",
+    # "city": "Some City",
+    # "county": "Some County",
+    # "createdAt": "Some Date", # needs to be in Date format
+    # "updatedAt": "Some Date" #needs to be in Date format 
 }
