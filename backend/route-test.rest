@@ -6,3 +6,14 @@ GET http://localhost:3000/jobs/63e51728570e8a2dcdf94730
 
 ###
 GET http://localhost:3000/jobs/63e518332f11d95818fb034f
+
+###
+DELETE http://localhost:3000/jobs/63e51728570e8a2dcdf94730
+
+###
+PATCH http://localhost:3000/jobs/63e518332f11d95818fb034f
+Content-Type: application/json
+
+{
+    "employer": "New Employer"
+}

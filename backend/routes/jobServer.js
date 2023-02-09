@@ -45,17 +45,31 @@ router.get("/jobs", (req, res) => {
 
 // Get a job
 router.get("/jobs/:id", getJob, (req, res) => {
-  res.send(res.job.employer)
+  res.json(res.job)
 })
 
 // update a job
-router.patch("/updateJob", (req, res) => {
+router.patch("/jobs/:id", getJob, async (req, res) => {
+  if (req.body.employer != null) {
+    res.job.employer = req.body.employer
+  }
 
+  try {
+    const updatedJob = await res.job.save()
+    res.json(updatedJob)
+  } catch (error) {
+    res.status(400).json({ message: error.message})
+  }
 })
 
 // delete a job
-router.delete("/", (req, res) => {
-
+router.delete("/jobs/:id", getJob, async (req, res) => {
+  try {
+    await res.job.remove()
+    res.json({ message: 'Deleted Job'})
+  } catch (error) {
+    res.status(500).json({ message: error.message})
+  }
 })
 
 // function to return a job by id
