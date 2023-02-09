@@ -37,6 +37,10 @@ router.post("/verifyJWT", (req, res) => {
     } else if (result) {
       res.json({ auth: true, admin: false });
     } else res.json({ auth: false, admin: false });
+  } else {
+    console.log("Didn't get the token");
+    console.log(req.cookies);
+    console.log(req.cookies.token);
   }
 });
 
@@ -59,7 +63,7 @@ router.post("/loginUser", (req, res) => {
     else if (result) {
       let token = jwt.sign(req.body.username, process.env.SESSION_SECRET);
 
-      res.cookie("token", token);
+      res.cookie("token", token, { sameSite: "none", secure: "false" });
 
       res.json({ auth: true, admin: false });
     } else {
