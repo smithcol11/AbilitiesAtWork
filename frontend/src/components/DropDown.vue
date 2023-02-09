@@ -17,9 +17,7 @@ const props = defineProps({
 
 <template>
   <div v-if="label != null">
-    <label class="form-label inline-block mb-2 text-gray-700">{{
-      label
-    }}</label>
+    <label class="form-label inline-block text-gray-700">{{ label }}</label>
   </div>
   <multiselect
     v-bind="$attrs"
