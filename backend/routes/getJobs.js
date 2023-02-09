@@ -11,3 +11,19 @@ router.get("/GetAllJobs", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+router.get("/getJobs", (req, res) => {
+  Jobs.find({})
+    .then((data) => {
+      let match = data.find(({industry}) => industry === req._parsedOriginalUrl.query);
+      if (match == null) {
+        console.log('No matches found');
+        res.json('[]')
+      }
+      else {
+        res.json(match);
+      }
+
+    })
+    .catch((err) => console.log(err));
+});
