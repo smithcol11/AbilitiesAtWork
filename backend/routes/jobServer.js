@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const Job = require("../schema/job");
+module.exports = router;
 
 // Add Job
 router.post("/createJob", async (req, res) => {
@@ -32,4 +33,16 @@ router.post("/createJob", async (req, res) => {
   res.status(201).send();
 });
 
-module.exports = router;
+router.get("/GetAllJobs", (req, res) => {
+  Job.find({})
+    .then((data) => {
+      console.log(data);
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
+});
+
+// update a job
+
+// delete a job
+
