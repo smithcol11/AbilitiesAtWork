@@ -1,7 +1,7 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import { ref } from "vue";
-
+import Button from "../components/Button.vue";
 const auth = useAuthenticationStore();
 let showLogout = ref(false);
 
@@ -70,21 +70,13 @@ function toggleLogout() {
     v-if="showLogout"
     class="absolute top-0 w-screen h-screen bg-opacity-50 bg-dark mx-auto text-center z-10"
   >
-    <div class="w-72 h-32 shadow-lg mx-auto bg-light mt-24 p-5">
+    <div class="w-72 h-28 shadow-lg mx-auto bg-light mt-24 p-5">
       Do you want to logout?
-      <div>
-        <button
-          @click="auth.Logout()"
-          class="bg-rose-600 text-light shadow p-3 rounded-lg mt-5 mx-1 hover:bg-rose-700 duration-200"
-        >
-          Logout
-        </button>
-        <button
-          @click="toggleLogout()"
-          class="bg-slate-300 text-dark shadow p-3 rounded-lg mt-5 mx-1 hover:bg-slate-200 duration-200"
-        >
-          Cancel
-        </button>
+      <div class="grid grid-cols-2 gap-4 place-content-around mt-2">
+        <Button class="red-button my-5" @click="auth.Logout()" text="Logout">
+        </Button>
+        <Button class="grey-button my-5" @click="toggleLogout" text="Cancel">
+        </Button>
       </div>
     </div>
   </div>

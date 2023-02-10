@@ -43,5 +43,8 @@
 .red-button {
   @apply duration-300 bg-red-700 hover:bg-red-500 px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded;
 }
+.grey-button {
+  @apply duration-300 bg-slate-400 hover:bg-slate-300 px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded;
+}
 
 /* ------------------ */
