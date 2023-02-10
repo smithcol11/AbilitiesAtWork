@@ -2,9 +2,9 @@
 import SearchTable from "../components/SearchTable.vue";
 import { ref } from "vue";
 import CreateJob from "../components/CreateJob.vue";
-
+import Button from "../components/Button.vue";
 const currentView = ref("Search");
-const activeBtnClass = ["bg-accentLight", "text-dark"];
+const activeBtnClass = ["l-purple-button"];
 
 function toggleView(view) {
   currentView.value = view;
@@ -22,20 +22,16 @@ function toggleView(view) {
 </script>
 <template>
   <div class="text-center">
-    <button
-      class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
-      @click="toggleView('Add')"
-      id="addJob"
-    >
-      Add Job
-    </button>
-    <button
-      class="duration-300 ml-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
-      @click="toggleView('Search')"
-      id="searchJob"
-    >
-      Search Jobs
-    </button>
+    <div class="flex justify-center gap-10 my-5">
+      <Button @click="toggleView('Add')" id="addJob" text="Add Job"> </Button>
+      <Button
+        class="l-purple-button"
+        @click="toggleView('Search')"
+        id="searchJob"
+        text="Search Jobs"
+      >
+      </Button>
+    </div>
     <form>
       <div v-if="currentView === 'Search'">
         <SearchTable />

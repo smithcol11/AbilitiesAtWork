@@ -1,10 +1,11 @@
 <script setup>
 import ClientAdd from "../components/AddClient.vue";
 import SearchTable from "../components/SearchTable.vue";
+import Button from "../components/Button.vue";
 import { ref } from "vue";
 
 const currentView = ref("Search");
-const activeBtnClass = ["bg-accentLight", "text-dark"];
+const activeBtnClass = ["l-purple-button"];
 
 function toggleView(view) {
   currentView.value = view;
@@ -22,20 +23,17 @@ function toggleView(view) {
 </script>
 <template>
   <div class="text-center">
-    <button
-      class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
-      @click="toggleView('Add')"
-      id="addClient"
-    >
-      Add Client
-    </button>
-    <button
-      class="duration-300 ml-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
-      @click="toggleView('Search')"
-      id="searchClient"
-    >
-      Search Clients
-    </button>
+    <div class="flex justify-center gap-10 my-5">
+      <Button @click="toggleView('Add')" id="addClient" text="Add Client">
+      </Button>
+      <Button
+        class="l-purple-button"
+        @click="toggleView('Search')"
+        id="searchClient"
+        text="Search Clients"
+      >
+      </Button>
+    </div>
     <div>
       <div v-if="currentView === 'Search'">
         <SearchTable />
@@ -46,5 +44,3 @@ function toggleView(view) {
     </div>
   </div>
 </template>
-
-<style></style>
