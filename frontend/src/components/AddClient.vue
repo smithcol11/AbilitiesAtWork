@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required, minLength, helpers } from "@vuelidate/validators";
 
 const banner = reactive({
   success: {
@@ -28,7 +28,9 @@ const data = reactive({
 
 const rules = computed(() => {
   return {
-    initials: { required },
+    initials: { 
+      required: helpers.withMessage("The initials field cannot be empty.", required), 
+      minLength: minLength(2) },
     industry: { required },
     hours: { required },
   };
@@ -79,6 +81,7 @@ const v$ = useVuelidate(rules, data);
 const submitForm = async () => {
   // check that the data matches requirements
   const result = await v$.value.$validate();
+
   console.log(result);
   if (result) {
     postClient();
@@ -103,44 +106,22 @@ const submitForm = async () => {
   </div>
   <form method="post" ref="clientForm" @submit.prevent>
     <div class="px-1 sm:px-1 max-w-xl py-5 w-full">
-      <div
-        class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border"
-      >
+      <div class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border">
         <div>
           <label class="block px-1 py-1">Initials</label>
-          <input
-            class="rounded border px-1 py-1 sm:w-3/4 w-full"
-            type="text"
-            name="initials"
-            id="initials"
-            placeholder="Enter initials"
-            v-model="data.initials"
-            required
-          />
+          <input class="rounded border px-1 py-1 sm:w-3/4 w-full" type="text" name="initials" id="initials"
+            placeholder="Enter initials" v-model="data.initials" required />
         </div>
         <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div class="w-full">
             <label class="block px-1 pt-1">Industry</label>
-            <input
-              class="rounded border px-1 py-1 sm:w-full w-full"
-              type="text"
-              name="industry"
-              id="industry"
-              placeholder="Enter industry"
-              v-model="data.industry"
-              required
-            />
+            <input class="rounded border px-1 py-1 sm:w-full w-full" type="text" name="industry" id="industry"
+              placeholder="Enter industry" v-model="data.industry" required />
           </div>
           <div class="w-full sm:w-1/2">
             <label class="block text-left px-1 pt-1">Hours</label>
-            <select
-              class="rounded bg-white pl-2 pt-1 pb-2 border w-full"
-              name="hours"
-              id="hours"
-              v-bind:value="1"
-              v-model="data.hours"
-              required
-            >
+            <select class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="hours" id="hours" v-bind:value="1"
+              v-model="data.hours" required>
               <option class="block w-full" value="0">Any</option>
               <option class="block w-full" value="1">Part-Time</option>
               <option class="block w-full" value="2">Full-Time</option>
@@ -149,15 +130,12 @@ const submitForm = async () => {
         </div>
         <button
           class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
-          @click="submitForm"
-        >
+          @click="submitForm">
           Add client
         </button>
         <button
           class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 font-bold text-base text-light hover:text-dark rounded"
-          type="reset"
-          @click="resetForm"
-        >
+          type="reset" @click="resetForm">
           Reset form
         </button>
       </div>
