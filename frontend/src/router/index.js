@@ -31,9 +31,10 @@ router.beforeEach(async (to) => {
   const publicPages = ["/login"];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthenticationStore();
+  const authSuccess = await auth.validateJWT();
 
   //return to '/login' if user or admin is not authorized
-  if (authRequired && (await auth.validateJWT())) {
+  if (authRequired && !authSuccess) {
     return "/login";
   }
 });

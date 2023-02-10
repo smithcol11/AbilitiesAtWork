@@ -38,9 +38,7 @@ router.post("/verifyJWT", (req, res) => {
       res.json({ auth: true, admin: false });
     } else res.json({ auth: false, admin: false });
   } else {
-    console.log("Didn't get the token");
-    console.log(req.cookies);
-    console.log(req.cookies.token);
+    res.status(400).json({ message: 'Token cookie not received', error });
   }
 });
 
