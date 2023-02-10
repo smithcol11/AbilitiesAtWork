@@ -28,14 +28,14 @@ const data = reactive({
 
 const rules = computed(() => {
   return {
-    initials: { 
-      required: helpers.withMessage("Please enter initials.", required), 
+    initials: {
+      required: helpers.withMessage("Please enter initials.", required),
       minLength: helpers.withMessage("Must have at least two initials.", minLength(2)),
     },
-    industry: { 
+    industry: {
       required: helpers.withMessage("Please enter an industry.", required),
     },
-    hours: { 
+    hours: {
       required: helpers.withMessage("Please enter hours.", required),
     },
   };
@@ -113,7 +113,7 @@ const submitForm = async () => {
             <label class="block px-1 pt-5">Industry</label>
             <input class="rounded border px-1 py-1 sm:w-full w-full" type="text" name="industry" id="industry"
               placeholder="Enter industry" v-model="data.industry" required />
-              <p class="px-1 py-1 text-red-700" v-if="v$.industry.$error"> {{ v$.industry.$errors[0].$message }} </p>
+            <p class="px-1 py-1 text-red-700" v-if="v$.industry.$error"> {{ v$.industry.$errors[0].$message }} </p>
           </div>
           <div class="w-full sm:w-1/2">
             <label class="block text-left px-1 pt-5">Hours</label>
@@ -125,14 +125,10 @@ const submitForm = async () => {
             </select>
           </div>
         </div>
-        <button
-          class="simple-button px-4 py-1 mt-5 mr-3"
-          @click="submitForm">
+        <button class="simple-button px-4 py-1 mt-5 mr-3" @click="submitForm">
           Add client
         </button>
-        <button
-          class="simple-button px-4 py-1 mt-5"
-          type="reset" @click="resetForm">
+        <button class="simple-button px-4 py-1 mt-5" type="reset" @click="resetForm">
           Reset form
         </button>
       </div>
