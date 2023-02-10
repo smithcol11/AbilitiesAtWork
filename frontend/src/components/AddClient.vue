@@ -26,7 +26,7 @@ const data = reactive({
   hours: "0",
 });
 
-const validations = computed(() => {
+const rules = computed(() => {
   return {
     initials: { 
       required: helpers.withMessage("Please enter initials.", required), 
@@ -73,7 +73,7 @@ async function postClient() {
 }
 
 // use the rules the data must follow
-const v$ = useVuelidate(validations, data);
+const v$ = useVuelidate(rules, data);
 
 const submitForm = async () => {
   // check that the data matches requirements
