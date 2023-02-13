@@ -8,14 +8,6 @@ const banner = reactive({
     type: Boolean,
     default: false,
   },
-  failure: {
-    type: Boolean,
-    default: false,
-  },
-  visible: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 const hourString = ["Any", "Part-Time", "Full-Time"];
@@ -92,11 +84,6 @@ const submitForm = async () => {
   <div v-if="banner.success == true" class="p-5 rounded bg-green-400 max-w-xl">
     <h1 class="text-green-700 text-center">
       <b>Successfully added client!</b>
-    </h1>
-  </div>
-  <div v-if="banner.failure == true" class="p-5 rounded bg-red-400 max-w-xl">
-    <h1 class="text-red-700 text-center">
-      <b>Error: Something went wrong.</b>
     </h1>
   </div>
   <form method="post" ref="clientForm" @submit.prevent>
