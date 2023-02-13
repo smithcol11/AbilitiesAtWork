@@ -14,7 +14,6 @@ import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';  
 
-import { useJobDataStore } from "./stores/JobData";
 import App from "./App.vue";
 import router from "./router";
 
@@ -35,9 +34,3 @@ app.component('InputText', InputText)
 
 
 app.mount("#app");
-
-//This call is needed somewhere in the beginning of the application
-//to populate the jobstore values if this will be used outside of the
-//createJob view (i.e. in the match and search)
-const jobStore = useJobDataStore();
-jobStore.FetchJobOptions();
