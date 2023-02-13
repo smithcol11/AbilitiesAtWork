@@ -4,9 +4,9 @@ const express = require("express");
 const router = express.Router();
 const Client = require("../schema/client")
 
-router.put('/editClient/', async (req, res) => {
+router.put('/editClient', async (req, res) => {
   try {
-    const client = await Client.findOneAndUpdate({ initials: req.params.initials }, req.body, { new: true });
+    const client = await Client.updateOne({ initials: req.body.initials }, req.body, { new: true });
     if (!client) {
       return res.status(404).send({ error: 'Client not found when updating' });
     }
@@ -17,9 +17,9 @@ router.put('/editClient/', async (req, res) => {
   }
 });
 
-router.delete('/deleteClient/', async (req, res) => {
+router.delete('/deleteClient', async (req, res) => {
   try {
-    const client = await Client.findOneAndRemove({ initials: req.params.initials });
+    client = await Client.deleteOne({initials: req.body.initials})
     if (!client) {
       return res.status(404).send({ error: 'Client not found when deleting' });
     }
