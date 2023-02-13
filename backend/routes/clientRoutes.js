@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const Client = require("../schema/client")
 
-router.put('/editClient/:initials', async (req, res) => {
+router.put('/editClient/', async (req, res) => {
   try {
     const client = await Client.findOneAndUpdate({ initials: req.params.initials }, req.body, { new: true });
     if (!client) {
@@ -17,7 +17,7 @@ router.put('/editClient/:initials', async (req, res) => {
   }
 });
 
-router.delete('/deleteClient/:initials', async (req, res) => {
+router.delete('/deleteClient/', async (req, res) => {
   try {
     const client = await Client.findOneAndRemove({ initials: req.params.initials });
     if (!client) {
