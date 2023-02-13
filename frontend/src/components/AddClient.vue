@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, helpers } from "@vuelidate/validators";
+import { required, helpers, maxLength } from "@vuelidate/validators";
 
 const banner = reactive({
   success: {
@@ -13,16 +13,25 @@ const banner = reactive({
 const hourString = ["Any", "Part-Time", "Full-Time"];
 
 const data = reactive({
-  initials: "",
+  firstName: "",
+  middleInitial: "",
+  lastInitial: "",
   industry: "",
   hours: "0",
 });
 
 const rules = computed(() => {
   return {
-    initials: {
-      required: helpers.withMessage("Please enter initials.", required),
-      minLength: helpers.withMessage("Must have at least two initials.", minLength(2)),
+    firstName: {
+      required: helpers.withMessage("Please enter first name.", required),
+    },
+    middleInitial: {
+      required: helpers.withMessage("Please enter middle initial.", required),
+      maxLength: helpers.withMessage("Please enter only one middle initial.", maxLength(1)),
+    },
+    lastInitial: {
+      required: helpers.withMessage("Please enter last initial.", required),
+      maxLength: helpers.withMessage("Please enter only one last initial.", maxLength(1)),
     },
     industry: {
       required: helpers.withMessage("Please enter an industry.", required),
