@@ -1,5 +1,5 @@
 <template>
-  <div class="font-bold pb-2"> Matches for {{ client.firstName }} {{ client.middleInitial }}. {{ client.LastInitial }}. </div>
+  <div class="font-bold pb-2"> Matches for {{ client.firstName }} {{ client.middleInitial }}. {{ client.lastInitial }}. </div>
   <div class="text-sm">
     <div><span class="font-extralight italic">Preferences: </span>
        {{ client.preferences }} 

@@ -9,11 +9,12 @@ export default {
   data() {
     return {
       exampleClient: {
-        initials: "ABC",
+        firstName: "First",
+        middleInitial: "M",
+        lastInitial: "L",
         preferences: "things",
         industry: "stuff",
         hours: "some",
-        appliedJobs: "many",
       },
     };
   },
