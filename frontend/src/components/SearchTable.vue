@@ -1,9 +1,11 @@
 <script>
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import Dropdown from "primevue/dropdown";
-import Chips from "primevue/chips";
 import { ref } from "vue";
 import ConfirmPopup from 'primevue/confirmpopup';
+
+import Dialog from 'primevue/dialog';
+import SplitButton from 'primevue/splitbutton';
 
 export default {
     setup() {
@@ -125,11 +127,30 @@ export default {
     },
     data() {
         return {
+            displayBasic: false,
             IsOpenMI: false,
             showDELModal: false,
             SelectedJob: {},
             SelectedIndex: -1,
+            items: [
+                {
+                    label: 'Update',
+                    icon: 'pi pi-refresh',
+                    command: () => {
+                        this.$toast.add({severity:'success', summary:'Updated', detail:'Data Updated', life: 3000});
+                    }
+                },
+                {
+                    label: 'Delete',
+                    icon: 'pi pi-times',
+                    command: () => {
+                      this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
+                    }
+                    
+                },
+            ],
         };
+        
     },
     created() {
         this.initFilters1();
@@ -191,13 +212,25 @@ export default {
           this.showDELModal = false;
         },
         RemoveJob(){
-          this.IsOpenMI = false;
-          this.showDELModal = false;
           if (this.SelectedIndex > -1)
               this.jobs.splice(this.SelectedIndex, 1);
         },
+        openBasic(item,index) {
+            this.displayBasic = true;
+            this.SelectedItem = item;
+            this.SelectedIndex = index;
+        },
+        closeBasic() {
+            this.displayBasic = false;
+        },
+        lol() {
+          console.log("lol");
+        }
     },
-
+    components: {
+      Dialog,
+      SplitButton
+  }
 };
 </script>
 
@@ -391,45 +424,24 @@ export default {
 
       <Column field="moreInfo">
         <template #body="{ data,index }">
-          <Button label="More Info" class="p-button-outlined p-button-secondary" 
-          @click="OpenModalMI(data,index)"/>
-          <modal v-if="IsOpenMI">
-          <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div class="mt-3 text-center">
-                <div class="mt-2 px-7 py-3">
-                  <p class="text-xl text-gray-500">
-                     More Information:
-                  </p>
-                  <div class="bg-white text-left italic font-bold text-gray-700">
+          <!-- <Button label="More Info" class="p-button-outlined p-button-secondary" />-->
+          <SplitButton label="More Info" :model="items" class="p-button-outlined p-button-secondary" @click="openBasic(data,index)" />
+          <Dialog header="More Information:" v-model:visible="displayBasic" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}">
+            <div class="mt-3 text-center">
+              <div class="mt-2 px-7 py-3">
+                <div class="bg-white text-left italic font-bold text-gray-700">
                     <p class="pt-2">Company: <span class="font-normal">{{SelectedItem.company}}</span></p>
                     <p class="">City: <span class="font-normal">{{SelectedItem.city}}</span></p>
                     <p class="">Zip: <span class="font-normal">{{SelectedItem.zip}}</span></p>
                     <p class="">County: <span class="font-normal">{{SelectedItem.county}}</span></p>
                     <p class="">Hours: <span class="font-normal">{{SelectedItem.hours}}</span></p>
                   </div>
-                </div>
-                <div class="flex justify-center">
-                  <div class="items-center px-4 py-3">
-                    <Button @click="showDELModal = true" label="Delete" class="p-button-danger p-button-outlined" />
-                    <div v-if="showDELModal" class="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-                      <div class="bg-white p-6 rounded-lg">
-                        <p class="text-ml font-medium">Are you sure you want to delete this job?</p>
-                        <div class="flex justify-end">
-                          <div class="px-2 py-2"><Button @click="RemoveJob" label="Yes" class="p-button-danger p-button-outlined" /></div>
-                          <div class="px-2 py-2"><Button @click="showDELModal = false" label="No" class="p-button-secondary p-button-outlined" /></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="items-center px-4 py-3">
-                    <Button label="Close" @click="CloseModalMI()" class="p-button-outlined p-button-secondary" />
-                  </div>
-                </div>
               </div>
             </div>
-          </div>
-          </modal>
+            <template #footer>
+                <Button label="Close" @click="closeBasic()" class="p-button-text"/>
+            </template>
+        </Dialog>
         </template>
       </Column>
   
