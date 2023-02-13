@@ -223,9 +223,6 @@ export default {
         closeBasic() {
             this.displayBasic = false;
         },
-        lol() {
-          console.log("lol");
-        }
     },
     components: {
       Dialog,
