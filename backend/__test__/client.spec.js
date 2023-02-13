@@ -1,25 +1,19 @@
 "use strict";
 
 import client from "../schema/client";
-import { connectDatabase, testInSession } from "./db-test";
+import { connectDatabase, testInSession } from "./dbTest";
 import { set } from "mongoose";
 import { beforeAll, describe, expect, it } from "vitest";
 
 set("strictQuery", false);
 
 const client1Test = {
-  userID: 1234,
   initials: "EX",
-  preference: {
-    industry: ["EX", "AM", "PLE"],
-    hours: "Part-Time",
-  },
-  savedJobs: "EXAMPLE",
-  appliedJobs: "EXAMPLE",
-  postedBy: "EXAMPLE",
-  postedOn: new Date(),
-  editedBy: "EXAMPLE",
-  editedOn: new Date(),
+  industry: ["EX", "AM", "PLE"],
+  hours: "Part-Time",
+  appliedJobs: [],
+  enteredBy: "EXAMPLE",
+  updatedBy: "EXAMPLE",
 };
 
 beforeAll(async () => {
@@ -33,32 +27,25 @@ describe("Client model", () => {
       const validClient = new client(client1Test);
       const savedClient = await validClient.save({ session });
 
-      expect(savedClient.userID).toBe(client1Test.userID);
-
       expect(savedClient.initials).toBe(client1Test.initials);
       expect(savedClient.initials.length).toBeGreaterThanOrEqual(2);
 
-      expect(savedClient.preference.industry.length).toBeGreaterThanOrEqual(1);
-      savedClient.preference.industry.forEach((item) => {
-        expect(client1Test.preference.industry).toContain(item);
+      expect(savedClient.industry.length).toBeGreaterThanOrEqual(1);
+      savedClient.industry.forEach((item) => {
+        expect(client1Test.industry).toContain(item);
       });
-      expect(Array.isArray(savedClient.preference.industry));
-      expect(savedClient.preference.industry.isMongooseArray);
-      expect(savedClient.preference.industry.isMongooseDocumentArray);
+      expect(Array.isArray(savedClient.industry));
+      expect(savedClient.industry.isMongooseArray);
+      expect(savedClient.industry.isMongooseDocumentArray);
 
-      expect(savedClient.preference.hours).toBe(client1Test.preference.hours);
+      expect(savedClient.hours).toBe(client1Test.hours);
 
-      expect(savedClient.savedJobs).toBe(client1Test.savedJobs);
-
-      expect(savedClient.appliedJobs).toBe(client1Test.appliedJobs);
+      expect(savedClient.appliedJobs).toStrictEqual(client1Test.appliedJobs);
 
       expect(savedClient.postedBy).toBe(client1Test.postedBy);
-
-      expect(savedClient.postedOn).toBe(client1Test.postedOn);
-
       expect(savedClient.editedBy).toBe(client1Test.editedBy);
-
-      expect(savedClient.editedOn).toBe(client1Test.editedOn);
+      expect(savedClient).toHaveProperty('createdAt');
+      expect(savedClient).toHaveProperty('updatedAt');
     })
   );
 

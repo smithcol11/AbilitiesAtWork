@@ -1,7 +1,10 @@
+<script setup>
+import SearchTable from "../components/SearchTable.vue";
+</script>
 
 <template>
-  <div class="Search">
-    <h1>This is the Search page</h1>
+  <div class="text-center">
+    <SearchTable />
   </div>
 </template>
 

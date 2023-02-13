@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const Jobs = require("../schema/job")
+const Jobs = require("../schema/job");
 module.exports = router;
 
 router.get("/GetAllJobs", (req, res) => {
-    Jobs.find({})
-        .then((data) => {
-            console.log(data);
-            res.json(data)
-        })
-        .catch((err) => console.log(err));
-    });
+  Jobs.find({})
+    .then((data) => {
+      console.log(data);
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
+});

@@ -9,8 +9,6 @@ export const useAuthenticationStore = defineStore("authorization", () => {
   const firstName = ref("");
   const lastName = ref("");
 
-  validateJWT();
-
   if (localStorage.getItem("firstName") == true) {
     firstName.value = localStorage.getItem("firstName");
     lastName.value = localStorage.getItem("lastName");
@@ -58,8 +56,20 @@ export const useAuthenticationStore = defineStore("authorization", () => {
     return isAuthUser.value;
   }
 
+  function cookieIsPresent(cookieName) {
+    let firstMatch = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith(`${cookieName}=`));
+
+    return firstMatch != undefined;
+  }
+
   async function validateJWT() {
-    await fetch("http://localhost:3000/verifyJWT", {
+    if (!cookieIsPresent("token")) {
+      return false;
+    }
+
+    return await fetch("http://localhost:3000/verifyJWT", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -68,10 +78,12 @@ export const useAuthenticationStore = defineStore("authorization", () => {
       .then((data) => {
         if (data.admin) {
           isAuthAdmin.value = true;
-          router.push("/");
+          return true;
         } else if (data.auth) {
           isAuthUser.value = true;
-          router.push("/");
+          return true;
+        } else {
+          return false;
         }
       });
   }

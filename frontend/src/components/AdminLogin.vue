@@ -57,14 +57,14 @@ function errorMessage() {
       </div>
       <button
         type="submit"
-        class="simple-button"
+        class="simple-button px-4 py-1 my-1"
         @click="updateAdmin"
       >
         Sign in
       </button>
       <button
         type="reset"
-        class="ml-1 simple-button"
+        class="ml-1 simple-button px-4 py-1 my-1"
       >
         Reset
       </button>

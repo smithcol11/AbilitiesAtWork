@@ -15,18 +15,9 @@ const router = createRouter({
       component: () => import("../views/JobMenu.vue"),
     },
     {
-      path: "/search",
-      name: "search",
-      component: () => import("../views/Search.vue"),
-    },
-    {
       path: "/match",
       name: "match",
       component: () => import("../views/Match.vue"),
-    },
-    {
-      path: "/logout",
-      name: "logout",
     },
     {
       path: "/login",
@@ -40,9 +31,10 @@ router.beforeEach(async (to) => {
   const publicPages = ["/login"];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthenticationStore();
+  const authSuccess = await auth.validateJWT();
 
   //return to '/login' if user or admin is not authorized
-  if (authRequired && !auth.isAuthAdmin && !auth.isAuthUser) {
+  if (authRequired && !authSuccess) {
     return "/login";
   }
 });

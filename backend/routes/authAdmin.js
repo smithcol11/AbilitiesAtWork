@@ -28,7 +28,7 @@ router.post("/loginAdmin", (req, res) => {
     else if (result) {
       let token = jwt.sign(req.body.username, process.env.SESSION_SECRET);
 
-      res.cookie("token", token);
+      res.cookie("token", token, { sameSite: "none", secure: "false" });
 
       res.json({ auth: true, admin: true });
     } else {
