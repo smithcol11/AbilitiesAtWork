@@ -2,10 +2,10 @@
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
-import ConfirmPopup from 'primevue/confirmpopup';
-
 import Dialog from 'primevue/dialog';
 import SplitButton from 'primevue/splitbutton';
+
+
 
 export default {
     setup() {
@@ -128,29 +128,10 @@ export default {
     data() {
         return {
             displayBasic: false,
-            IsOpenMI: false,
-            showDELModal: false,
+            displayDel: false,
             SelectedJob: {},
             SelectedIndex: -1,
-            items: [
-                {
-                    label: 'Update',
-                    icon: 'pi pi-refresh',
-                    command: () => {
-                        this.$toast.add({severity:'success', summary:'Updated', detail:'Data Updated', life: 3000});
-                    }
-                },
-                {
-                    label: 'Delete',
-                    icon: 'pi pi-times',
-                    command: () => {
-                      this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000});
-                    }
-                    
-                },
-            ],
         };
-        
     },
     created() {
         this.initFilters1();
@@ -202,18 +183,13 @@ export default {
                 console.log(error);
             }
         },
-        OpenModalMI(item,index) {
-          this.IsOpenMI = true;
-          this.SelectedItem = item;
-          this.SelectedIndex = index;
+        openDel() {
+          this.displayBasic = false;
+          this.displayDel = true;
+          
         },
-        CloseModalMI() {
-          this.IsOpenMI = false;
-          this.showDELModal = false;
-        },
-        RemoveJob(){
-          if (this.SelectedIndex > -1)
-              this.jobs.splice(this.SelectedIndex, 1);
+        closeDel() {
+          this.displayDel = false;
         },
         openBasic(item,index) {
             this.displayBasic = true;
@@ -223,10 +199,16 @@ export default {
         closeBasic() {
             this.displayBasic = false;
         },
+        removeJob(){
+          if (this.SelectedIndex > -1)
+              this.jobs.splice(this.SelectedIndex, 1);
+              this.displayBasic = false;
+              this.displayDel = false;
+        }
     },
     components: {
       Dialog,
-      SplitButton
+      SplitButton,
   }
 };
 </script>
@@ -421,8 +403,7 @@ export default {
 
       <Column field="moreInfo">
         <template #body="{ data,index }">
-          <!-- <Button label="More Info" class="p-button-outlined p-button-secondary" />-->
-          <SplitButton label="More Info" :model="items" class="p-button-outlined p-button-secondary" @click="openBasic(data,index)" />
+          <Button label="More Info" class="p-button-outlined p-button-secondary" @click="openBasic(data,index)" />
           <Dialog header="More Information:" v-model:visible="displayBasic" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}">
             <div class="mt-3 text-center">
               <div class="mt-2 px-7 py-3">
@@ -436,12 +417,19 @@ export default {
               </div>
             </div>
             <template #footer>
-                <Button label="Close" @click="closeBasic()" class="p-button-text"/>
+                <Button label="Update" icon="pi pi-refresh" @click="closeBasic()" class="p-button-text p-button-secondary"/>
+                <Button label="Delete" icon="pi pi-times" @click="openDel()" class="p-button-text p-button-secondary"/>    
             </template>
+        </Dialog>
+        <Dialog header="Do you want to delete this job?" v-model:visible="displayDel" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}">
+          <div class="mt-3 text-right">
+            <Button label="Yes" icon="pi pi-check" @click="removeJob()" class="p-button-text p-button-secondary"/>
+            <!--<Button label="Delete" icon="pi pi-times" @click="RemoveJob()" class="p-button-text p-button-secondary"/>  -->
+            <Button label="No" icon="pi pi-times" @click="closeDel()" class="p-button-text p-button-secondary"/>
+          </div>        
         </Dialog>
         </template>
       </Column>
-  
   </DataTable>
   </div>
 </template>
