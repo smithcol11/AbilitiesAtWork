@@ -6,6 +6,8 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, email, integer } from "@vuelidate/validators";
 import successBanner from "./SuccessBanner.vue";
 import errorBanner from "./ErrorBanner.vue";
+import Button from "./Button.vue";
+import Label from "./Label.vue";
 
 const banner = reactive({
   displaySuccess: {
@@ -157,13 +159,13 @@ function ResetFormValues() {
 
 let requestFormOptions = async () => {
   await fetch("http://localhost:3000/GetJobOptions")
-    .then(res => res.json())
-    .then(newOptions => {
-      for(const key in formOptions) {
+    .then((res) => res.json())
+    .then((newOptions) => {
+      for (const key in formOptions) {
         formOptions[key] = newOptions[key];
-      };
+      }
     })
-    .catch((err) => console.log(err));;
+    .catch((err) => console.log(err));
 };
 
 onBeforeMount(async () => {
@@ -191,10 +193,14 @@ onBeforeMount(async () => {
             </div>
           </div>
         </Transition>
-        <div class="grid grid-cols-2 gap-4 place-content-around">
-          <div class="basis-1/5">
+        <!--
+
+          <div class="flex flex-wrap grid-cols-2 gap-2 place-content-around">
+        -->
+        <div class="md:flex flex-wrap grid-cols-2 gap-4 place-content-around">
+          <div class="basis-2/5">
+            <Label position="middle" text="Bussiness Name"></Label>
             <TextBox
-              label="Business Name"
               type="text"
               placeholder="Enter Business Name"
               v-model="formData.businessName"
@@ -204,9 +210,9 @@ onBeforeMount(async () => {
               >Enter a Business Name!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="Contact Name"></Label>
             <TextBox
-              label="Contact Name"
               type="text"
               placeholder="Enter Contact Name "
               v-model="formData.contactName"
@@ -216,9 +222,9 @@ onBeforeMount(async () => {
               >Enter a Contact Name!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text=" Phone Number"></Label>
             <TextBox
-              label="Contact Phone Number"
               type="number"
               placeholder="Enter Contact Phone"
               v-model="formData.contactPhoneNumber"
@@ -228,11 +234,11 @@ onBeforeMount(async () => {
               >Enter a Phone Number!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="Email"></Label>
             <TextBox
-              label="Contact Email"
               type="email"
-              placeholder="Enter Contact Email"
+              placeholder="Enter Email (optional)"
               v-model="formData.contactEmail"
             >
             </TextBox>
@@ -240,9 +246,9 @@ onBeforeMount(async () => {
               >Enter a Valid Email!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="Address"></Label>
             <TextBox
-              label="Address"
               type="text"
               placeholder="Enter Address Info"
               v-model="formData.address"
@@ -252,18 +258,18 @@ onBeforeMount(async () => {
               >Enter Address Info!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="City"></Label>
             <DropDown
-              label="City"
               v-model="formData.city"
               :options="formOptions.cities"
               placeholder="Select City"
             ></DropDown>
             <span class="text-red-700" v-if="v$.city.$error">Select City!</span>
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="Zip Code"></Label>
             <DropDown
-              label="Zip Code"
               v-model="formData.zip"
               :options="formOptions.zips"
               placeholder="Select Zip Code"
@@ -273,9 +279,9 @@ onBeforeMount(async () => {
             >
           </div>
 
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="County"></Label>
             <DropDown
-              label="County"
               v-model="formData.county"
               :options="formOptions.counties"
               placeholder="Select County"
@@ -285,9 +291,9 @@ onBeforeMount(async () => {
               >Select County!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="Position"></Label>
             <DropDown
-              label="Position"
               v-model="formData.position"
               :options="formOptions.positions"
               placeholder="Select Position"
@@ -296,9 +302,9 @@ onBeforeMount(async () => {
               >Select Position!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="Industry"></Label>
             <DropDown
-              label="Industry"
               v-model="formData.industry"
               :options="formOptions.industries"
               placeholder="Select Industy"
@@ -307,9 +313,9 @@ onBeforeMount(async () => {
               >Select Industry!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="Shift"></Label>
             <DropDown
-              label="Shift"
               v-model="formData.shift"
               :options="formOptions.shiftOptions"
               placeholder="Select Shift"
@@ -318,9 +324,9 @@ onBeforeMount(async () => {
               >Select Shift!</span
             >
           </div>
-          <div class="basis-1/5">
+          <div class="basis-2/5">
+            <Label position="middle" text="Hours"></Label>
             <DropDown
-              label="Hours"
               v-model="formData.hours"
               :options="formOptions.timeCommitmentOptions"
               placeholder="Select Hours"
@@ -329,20 +335,13 @@ onBeforeMount(async () => {
               >Select Hours!</span
             >
           </div>
-          <div>
-            <div class="basis-1/5">
-              <TextBox type="date" v-model="formData.date" label="Date Posted">
-              </TextBox>
-              <span class="text-red-700" v-if="v$.date.$error"
-                >Select Date!</span
-              >
-            </div>
+          <div class="basis-2/5">
+            <Label position="middle" text="Date"></Label>
+            <TextBox type="date" v-model="formData.date"> </TextBox>
+            <span class="text-red-700" v-if="v$.date.$error">Select Date!</span>
           </div>
-          <div class="basis-1/5">
-            <label class="form-label inline-block mb-2 text-gray-700"
-              >Notes</label
-            >
-            <p style="white-space: pre-line"></p>
+          <div class="basis-2/5">
+            <Label position="middle" text="Notes"></Label>
             <textarea
               class="form-control block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
               v-model="formData.notes"
@@ -350,13 +349,8 @@ onBeforeMount(async () => {
             ></textarea>
           </div>
         </div>
-        <div>
-          <button
-            @click="SubmitForm()"
-            class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mt-5 rounded"
-          >
-            SUBMIT
-          </button>
+        <div class="mt-2">
+          <Button text="Submit" @click="SubmitForm()"></Button>
         </div>
       </div>
     </div>

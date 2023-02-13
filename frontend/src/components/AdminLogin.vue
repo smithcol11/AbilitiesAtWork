@@ -4,6 +4,7 @@ import { ref, reactive } from "vue";
 import TextBox from "./TextBox.vue";
 import Button from "./Button.vue";
 import errorBanner from "./ErrorBanner.vue";
+import Label from "./Label.vue";
 const auth = useAuthenticationStore();
 const adminData = reactive({
   adminUser: "",
@@ -52,17 +53,16 @@ function ResetValues() {
 }
 </script>
 <template>
-  <div id="Admin Login" class="">
-    <h2>Administrator Login</h2>
+  <div id="Admin Login">
+    <Label text="Administrator Login"></Label>
     <form class="w-full max-w-md" method="post" @submit.prevent>
       <div class="md:flex md:items-center mb-6 mt-2">
         <div class="md:w-1/4">
-          <label
-            class="block md:text-right mb-1 md:mb-0 pr-4"
-            for="inline-full-name"
-          >
-            Username
-          </label>
+          <Label
+            class="block mb-1 md:mb-0 pr-4"
+            position="right"
+            text="Username"
+          ></Label>
         </div>
         <div class="md:w-1/2">
           <TextBox
@@ -71,19 +71,18 @@ function ResetValues() {
             id="username"
             placeholder="Enter username"
             v-model="adminData.adminUser"
-            :required="true"
+            required
           >
           </TextBox>
         </div>
       </div>
       <div class="md:flex md:items-center mb-6 mt-2">
         <div class="md:w-1/4">
-          <label
+          <Label
             class="block md:text-right mb-1 md:mb-0 pr-4"
-            for="inline-full-name"
-          >
-            Password
-          </label>
+            position="middle"
+            text="Password"
+          ></Label>
         </div>
         <div class="md:w-1/2">
           <TextBox
@@ -92,7 +91,7 @@ function ResetValues() {
             id="password"
             placeholder="Enter password"
             v-model="adminData.adminPassword"
-            :required="true"
+            required
           >
           </TextBox>
         </div>

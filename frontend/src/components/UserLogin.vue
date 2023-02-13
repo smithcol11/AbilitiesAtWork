@@ -4,7 +4,7 @@ import { ref, reactive } from "vue";
 import TextBox from "./TextBox.vue";
 import Button from "./Button.vue";
 import errorBanner from "./ErrorBanner.vue";
-
+import Label from "./Label.vue";
 const auth = useAuthenticationStore();
 const userData = reactive({
   firstName: "",
@@ -51,43 +51,41 @@ function DisplayErrorBanner() {
 </script>
 
 <template>
-  <div id="User Login" class="">
-    <h2>User Login</h2>
+  <div id="User Login">
+    <Label text="User Login"></Label>
     <form class="w-full max-w-md" method="post" @submit.prevent>
       <div class="md:flex md:items-center mb-6 mt-2">
         <div class="md:w-1/4">
-          <label
+          <Label
             class="block md:text-right mb-1 md:mb-0 pr-4"
-            for="inline-full-name"
-          >
-            First
-          </label>
+            position="middle"
+            text="First"
+          ></Label>
         </div>
         <div class="md:w-1/2">
           <TextBox
             type="text"
             placeholder="Enter first name"
             v-model="userData.firstName"
-            :required="true"
+            required
           >
           </TextBox>
         </div>
       </div>
       <div class="md:flex md:items-center mb-6 mt-2">
         <div class="md:w-1/4">
-          <label
+          <Label
             class="block md:text-right mb-1 md:mb-0 pr-4"
-            for="inline-full-name"
-          >
-            Last
-          </label>
+            position="middle"
+            text="Last"
+          ></Label>
         </div>
         <div class="md:w-1/2">
           <TextBox
             type="text"
             placeholder="Enter last name"
             v-model="userData.lastName"
-            :required="true"
+            required
           >
           </TextBox>
         </div>
