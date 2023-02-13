@@ -23,14 +23,14 @@ function toggleView(view) {
 <template>
   <div class="text-center">
     <button
-      class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+      class="duration-300 mx-2 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
       @click="toggleView('Add')"
       id="addClient"
     >
       Add Client
     </button>
     <button
-      class="duration-300 ml-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+      class="duration-300 mx-2 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
       @click="toggleView('Search')"
       id="searchClient"
     >
