@@ -4,7 +4,7 @@ import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
 import Dialog from 'primevue/dialog';
 import SplitButton from 'primevue/splitbutton';
-
+import InputText from 'primevue/inputtext';
 
 
 export default {
@@ -113,6 +113,7 @@ export default {
             console.log(event.data.company);
         }
         function onRowUnselect(event) { }
+
         return {
             jobs,
             filters1,
@@ -129,6 +130,7 @@ export default {
         return {
             displayBasic: false,
             displayDel: false,
+            displayUpdate: false,
             SelectedJob: {},
             SelectedIndex: -1,
         };
@@ -191,6 +193,13 @@ export default {
         closeDel() {
           this.displayDel = false;
         },
+        openUpdate() {
+          this.displayBasic = false;
+          this.displayUpdate = true;
+        },
+        closeUpdate() {
+          this.displayUpdate = false;
+        },
         openBasic(item,index) {
             this.displayBasic = true;
             this.SelectedItem = item;
@@ -204,11 +213,16 @@ export default {
               this.jobs.splice(this.SelectedIndex, 1);
               this.displayBasic = false;
               this.displayDel = false;
+        },
+        saveUpdate(){
+          
+          this.displayUpdate = false;
         }
     },
     components: {
       Dialog,
       SplitButton,
+      InputText
   }
 };
 </script>
@@ -413,18 +427,36 @@ export default {
                     <p class="">Zip: <span class="font-normal">{{SelectedItem.zip}}</span></p>
                     <p class="">County: <span class="font-normal">{{SelectedItem.county}}</span></p>
                     <p class="">Hours: <span class="font-normal">{{SelectedItem.hours}}</span></p>
-                  </div>
+                </div>
               </div>
             </div>
             <template #footer>
-                <Button label="Update" icon="pi pi-refresh" @click="closeBasic()" class="p-button-text p-button-secondary"/>
+                <Button label="Update" icon="pi pi-refresh" @click="openUpdate()" class="p-button-text p-button-secondary"/>
                 <Button label="Delete" icon="pi pi-times" @click="openDel()" class="p-button-text p-button-secondary"/>    
             </template>
+        </Dialog>
+        <Dialog header="Update" v-model:visible="displayUpdate" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}">
+          <form action="">
+          <div class="mt-3 text-center">
+              <div class="mt-2 px-7 py-3">
+                <div class="bg-white text-center italic font-bold text-gray-700">
+                    <p class="pt-2">Company: </p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.company />
+                    <p class="pt-2">City: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.city /></p>
+                    <p class="pt-2">Zip: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.zip /></p>
+                    <p class="pt-2">County: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.county /></p>
+                    <p class="pt-2">Hours: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.hours /></p>
+                </div>
+              </div>
+            </div>
+          <div class="mt-3 text-right">
+            <Button label="Confirm" icon="pi pi-check" @click="saveUpdate()" class="p-button-text p-button-secondary"/>
+            <Button label="Cancel" icon="pi pi-times" @click="closeUpdate()" class="p-button-text p-button-secondary"/>
+          </div>   
+        </form>     
         </Dialog>
         <Dialog header="Do you want to delete this job?" v-model:visible="displayDel" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}">
           <div class="mt-3 text-right">
             <Button label="Yes" icon="pi pi-check" @click="removeJob()" class="p-button-text p-button-secondary"/>
-            <!--<Button label="Delete" icon="pi pi-times" @click="RemoveJob()" class="p-button-text p-button-secondary"/>  -->
             <Button label="No" icon="pi pi-times" @click="closeDel()" class="p-button-text p-button-secondary"/>
           </div>        
         </Dialog>
