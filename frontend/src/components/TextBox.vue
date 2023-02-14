@@ -6,7 +6,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: "Place holnullder text",
+    default: "Place holder text",
   },
   modelValue: {
     type: String,
