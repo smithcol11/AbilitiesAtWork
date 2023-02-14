@@ -48,6 +48,6 @@
 }
 
 .nav-button {
-  @apply w-full bg-light py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light;
+  @apply py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light;
 }
 /* ------------------ */

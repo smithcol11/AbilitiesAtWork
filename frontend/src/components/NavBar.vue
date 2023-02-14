@@ -26,7 +26,12 @@ function toggleLogout() {
       <RouterLink class="nav-button" to="/clientMenu"> Client Menu </RouterLink>
       <RouterLink class="nav-button" to="/JobMenu"> Job Menu </RouterLink>
       <RouterLink class="nav-button" to="/match"> Match </RouterLink>
-      <button class="nav-button" @click="toggleLogout()">Logout</button>
+      <button
+        class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
+        @click="toggleLogout()"
+      >
+        Logout
+      </button>
     </div>
   </nav>
   <Button class="nav-button" @click="toggleNav()">
