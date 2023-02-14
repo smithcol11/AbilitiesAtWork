@@ -20,7 +20,11 @@ router.post("/addClient", async (req, res) => {
 router.put("/editClient", async (req, res) => {
   try {
     const client = await Client.updateOne(
-      { initials: req.body.initials },
+      {
+        firstName: req.body.firstName,
+        middleInitial: req.body.middleInitial,
+        lastInitial: req.body.lastInitial,
+      },
       req.body,
       { new: true }
     );
@@ -36,7 +40,11 @@ router.put("/editClient", async (req, res) => {
 
 router.delete("/deleteClient", async (req, res) => {
   try {
-    client = await Client.deleteOne({ initials: req.body.initials });
+    client = await Client.deleteOne({
+      firstName: req.body.firstName,
+      middleInitial: req.body.middleInitial,
+      lastInitial: req.body.lastInitial,
+    });
     if (!client) {
       return res.status(404).send({ error: "Client not found when deleting" });
     }
