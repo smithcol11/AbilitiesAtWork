@@ -17,9 +17,9 @@ router.put('/editClient', async (req, res) => {
   }
 });
 
-router.delete('/deleteClient/:initials', async (req, res) => {
+router.delete('/deleteClient', async (req, res) => {
   try {
-    client = await Client.deleteOne({initials: req.params.initials})
+    client = await Client.deleteOne({initials: req.body.initials})
     if (!client) {
       return res.status(404).send({ error: 'Client not found when deleting' });
     }
