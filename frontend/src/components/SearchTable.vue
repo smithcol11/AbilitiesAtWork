@@ -133,6 +133,8 @@ export default {
             displayUpdate: false,
             SelectedJob: {},
             SelectedIndex: -1,
+            companyName: '',
+            dialogs: {}
         };
     },
     created() {
@@ -188,7 +190,6 @@ export default {
         openDel() {
           this.displayBasic = false;
           this.displayDel = true;
-          
         },
         closeDel() {
           this.displayDel = false;
@@ -204,6 +205,7 @@ export default {
             this.displayBasic = true;
             this.SelectedItem = item;
             this.SelectedIndex = index;
+            
         },
         closeBasic() {
             this.displayBasic = false;
@@ -215,7 +217,10 @@ export default {
               this.displayDel = false;
         },
         saveUpdate(){
-          
+          //this.SelectedJob.company = this.companyName
+          console.log(this.companyName)
+          console.log(this.SelectedJob.company)
+
           this.displayUpdate = false;
         }
     },
@@ -418,7 +423,7 @@ export default {
       <Column field="moreInfo">
         <template #body="{ data,index }">
           <Button label="More Info" class="p-button-outlined p-button-secondary" @click="openBasic(data,index)" />
-          <Dialog header="More Information:" v-model:visible="displayBasic" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}">
+          <Dialog header="More Information:" v-model:visible="displayBasic" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}" v-if="SelectedIndex == index">
             <div class="mt-3 text-center">
               <div class="mt-2 px-7 py-3">
                 <div class="bg-white text-left italic font-bold text-gray-700">
@@ -435,12 +440,12 @@ export default {
                 <Button label="Delete" icon="pi pi-times" @click="openDel()" class="p-button-text p-button-secondary"/>    
             </template>
         </Dialog>
-        <Dialog header="Update" v-model:visible="displayUpdate" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}">
+        <Dialog header="Update" v-model:visible="displayUpdate" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}" v-if="SelectedIndex == index">
           <form action="">
           <div class="mt-3 text-center">
               <div class="mt-2 px-7 py-3">
                 <div class="bg-white text-center italic font-bold text-gray-700">
-                    <p class="pt-2">Company: </p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.company />
+                    <p class="pt-2">Company: </p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.company v-model='companyName'/>
                     <p class="pt-2">City: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.city /></p>
                     <p class="pt-2">Zip: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.zip /></p>
                     <p class="pt-2">County: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.county /></p>
@@ -454,7 +459,7 @@ export default {
           </div>   
         </form>     
         </Dialog>
-        <Dialog header="Do you want to delete this job?" v-model:visible="displayDel" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}">
+        <Dialog header="Do you want to delete this job?" v-model:visible="displayDel" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}" v-if="SelectedIndex == index">
           <div class="mt-3 text-right">
             <Button label="Yes" icon="pi pi-check" @click="removeJob()" class="p-button-text p-button-secondary"/>
             <Button label="No" icon="pi pi-times" @click="closeDel()" class="p-button-text p-button-secondary"/>
