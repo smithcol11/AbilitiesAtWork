@@ -51,8 +51,8 @@ const data = reactive({
   firstName: "",
   middleInitial: "",
   lastInitial: "",
-  industry: "",
-  hours: [],
+  industry: [],
+  hours: "",
 });
 const rules = computed(() => {
   return {
@@ -106,22 +106,7 @@ function DisplayBanner(bannerType) {
     }
   }, 1000);
 }
-/*
-// create the post request and send it to the backend
-async function postClient() {
-  await fetch("http://localhost:3000/addClient", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      initials: data.initials,
-      hours: data.hours,
-      industry: data.industry,
-    }),
-  })
-    .then((response) => console.log(response))
-    .catch((errors) => console.log(errors));
-}*/
+
 // use the rules the data must follow
 const v$ = useVuelidate(rules, data);
 
@@ -139,6 +124,8 @@ const submitForm = async () => {
     } else {
       DisplayBanner("failed");
     }
+  } else {
+    DisplayBanner("failed");
   }
 };
 
@@ -157,6 +144,22 @@ async function postClient() {
 </script>
 
 <template>
+  <Transition>
+    <div role="alert">
+      <div v-if="banner.displaySuccess == true">
+        <successBanner
+          topText="Job has been successfully created"
+          bottomText="Job was added to the available jobs! "
+        ></successBanner>
+      </div>
+      <div v-if="banner.displayFailed == true">
+        <errorBanner
+          topText="ERROR: Invalid data field!"
+          bottomText="One or more data fields is missing or incorrect!"
+        ></errorBanner>
+      </div>
+    </div>
+  </Transition>
   <form @submit.prevent>
     <div class="shadow-lg border rounded bg-light">
       <div class="h-84 p-5">
@@ -180,8 +183,8 @@ async function postClient() {
         </Transition>
         <div class="grid grid-cols-2 gap-4 place-content-around">
           <div class="basis-1/5">
+            <Label text="First Name"></Label>
             <TextBox
-              label="First Name"
               type="text"
               placeholder="Enter First Name"
               v-model="data.firstName"
@@ -191,8 +194,8 @@ async function postClient() {
             </p>
           </div>
           <div class="basis-1/5">
+            <Label text="Middle Initial"></Label>
             <TextBox
-              label="Middle Initial"
               type="text"
               placeholder="Enter Middle Initial"
               v-model="data.middleInitial"
@@ -203,8 +206,8 @@ async function postClient() {
             </p>
           </div>
           <div class="basis-1/5">
+            <Label text="Last Initial"></Label>
             <TextBox
-              label="Last Initial"
               type="text"
               placeholder="Enter Last Initial"
               v-model="data.lastInitial"
@@ -215,21 +218,21 @@ async function postClient() {
             </p>
           </div>
           <div class="basis-1/5">
-            <TextBox
-              label="Industry"
-              type="text"
-              placeholder="Enter Industry"
+            <Label text="Industry"></Label>
+            <DropDown
               v-model="data.industry"
+              :options="formOptions.industries"
+              placeholder="Select Industry"
             />
             <p class="text-red-700" v-if="v$.industry.$error">
               {{ v$.industry.$errors[0].$message }}
             </p>
           </div>
           <div class="basis-1/5">
+            <Label text="Hours"></Label>
             <DropDown
-              label="Hours"
               v-model="data.hours"
-              :options="hourString"
+              :options="formOptions.timeCommitmentOptions"
               placeholder="Select Hours"
             />
             <p class="text-red-700" v-if="v$.hours.$error">
@@ -237,20 +240,11 @@ async function postClient() {
             </p>
           </div>
         </div>
-        <div>
-          <button
-            class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mt-5 mx-2 rounded"
-            @click="submitForm"
-          >
-            Add Client
-          </button>
-          <button
-            class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mt-5 mx-2 rounded"
-            type="reset"
-            @click="resetForm"
-          >
-            Reset Form
-          </button>
+        <div
+          class="md:flex flex-wrap grid-cols-2 gap-2 place-content-center py-4"
+        >
+          <Button text="Add Client" @click="submitForm()"></Button>
+          <Button text="Reset form" @click="resetForm()"></Button>
         </div>
       </div>
     </div>
