@@ -1,12 +1,13 @@
-<script>
+<script setup>
 import ClientInfo from "../components/ClientInfo.vue";
 import SearchTable from "../components/SearchTable.vue";
 import { reactive, ref, computed, onBeforeMount } from "vue";
 import SearchNewClient from "../components/SearchNewClient.vue";
 import { required } from "@vuelidate/validators";
-const success = ref(false)
-const visible = ref(false)
 import { useVuelidate } from "@vuelidate/core";
+
+const success = ref(false);
+const visible = ref(false);
 
 const banner = reactive({
   success: {
@@ -23,14 +24,15 @@ const banner = reactive({
   },
 });
 
-const client_initials = ref("");
-
-const rules = computed(() => {
-  return {
-    initials: { required },
-  };
+const clientInfo = reactive({
+  firstName: "",
+  middleInitial: "",
+  lastInitial: "",
 });
 
+const rules = computed(() => {
+  return {};
+});
 
 // display success banner if post succeeded
 const displaySuccess = () => {
@@ -49,79 +51,45 @@ const displayError = () => {
 };
 
 // use the rules the data must follow
-const v$ = useVuelidate(rules, client_initials);
+const v$ = useVuelidate(rules, clientInfo);
 
 const submitForm = async () => {
   // check that the data matches requirements
   const result = await v$.value.$validate();
   if (result) {
     displaySuccess();
+    matchClient();
   } else {
     displayError();
   }
 };
 
-
-export default {
-    name: "App",
-    components: {
-      ClientInfo,
-      SearchTable,
-      SearchNewClient,
-    },
-    data() {
-      return {
-        exampleClient: {
-          initials: null,
-          preferences: "things",
-          industry: "stuff",
-          hours: "some",
-          appliedJobs: "many",
-        },
-      };
-    },
-    
-   
-    methods: {
-      async getClient() {
-        
-        try {
-          //console.log(SearchNewClient.client_initials.initials)
-          
-          //console.log(this.$options.components['searchNewClient'].options.data().initial)
-          //const baseURL = 'http://localhost:3000/getAllClients?JAR'
-          const baseURL = 'http://localhost:3000/matchClient?re'
-          const res = await fetch(baseURL, { method: 'GET'})          
-          //const res = await fetch(baseURL, { method: 'POST', body: JSON.stringify({ initials: 'JAR'})})          
-          //const data = await res.json()
-          console.log('get successful')
-          //console.log(res)
-        } catch (error) {
-          console.log('get failed')
-        }
-      }
-    }  
+let exampleClient = {
+  initials: "name",
+  preferences: "things",
+  industry: "stuff",
+  hours: "some",
+  appliedJobs: "many",
 };
 
-async function getClient() {
-  await fetch("http://localhost:3000/getClient", {
-    method: "GET",
+async function matchClient() {
+  await fetch("http://localhost:3000/matchClient", {
+    method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({
-      initials: data.initials,
-      hours: hourString[parseInt(data.hours)],
-      industry: data.industry,
+      firstName: clientInfo.firstName,
+      middleInitial: clientInfo.middleInitial,
+      lastInitial: clientInfo.lastInitial,
     }),
   })
     .then((response) => console.log(response))
     .then((data) => {
-      responseBody = data;
+      let responseBody = data;
       console.log(responseBody);
     })
     .catch((errors) => console.log(errors));
-};
-
+}
 </script>
 
 <template>
@@ -140,19 +108,27 @@ async function getClient() {
             Search new client
           </button> -->
           <form>
-            <div
-          @click="getClient()">
+            <div>
               <form method="post" ref="clientForm" @submit.prevent>
                 <div class="px-1 sm:px-1 max-w-xl py-5 w-full">
-                  <div class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border">
+                  <div
+                    class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border"
+                  >
                     <div>
                       <label class="block px-1 py-1">Initials</label>
-                      <input class="rounded border px-1 py-1 sm:w-3/4 w-full" type="text" name="initials" id="initials"
-                        placeholder="Enter initials" />
+                      <input
+                        class="rounded border px-1 py-1 sm:w-3/4 w-full"
+                        type="text"
+                        name="initials"
+                        id="initials"
+                        placeholder="Enter initials"
+                        v-model="clientInfo.firstName"
+                      />
                     </div>
                     <button
                       class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
-                      @click="submitForm">
+                      @click="submitForm()"
+                    >
                       Search client
                     </button>
                   </div>
@@ -162,12 +138,10 @@ async function getClient() {
           </form>
         </div>
       </div>
-      
     </div>
     <div class="text-center">
-    <SearchTable />
-  </div>
-
+      <SearchTable />
+    </div>
   </div>
 </template>
 
