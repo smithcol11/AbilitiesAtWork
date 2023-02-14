@@ -4,7 +4,7 @@ import { ref } from "vue";
 import CreateJob from "../components/CreateJob.vue";
 import Button from "../components/Button.vue";
 const currentView = ref("Search");
-const activeBtnClass = ["l-purple-button"];
+const activeBtnClass = ["accentLight-button"];
 
 function toggleView(view) {
   currentView.value = view;
@@ -25,7 +25,7 @@ function toggleView(view) {
     <div class="flex justify-center gap-10 my-5">
       <Button @click="toggleView('Add')" id="addJob" text="Add Job"> </Button>
       <Button
-        class="l-purple-button"
+        class="accentLight-button"
         @click="toggleView('Search')"
         id="searchJob"
         text="Search Jobs"

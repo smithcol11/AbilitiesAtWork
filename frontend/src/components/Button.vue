@@ -10,7 +10,7 @@ const props = defineProps({
   },
   buttonColor: {
     type: String,
-    default: "d-purple-button",
+    default: "accentDark-button",
   },
 });
 </script>

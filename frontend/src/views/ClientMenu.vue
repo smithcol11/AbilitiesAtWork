@@ -5,7 +5,7 @@ import Button from "../components/Button.vue";
 import { ref } from "vue";
 
 const currentView = ref("Search");
-const activeBtnClass = ["l-purple-button"];
+const activeBtnClass = ["accentLight-button"];
 
 function toggleView(view) {
   currentView.value = view;
@@ -27,7 +27,7 @@ function toggleView(view) {
       <Button @click="toggleView('Add')" id="addClient" text="Add Client">
       </Button>
       <Button
-        class="l-purple-button"
+        class="accentLight-button"
         @click="toggleView('Search')"
         id="searchClient"
         text="Search Clients"

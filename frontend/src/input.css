@@ -33,10 +33,10 @@
   @apply duration-300 bg-accentDark hover:bg-accentLight font-bold text-base text-light hover:text-dark rounded;
 }
 
-.d-purple-button {
+.accentDark-button {
   @apply duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded;
 }
-.l-purple-button {
+.accentLight-button {
   @apply duration-300 bg-accentLight hover:bg-accentDark px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded;
 }
 
@@ -47,4 +47,7 @@
   @apply duration-300 bg-slate-400 hover:bg-slate-300 px-4 py-1 my-1 font-bold text-base text-light hover:text-dark rounded;
 }
 
+.nav-button {
+  @apply w-full bg-light py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light;
+}
 /* ------------------ */
