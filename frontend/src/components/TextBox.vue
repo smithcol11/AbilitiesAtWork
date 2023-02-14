@@ -21,6 +21,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  maxLength: {
+    type: String,
+    default: "524288",
+  },
 });
 </script>
 <template>
@@ -31,6 +35,7 @@ const props = defineProps({
     :value="modelValue"
     :name="name"
     :id="id"
+    :maxlength="maxLength"
     @input="$emit('update:modelValue', $event.target.value)"
   />
 </template>

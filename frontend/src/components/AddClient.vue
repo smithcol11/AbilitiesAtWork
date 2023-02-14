@@ -1,7 +1,7 @@
 <script setup>
-import { reactive, ref, computed, onBeforeMount } from "vue";
+import { reactive, toRaw, computed, onBeforeMount } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, helpers } from "@vuelidate/validators";
+import { required, maxLength, helpers } from "@vuelidate/validators";
 import successBanner from "./SuccessBanner.vue";
 import errorBanner from "./ErrorBanner.vue";
 import Button from "./Button.vue";
@@ -48,17 +48,29 @@ const banner = reactive({
 });
 
 const data = reactive({
-  initials: "",
-  industry: [],
-  hours: "",
+  firstName: "",
+  middleInitial: "",
+  lastInitial: "",
+  industry: "",
+  hours: [],
 });
 const rules = computed(() => {
   return {
-    initials: {
-      required: helpers.withMessage("Please enter initials.", required),
-      minLength: helpers.withMessage(
-        "Must have at least two initials.",
-        minLength(2)
+    firstName: {
+      required: helpers.withMessage("Please enter first name.", required),
+    },
+    middleInitial: {
+      required: helpers.withMessage("Please enter middle initial.", required),
+      maxLength: helpers.withMessage(
+        "Please enter only one middle initial.",
+        maxLength(1)
+      ),
+    },
+    lastInitial: {
+      required: helpers.withMessage("Please enter last initial.", required),
+      maxLength: helpers.withMessage(
+        "Please enter only one last initial.",
+        maxLength(1)
       ),
     },
     industry: {
@@ -71,9 +83,10 @@ const rules = computed(() => {
 });
 // reset form values to default or empty values
 const resetForm = () => {
-  data.hours = "";
-  data.initials = "";
-  data.industry = "";
+  v$.value.$reset();
+  for (const field in data) {
+    data[field] = "";
+  }
 };
 
 function DisplayBanner(bannerType) {
@@ -93,6 +106,7 @@ function DisplayBanner(bannerType) {
     }
   }, 1000);
 }
+/*
 // create the post request and send it to the backend
 async function postClient() {
   await fetch("http://localhost:3000/addClient", {
@@ -107,7 +121,7 @@ async function postClient() {
   })
     .then((response) => console.log(response))
     .catch((errors) => console.log(errors));
-}
+}*/
 // use the rules the data must follow
 const v$ = useVuelidate(rules, data);
 
@@ -117,87 +131,126 @@ const submitForm = async () => {
 
   // check that the data matches requirements
   const result = await v$.value.$validate();
-  if (result) {
-    postClient();
-    resetForm();
-    DisplayBanner("success");
-    v$.value.$reset();
-  } else {
-    DisplayBanner("failed");
+  if (await v$.value.$validate()) {
+    // if an error prevents saving the client, warn the user
+    if (await postClient()) {
+      resetForm();
+      DisplayBanner("success");
+    } else {
+      DisplayBanner("failed");
+    }
   }
 };
+
+// create the post request and send it to the backend
+async function postClient() {
+  return await fetch("http://localhost:3000/addClient", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(toRaw(data)),
+  }).catch((errors) => {
+    console.log(errors);
+    return null;
+  });
+}
 </script>
 
 <template>
-  <Transition>
-    <div role="alert">
-      <div v-if="banner.displaySuccess == true">
-        <successBanner
-          topText="Job has been successfully created"
-          bottomText="Job was added to the available jobs! "
-        ></successBanner>
-      </div>
-      <div v-if="banner.displayFailed == true">
-        <errorBanner
-          topText="ERROR: Invalid data field!"
-          bottomText="One or more data fields is missing or incorrect!"
-        ></errorBanner>
-      </div>
-    </div>
-  </Transition>
-
-  <form method="post" ref="clientForm" @submit.prevent>
-    <div class="px-1 sm:px-1 max-w-xl py-5 w-full">
-      <div
-        class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border"
-      >
-        <div>
-          <Label postion="middle" text="Initals"></Label>
-          <div class="flex justify-start my-2">
-            <div class="md:w-4/5 sm:w-1/5">
-              <TextBox
-                type="text"
-                placeholder="Enter Initals"
-                v-model="data.initials"
-                required
-              >
-              </TextBox>
+  <form @submit.prevent>
+    <div class="shadow-lg border rounded bg-light">
+      <div class="h-84 p-5">
+        <Transition>
+          <div role="alert">
+            <div v-if="banner.success == true">
+              <successBanner
+                class="mb-4"
+                topText="Job has been successfully created"
+                bottomText="Job was added to the available jobs! "
+              ></successBanner>
+            </div>
+            <div v-if="banner.failure == true">
+              <errorBanner
+                class="mb-4"
+                topText="ERROR: Unable to save client!"
+                bottomText="An error occurred while contacting the server."
+              ></errorBanner>
             </div>
           </div>
-          <p class="px-1 py-1 text-red-700" v-if="v$.initials.$error">
-            {{ v$.initials.$errors[0].$message }}
-          </p>
-        </div>
-        <div class="md:flex flex-wrap grid-cols-2 justify-start">
-          <div class="md:w-2/5 sm:w-1/5">
-            <label class="block px-1 pt-5">Industry</label>
-            <DropDown
+        </Transition>
+        <div class="grid grid-cols-2 gap-4 place-content-around">
+          <div class="basis-1/5">
+            <TextBox
+              label="First Name"
+              type="text"
+              placeholder="Enter First Name"
+              v-model="data.firstName"
+            />
+            <p class="text-red-700" v-if="v$.firstName.$error">
+              {{ v$.firstName.$errors[0].$message }}
+            </p>
+          </div>
+          <div class="basis-1/5">
+            <TextBox
+              label="Middle Initial"
+              type="text"
+              placeholder="Enter Middle Initial"
+              v-model="data.middleInitial"
+              maxLength="1"
+            />
+            <p class="text-red-700" v-if="v$.middleInitial.$error">
+              {{ v$.middleInitial.$errors[0].$message }}
+            </p>
+          </div>
+          <div class="basis-1/5">
+            <TextBox
+              label="Last Initial"
+              type="text"
+              placeholder="Enter Last Initial"
+              v-model="data.lastInitial"
+              maxLength="1"
+            />
+            <p class="text-red-700" v-if="v$.lastInitial.$error">
+              {{ v$.lastInitial.$errors[0].$message }}
+            </p>
+          </div>
+          <div class="basis-1/5">
+            <TextBox
+              label="Industry"
+              type="text"
+              placeholder="Enter Industry"
               v-model="data.industry"
-              :options="formOptions.industries"
-              placeholder="Select Industy"
-              required
-            ></DropDown>
-            <p class="px-1 py-1 text-red-700" v-if="v$.industry.$error">
+            />
+            <p class="text-red-700" v-if="v$.industry.$error">
               {{ v$.industry.$errors[0].$message }}
             </p>
           </div>
-          <div class="md:w-2/5 sm:w-2/5">
-            <label class="block text-left px-1 pt-5">Hours</label>
+          <div class="basis-1/5">
             <DropDown
               label="Hours"
               v-model="data.hours"
-              :options="formOptions.timeCommitmentOptions"
-              :optionLabel="formOptions.timeCommitmentOptions"
+              :options="hourString"
               placeholder="Select Hours"
-              required
-            ></DropDown>
+            />
+            <p class="text-red-700" v-if="v$.hours.$error">
+              {{ v$.hours.$errors[0].$message }}
+            </p>
           </div>
         </div>
-        <div
-          class="md:flex flex-wrap grid-cols-2 gap-2 place-content-start py-4"
-        >
-          <Button text="Add Client" @click="submitForm()"></Button>
-          <Button text="Reset form" @click="resetForm()"></Button>
+        <div>
+          <button
+            class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mt-5 mx-2 rounded"
+            @click="submitForm"
+          >
+            Add Client
+          </button>
+          <button
+            class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mt-5 mx-2 rounded"
+            type="reset"
+            @click="resetForm"
+          >
+            Reset Form
+          </button>
         </div>
       </div>
     </div>
