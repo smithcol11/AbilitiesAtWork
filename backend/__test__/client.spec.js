@@ -8,7 +8,9 @@ import { beforeAll, describe, expect, it } from "vitest";
 set("strictQuery", false);
 
 const client1Test = {
-  initials: "EX",
+  firstName: "name",
+  middleInitial: "m",
+  lastInitial: "l",
   industry: ["EX", "AM", "PLE"],
   hours: "Part-Time",
   appliedJobs: [],
@@ -27,8 +29,9 @@ describe("Client model", () => {
       const validClient = new client(client1Test);
       const savedClient = await validClient.save({ session });
 
-      expect(savedClient.initials).toBe(client1Test.initials);
-      expect(savedClient.initials.length).toBeGreaterThanOrEqual(2);
+      expect(savedClient.firstName).toBe(client1Test.firstName);
+      expect(savedClient.middleInitial.length).toEqual(1);
+      expect(savedClient.lastInitial.length).toEqual(1);
 
       expect(savedClient.industry.length).toBeGreaterThanOrEqual(1);
       savedClient.industry.forEach((item) => {
