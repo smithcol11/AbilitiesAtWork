@@ -1,7 +1,11 @@
 <script setup>
-import { reactive, ref, computed } from "vue";
+import { reactive, computed, toRaw } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, helpers } from "@vuelidate/validators";
+import { required, helpers, maxLength } from "@vuelidate/validators";
+import DropDown from "./DropDown.vue";
+import TextBox from "./TextBox.vue";
+import successBanner from "./SuccessBanner.vue";
+import errorBanner from "./ErrorBanner.vue";
 
 const banner = reactive({
   success: {
@@ -11,26 +15,31 @@ const banner = reactive({
   failure: {
     type: Boolean,
     default: false,
-  },
-  visible: {
-    type: Boolean,
-    default: false,
-  },
+  }
 });
 
 const hourString = ["Any", "Part-Time", "Full-Time"];
 
 const data = reactive({
-  initials: "",
+  firstName: "",
+  middleInitial: "",
+  lastInitial: "",
   industry: "",
-  hours: "0",
+  hours: "",
 });
 
 const rules = computed(() => {
   return {
-    initials: {
-      required: helpers.withMessage("Please enter initials.", required),
-      minLength: helpers.withMessage("Must have at least two initials.", minLength(2)),
+    firstName: {
+      required: helpers.withMessage("Please enter first name.", required),
+    },
+    middleInitial: {
+      required: helpers.withMessage("Please enter middle initial.", required),
+      maxLength: helpers.withMessage("Please enter only one middle initial.", maxLength(1)),
+    },
+    lastInitial: {
+      required: helpers.withMessage("Please enter last initial.", required),
+      maxLength: helpers.withMessage("Please enter only one last initial.", maxLength(1)),
     },
     industry: {
       required: helpers.withMessage("Please enter an industry.", required),
@@ -43,9 +52,10 @@ const rules = computed(() => {
 
 // reset form values to default or empty values
 const resetForm = () => {
-  data.hours = "0";
-  data.initials = "";
-  data.industry = "";
+  v$.value.$reset();
+  for (const field in data) {
+    data[field] = "";
+  }
 };
 
 // display success banner if post succeeded
@@ -56,81 +66,92 @@ const displaySuccess = () => {
   }, 3000);
 };
 
-// create the post request and send it to the backend
-async function postClient() {
-  await fetch("http://localhost:3000/addClient", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      initials: data.initials,
-      hours: hourString[parseInt(data.hours)],
-      industry: data.industry,
-    }),
-  })
-    .then((response) => console.log(response))
-    .catch((errors) => console.log(errors));
-}
+// display failure banner if post request failed
+const displayFailure = () => {
+  banner.failure = true;
+  setTimeout(() => {
+    banner.success = false;
+  }, 3000);
+};
 
 // use the rules the data must follow
 const v$ = useVuelidate(rules, data);
 
 const submitForm = async () => {
   // check that the data matches requirements
-  const result = await v$.value.$validate();
-
-  if (result) {
-    postClient();
-    resetForm();
-    v$.value.$reset()
-    displaySuccess();
+  if (await v$.value.$validate()) {
+    // if an error prevents saving the client, warn the user
+    if (await postClient()) {
+      resetForm();
+      displaySuccess();
+    } else {
+      displayFailure();
+    }
   }
 };
+
+// create the post request and send it to the backend
+async function postClient() {
+  return await fetch("http://localhost:3000/addClient", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(toRaw(data)),
+  })
+    .catch((errors) => { console.log(errors); return null });
+}
 </script>
 
 <template>
-  <div v-if="banner.success == true" class="p-5 rounded bg-green-400 max-w-xl">
-    <h1 class="text-green-700 text-center">
-      <b>Successfully added client!</b>
-    </h1>
-  </div>
-  <div v-if="banner.failure == true" class="p-5 rounded bg-red-400 max-w-xl">
-    <h1 class="text-red-700 text-center">
-      <b>Error: Something went wrong.</b>
-    </h1>
-  </div>
-  <form method="post" ref="clientForm" @submit.prevent>
-    <div class="px-1 sm:px-1 max-w-xl py-5 w-full">
-      <div class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border">
+  <form @submit.prevent>
+    <div class="shadow-lg border rounded bg-light">
+      <div class="h-84 p-5">
+        <Transition>
+          <div role="alert">
+            <div v-if="banner.success == true">
+              <successBanner class="mb-4" topText="Job has been successfully created"
+                bottomText="Job was added to the available jobs! "></successBanner>
+            </div>
+            <div v-if="banner.failure == true">
+              <errorBanner class="mb-4" topText="ERROR: Unable to save client!"
+                bottomText="An error occurred while contacting the server."></errorBanner>
+            </div>
+          </div>
+        </Transition>
+        <div class="grid grid-cols-2 gap-4 place-content-around">
+          <div class="basis-1/5">
+            <TextBox label="First Name" type="text" placeholder="Enter First Name" v-model="data.firstName" />
+            <p class="text-red-700" v-if="v$.firstName.$error"> {{ v$.firstName.$errors[0].$message }} </p>
+          </div>
+          <div class="basis-1/5">
+            <TextBox label="Middle Initial" type="text" placeholder="Enter Middle Initial" v-model="data.middleInitial"
+              maxLength="1" />
+            <p class="text-red-700" v-if="v$.middleInitial.$error"> {{ v$.middleInitial.$errors[0].$message }} </p>
+          </div>
+          <div class="basis-1/5">
+            <TextBox label="Last Initial" type="text" placeholder="Enter Last Initial" v-model="data.lastInitial"
+              maxLength="1" />
+            <p class="text-red-700" v-if="v$.lastInitial.$error"> {{ v$.lastInitial.$errors[0].$message }} </p>
+          </div>
+          <div class="basis-1/5">
+            <TextBox label="Industry" type="text" placeholder="Enter Industry" v-model="data.industry" />
+            <p class="text-red-700" v-if="v$.industry.$error"> {{ v$.industry.$errors[0].$message }} </p>
+          </div>
+          <div class="basis-1/5">
+            <DropDown label="Hours" v-model="data.hours" :options="hourString" placeholder="Select Hours" />
+            <p class="text-red-700" v-if="v$.hours.$error"> {{ v$.hours.$errors[0].$message }} </p>
+          </div>
+        </div>
         <div>
-          <label class="block px-1 py-1">Initials</label>
-          <input class="rounded border px-1 py-1 sm:w-3/4 w-full" type="text" name="initials" id="initials"
-            placeholder="Enter initials" v-model="data.initials" required />
-          <p class="px-1 py-1 text-red-700" v-if="v$.initials.$error"> {{ v$.initials.$errors[0].$message }} </p>
+          <button class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mt-5 mx-2 rounded"
+            @click="submitForm">
+            Add Client
+          </button>
+          <button class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mt-5 mx-2 rounded"
+            type="reset" @click="resetForm">
+            Reset Form
+          </button>
         </div>
-        <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="w-full">
-            <label class="block px-1 pt-5">Industry</label>
-            <input class="rounded border px-1 py-1 sm:w-full w-full" type="text" name="industry" id="industry"
-              placeholder="Enter industry" v-model="data.industry" required />
-            <p class="px-1 py-1 text-red-700" v-if="v$.industry.$error"> {{ v$.industry.$errors[0].$message }} </p>
-          </div>
-          <div class="w-full sm:w-1/2">
-            <label class="block text-left px-1 pt-5">Hours</label>
-            <select class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="hours" id="hours" v-bind:value="1"
-              v-model="data.hours" required>
-              <option class="block w-full" value="0">Any</option>
-              <option class="block w-full" value="1">Part-Time</option>
-              <option class="block w-full" value="2">Full-Time</option>
-            </select>
-          </div>
-        </div>
-        <button class="simple-button px-4 py-1 mt-5 mr-3" @click="submitForm">
-          Add client
-        </button>
-        <button class="simple-button px-4 py-1 mt-5" type="reset" @click="resetForm">
-          Reset form
-        </button>
       </div>
     </div>
   </form>
