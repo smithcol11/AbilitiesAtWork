@@ -121,8 +121,6 @@ const submitForm = async () => {
     if (await postClient()) {
       resetForm();
       DisplayBanner("success");
-    } else {
-      DisplayBanner("failed");
     }
   } else {
     DisplayBanner("failed");
@@ -144,39 +142,23 @@ async function postClient() {
 </script>
 
 <template>
-  <Transition>
-    <div role="alert">
-      <div v-if="banner.displaySuccess == true">
-        <successBanner
-          topText="Job has been successfully created"
-          bottomText="Job was added to the available jobs! "
-        ></successBanner>
-      </div>
-      <div v-if="banner.displayFailed == true">
-        <errorBanner
-          topText="ERROR: Invalid data field!"
-          bottomText="One or more data fields is missing or incorrect!"
-        ></errorBanner>
-      </div>
-    </div>
-  </Transition>
   <form @submit.prevent>
     <div class="shadow-lg border rounded bg-light">
       <div class="h-84 p-5">
         <Transition>
           <div role="alert">
-            <div v-if="banner.success == true">
+            <div v-if="banner.displaySuccess == true">
               <successBanner
                 class="mb-4"
                 topText="Job has been successfully created"
                 bottomText="Job was added to the available jobs! "
               ></successBanner>
             </div>
-            <div v-if="banner.failure == true">
+            <div v-if="banner.displayFailed == true">
               <errorBanner
                 class="mb-4"
-                topText="ERROR: Unable to save client!"
-                bottomText="An error occurred while contacting the server."
+                topText="ERROR: Invalid data field!"
+                bottomText="One or more data fields is missing or incorrect!"
               ></errorBanner>
             </div>
           </div>
