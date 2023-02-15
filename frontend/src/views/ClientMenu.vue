@@ -2,9 +2,11 @@
 import ClientAdd from "../components/AddClient.vue";
 import SearchTable from "../components/SearchTable.vue";
 import { ref } from "vue";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
 const currentView = ref("Search");
 const activeBtnClass = ["bg-accentLight", "text-dark"];
+const auth = useAuthenticationStore();
 
 function toggleView(view) {
   currentView.value = view;
@@ -19,10 +21,14 @@ function toggleView(view) {
     otherBtn1.classList.remove(...activeBtnClass);
   }
 }
+
+const authorizeAddClient = () => auth.validateJWT() && auth.isAuthAdmin
+
 </script>
 <template>
   <div class="text-center">
     <button
+      v-if="authorizeAddClient() == true"
       class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
       @click="toggleView('Add')"
       id="addClient"
