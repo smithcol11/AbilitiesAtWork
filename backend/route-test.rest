@@ -1,16 +1,19 @@
+### get all jobs
 GET http://localhost:3000/jobs
 
-###
+### get 1 job using id 63e51728570e8a2dcdf94730
 GET http://localhost:3000/jobs/63e51728570e8a2dcdf94730
 
 
-###
+### get 1 job using id 63e518332f11d95818fb034f
 GET http://localhost:3000/jobs/63e518332f11d95818fb034f
 
-###
+### delete 1 job using id 63e51728570e8a2dcdf94730
 DELETE http://localhost:3000/jobs/63e51728570e8a2dcdf94730
 
-###
+### update 1 job using id 63e518332f11d95818fb034f
+### the json below doesn't have to have every field, 
+### just the ones client need to update.
 PATCH http://localhost:3000/jobs/63e518332f11d95818fb034f
 Content-Type: application/json
 
@@ -20,9 +23,8 @@ Content-Type: application/json
 
     "contact": {
         "email": "newEmail@mail.com",
-        "name": "new name"
-        # passing a number is having a problem
-        #"phone": 333
+        "name": "new name",
+        "phone": 5000000000
     },
     # "openingDate": "someDate",
     # "enteredBy": "Name A",
@@ -32,7 +34,6 @@ Content-Type: application/json
     # "position": "Assisted Living",
     # "timeCommitment": "Full-Time",
     # "shift": "Afternoon",
-    # issues with testing hourlyWafe because of type number
     # "hourlyWage": 10,
     # "benefits": "some benefits",
     # "notes": "some notes",
@@ -41,5 +42,9 @@ Content-Type: application/json
     # "city": "Some City",
     # "county": "Some County",
     # "createdAt": "Some Date", # needs to be in Date format
-    # "updatedAt": "Some Date" #needs to be in Date format 
+    # "updatedAt": "Some Date" # needs to be in Date format 
 }
+
+### the date format above shouldn't be an issue as
+### they should have already been timestamped 
+### and not manually entered by client
