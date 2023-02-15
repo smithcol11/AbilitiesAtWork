@@ -18,81 +18,149 @@ export default {
             zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
             county: { value: null, matchMode: FilterMatchMode.IN },
             industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            hours: { value: null, matchMode: FilterMatchMode.EQUALS },
+            hours: { value: null, matchMode: FilterMatchMode.EQUALS },  
         });
         const columns = ref([
             { field: "company", header: "Company" },
             { field: "city", header: "City" },
             { field: "zip", header: "Zip" },
             { field: "county", header: "County" },
-            { field: "industry", header: "Industry" },
             { field: "hours", header: "Hours" },
         ]);
         const jobs = ref([
             {
                 id: 5,
                 company: "ABC Inc.",
+                contactName: "Wilfred Ramsey",
+                contactPhoneNumber: "(671) 486-2663",
+                contactEmail: "wilfred@gmail.com",
+                address: "644 Stonybrook Drive",
                 city: "Portland",
                 zip: "97223",
                 county: "Washington",
+                shift: "Early",
                 industry: "Manufacturing",
+                position: "Package Delivery Driver",
                 hours: "Full Time",
+                datePosted: "12/07/2022",
+                notes: "Routes average 50 hours per week. Overtime shifts available as there are a need." + 
+                " We run routes 6 days a week, drivers will be assigned a 5 day work week, Saturdays will be required."+
+                " Routes ranging from 50 -80+ stops per day depending on area." +
+                " Routes ranging from 50 - 300+ miles per day depending on area." +
+                " Home every night. Employee will keep the delivery van at their home in Grand Marais or the surrounding area." + 
+                " They will meet with another driver late in the morning to receive their delivery packages for the day. Hours vary as the amount of packages varies day to day."
             },
             {
                 company: "XYZ Co.",
+                contactName: "Regina Hunt",
+                contactPhoneNumber: "(629) 796-1398",
+                contactEmail: "regina@gmail.com",
+                address: "9110 Wentworth St",
                 city: "Beaverton",
                 zip: "97002",
                 county: "Multnomah",
+                shift: "Morning",
                 industry: "Retail",
+                position: "Personal assistant",
                 hours: "Part Time",
+                datePosted: "12/25/2022",
+                notes: "Nothing"
             },
             {
                 company: "Might Ent.",
+                contactName: "Dorothy Rice",
+                contactPhoneNumber: "(227) 932-8104",
+                contactEmail: "dorothy@gmail.com",
+                address: "683 SE. Grandrose Drive",
                 city: "Dalles",
                 zip: "99696",
                 county: "Washington",
+                shift: "Afternoon",
                 industry: "Buisness",
+                position: "Accounting",
                 hours: "Part Time",
+                datePosted: "02/07/2022",
+                notes: "Nothing"
             },
             {
                 company: "GoodieMax",
+                contactName: "Travis Vasquez",
+                contactPhoneNumber: "(372) 501-1055",
+                contactEmail: "travis@gmail.com",
+                address: "23 South Fulton Dr.",
                 city: "Dalles",
                 zip: "98868",
                 county: "Washington",
+                shift: "Early",
                 industry: "Manufacturing",
+                position: "Guest Experience",
                 hours: "Full Time",
+                datePosted: "09/17/2022",
+                notes: "Nothing"
             },
             {
                 company: "TempCo",
+                contactName: "Gilbert Ortiz",
+                contactPhoneNumber: "(439) 282-1448",
+                contactEmail: "gilbert@gmail.com",
+                address: "62 Livingston Court",
                 city: "Portland",
                 zip: "97223",
                 county: "Washington",
+                shift: "Early",
                 industry: "Buisness",
+                position: "Accounting",
                 hours: "Part Time",
+                datePosted: "01/08/2022",
+                notes: "Nothing"
             },
             {
                 company: "DiceCity",
+                contactName: "Marjorie Watson",
+                contactPhoneNumber: "(269) 390-9930",
+                contactEmail: "marjorie@gmail.com",
+                address: "771 Studebaker St.",
                 city: "Portland",
                 zip: "97223",
                 county: "Washington",
+                shift: "Evening",
                 industry: "Retail",
+                position: "Retail",
                 hours: "Part Time",
+                datePosted: "06/06/2022",
+                notes: "Nothing"
             },
             {
                 company: "BigMeyer",
+                contactName: "Fred Ballard",
+                contactPhoneNumber: "(892) 949-2754",
+                contactEmail: "fred@gmail.com",
+                address: "7491 SW. Plumb Branch Dr.",
                 city: "Portland",
                 zip: "97223",
                 county: "Washington",
+                shift: "Early",
                 industry: "Retail",
+                position: "Cafe",
                 hours: "Full Time",
+                datePosted: "03/03/2022",
+                notes: "Nothing"
             },
             {
                 company: "WorstPlace",
+                contactName: "Blanca Pope",
+                contactPhoneNumber: "(507) 690-0787",
+                contactEmail: "blanca@gmail.com",
+                address: "55 Lake Forest Lane",
                 city: "Eugene",
                 zip: "93556",
                 county: "Washington",
+                shift: "Morning",
                 industry: "Buisness",
+                position: "Food",
                 hours: "Full Time",
+                datePosted: "12/07/2022",
+                notes: "Nothing"
             },
         ]);
         const filterData = ref([
@@ -217,10 +285,9 @@ export default {
               this.displayDel = false;
         },
         saveUpdate(){
-          //this.SelectedJob.company = this.companyName
+          //Not implemented yet
           console.log(this.companyName)
           console.log(this.SelectedJob.company)
-
           this.displayUpdate = false;
         }
     },
@@ -423,15 +490,24 @@ export default {
       <Column field="moreInfo">
         <template #body="{ data,index }">
           <Button label="More Info" class="p-button-outlined p-button-secondary" @click="openBasic(data,index)" />
-          <Dialog header="More Information:" v-model:visible="displayBasic" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}" v-if="SelectedIndex == index">
+          <Dialog header="More Information:" v-model:visible="displayBasic" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '30vw'}" v-if="SelectedIndex == index">
             <div class="mt-3 text-center">
               <div class="mt-2 px-7 py-3">
                 <div class="bg-white text-left italic font-bold text-gray-700">
                     <p class="pt-2">Company: <span class="font-normal">{{SelectedItem.company}}</span></p>
-                    <p class="">City: <span class="font-normal">{{SelectedItem.city}}</span></p>
-                    <p class="">Zip: <span class="font-normal">{{SelectedItem.zip}}</span></p>
-                    <p class="">County: <span class="font-normal">{{SelectedItem.county}}</span></p>
-                    <p class="">Hours: <span class="font-normal">{{SelectedItem.hours}}</span></p>
+                    <p class="pt-2">Contact Name: <span class="font-normal">{{SelectedItem.contactName}}</span></p>
+                    <p class="pt-2">Contact Phone Number: <span class="font-normal">{{SelectedItem.contactPhoneNumber}}</span></p>
+                    <p class="pt-2">Contact Email: <span class="font-normal">{{SelectedItem.contactEmail}}</span></p>
+                    <p class="pt-2">Address: <span class="font-normal">{{SelectedItem.address}}</span></p>
+                    <p class="pt-2">City: <span class="font-normal">{{SelectedItem.city}}</span></p>
+                    <p class="pt-2">Zip: <span class="font-normal">{{SelectedItem.zip}}</span></p>
+                    <p class="pt-2">County: <span class="font-normal">{{SelectedItem.county}}</span></p>
+                    <p class="pt-2">Industry: <span class="font-normal">{{SelectedItem.industry}}</span></p>
+                    <p class="pt-2">Position: <span class="font-normal">{{SelectedItem.position}}</span></p>
+                    <p class="pt-2">Shift: <span class="font-normal">{{SelectedItem.shift}}</span></p>
+                    <p class="pt-2">Hours: <span class="font-normal">{{SelectedItem.hours}}</span></p>
+                    <p class="pt-2">Date Posted: <span class="font-normal">{{SelectedItem.datePosted}}</span></p>
+                    <p class="pt-2">Notes: <span class="font-normal">{{SelectedItem.notes}}</span></p>
                 </div>
               </div>
             </div>
@@ -440,16 +516,26 @@ export default {
                 <Button label="Delete" icon="pi pi-times" @click="openDel()" class="p-button-text p-button-secondary"/>    
             </template>
         </Dialog>
-        <Dialog header="Update" v-model:visible="displayUpdate" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}" v-if="SelectedIndex == index">
+        <Dialog header="Update" v-model:visible="displayUpdate" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '30vw'}" v-if="SelectedIndex == index">
           <form action="">
           <div class="mt-3 text-center">
               <div class="mt-2 px-7 py-3">
-                <div class="bg-white text-center italic font-bold text-gray-700">
-                    <p class="pt-2">Company: </p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.company v-model='companyName'/>
-                    <p class="pt-2">City: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.city /></p>
-                    <p class="pt-2">Zip: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.zip /></p>
-                    <p class="pt-2">County: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.county /></p>
-                    <p class="pt-2">Hours: </p><p><InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.hours /></p>
+                <div class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6">
+                    <div class="pt-2">Company: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.company /></div>
+                    <div class="pt-2">Contact Name: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.contactName /></div>
+                    <div class="pt-2">Contact Phone Number: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.contactPhoneNumber /></div>
+                    <div class="pt-2">Contact Email: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.contactEmail /></div>
+                    <div class="pt-2">Address: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.address /></div>
+                    <div class="pt-2">City: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.city /></div>
+                    <div class="pt-2">Zip: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.zip /></div>
+                    <div class="pt-2">County: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.county /></div>
+                    <div class="pt-2">Shift: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.shift /></div>
+                    <div class="pt-2">Industry: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.industry /></div>
+                    <div class="pt-2">Position: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.position /></div>
+                    <div class="pt-2">Hours: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.hours /></div>
+                    <div class="pt-2">Date Posted: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.datePosted /></div>
+                    <div class="pt-2">Notes: <InputText type="text" class="p-inputtext-sm" :placeholder=SelectedItem.notes /></div>
+
                 </div>
               </div>
             </div>
@@ -457,7 +543,7 @@ export default {
             <Button label="Confirm" icon="pi pi-check" @click="saveUpdate()" class="p-button-text p-button-secondary"/>
             <Button label="Cancel" icon="pi pi-times" @click="closeUpdate()" class="p-button-text p-button-secondary"/>
           </div>   
-        </form>     
+        </form>   
         </Dialog>
         <Dialog header="Do you want to delete this job?" v-model:visible="displayDel" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '25vw'}" v-if="SelectedIndex == index">
           <div class="mt-3 text-right">
