@@ -193,13 +193,7 @@ export default {
     },
     data() {
         return {
-            displayBasic: false,
-            displayDel: false,
-            displayUpdate: false,
-            SelectedJob: {},
-            SelectedIndex: -1,
-            companyName: '',
-            dialogs: {}
+
         };
     },
     created() {
@@ -255,6 +249,23 @@ export default {
         removeJob(SelectedIndex){
           if (SelectedIndex > -1)
               this.jobs.splice(SelectedIndex, 1);
+        },
+        saveUpdate(updatedJob, SelectedIndex){
+          console.log(updatedJob.company)
+          this.jobs[SelectedIndex].company = updatedJob.company;
+          this.jobs[SelectedIndex].contactName = updatedJob.contactName;
+          this.jobs[SelectedIndex].compcontactPhoneNumberany = updatedJob.contactPhoneNumber;
+          this.jobs[SelectedIndex].contactEmail = updatedJob.contactEmail;
+          this.jobs[SelectedIndex].address = updatedJob.address;
+          this.jobs[SelectedIndex].city = updatedJob.city;
+          this.jobs[SelectedIndex].zip = updatedJob.zip;
+          this.jobs[SelectedIndex].county = updatedJob.county;
+          this.jobs[SelectedIndex].shift = updatedJob.shift;
+          this.jobs[SelectedIndex].industry = updatedJob.industry;
+          this.jobs[SelectedIndex].position = updatedJob.position;
+          this.jobs[SelectedIndex].hours = updatedJob.hours;
+          this.jobs[SelectedIndex].datePosted = updatedJob.datePosted;
+          this.jobs[SelectedIndex].notes = updatedJob.notes;
         },
 
     },
@@ -454,7 +465,7 @@ export default {
 
       <Column field="moreInfo">
         <template #body="{ data,index }">
-          <MoreInfo :data="data" :index="index" :removeJob="removeJob"/>
+          <MoreInfo :data="data" :index="index" :removeJob="removeJob" :saveUpdate="saveUpdate"/>
         </template>
       </Column>
   </DataTable>
