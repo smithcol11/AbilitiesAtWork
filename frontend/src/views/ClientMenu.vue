@@ -6,7 +6,7 @@ import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
 const currentView = ref("Search");
 const activeBtnClass = ["bg-accentLight", "text-dark"];
-const auth = useAuthenticationStore();
+const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
 
 function toggleView(view) {
   currentView.value = view;
@@ -22,6 +22,7 @@ function toggleView(view) {
   }
 }
 
+//authorize action by validating the JWT and checking the isAdmin value after validation
 const authorizeAddClient = () => auth.validateJWT() && auth.isAuthAdmin
 
 </script>
