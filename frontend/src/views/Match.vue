@@ -1,9 +1,7 @@
 <script setup>
 import ClientInfo from "../components/ClientInfo.vue";
 import SearchTable from "../components/SearchTable.vue";
-import { reactive, ref, computed, onBeforeMount } from "vue";
-import SearchNewClient from "../components/SearchNewClient.vue";
-import { required } from "@vuelidate/validators";
+import { reactive, ref, computed} from "vue";
 import { useVuelidate } from "@vuelidate/core";
 
 const success = ref(false);
@@ -65,7 +63,7 @@ const submitForm = async () => {
 };
 
 let exampleClient = {
-  initials: "name",
+  initials: clientInfo.firstName + " " + clientInfo.middleInitial + " " + clientInfo.lastInitial,
   preferences: "things",
   industry: "stuff",
   hours: "some",
@@ -100,13 +98,6 @@ async function matchClient() {
           <ClientInfo :client="exampleClient" />
         </div>
         <div class="px-20 self-start">
-          <!-- <button
-          type="submit"
-          id="getClientButton"
-          class="simple-button"
-          @click="getClient()">
-            Search new client
-          </button> -->
           <form>
             <div>
               <form method="post" ref="clientForm" @submit.prevent>
@@ -115,15 +106,20 @@ async function matchClient() {
                     class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border"
                   >
                     <div>
-                      <label class="block px-1 py-1">Initials</label>
+                      <label class="block px-1 py-1">Enter Client's Name</label>
                       <input
-                        class="rounded border px-1 py-1 sm:w-3/4 w-full"
+                        class="rounded border px-1 py-1 sm:w-1/2"
                         type="text"
                         name="initials"
                         id="initials"
-                        placeholder="Enter initials"
+                        placeholder="First Name"
                         v-model="clientInfo.firstName"
+                        style="margin-right: 1rem;"
                       />
+                      <input class="rounded border px-1 py-1 sm:w-1/5" type="text" name="initials" id="initials"
+                        placeholder="Middle initial" v-model="clientInfo.middleInitial" />
+                      <input class="rounded border px-1 py-1 sm:w-3/4" type="text" name="initials" id="initials"
+                        placeholder="Last Name" v-model="clientInfo.lastInitial" />
                     </div>
                     <button
                       class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
