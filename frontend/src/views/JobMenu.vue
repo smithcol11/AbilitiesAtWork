@@ -2,6 +2,7 @@
 import SearchTable from "../components/SearchTable.vue";
 import { ref } from "vue";
 import CreateJob from "../components/CreateJob.vue";
+import ModifyLists from "../components/ModifyLists.vue"
 
 const currentView = ref("Search");
 const activeBtnClass = ["bg-accentLight", "text-dark"];
@@ -23,18 +24,25 @@ function toggleView(view) {
 <template>
   <div class="text-center">
     <button
-      class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+      class="duration-300 mx-2 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
       @click="toggleView('Add')"
       id="addJob"
     >
       Add Job
     </button>
     <button
-      class="duration-300 ml-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+      class="duration-300 mx-2 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
       @click="toggleView('Search')"
       id="searchJob"
     >
       Search Jobs
+    </button>
+    <button
+      class="duration-300 mx-2 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
+      @click="toggleView('Modify')"
+      id="modiftList"
+    >
+      Modify Lists
     </button>
     <form>
       <div v-if="currentView === 'Search'">
@@ -42,6 +50,9 @@ function toggleView(view) {
       </div>
       <div v-else-if="currentView === 'Add'" class="mx-auto max-w-xl">
         <CreateJob />
+      </div>
+      <div v-else-if="currentView === 'Modify'" class="mx-auto max-w-xl">
+        <ModifyLists/>
       </div>
     </form>
   </div>
