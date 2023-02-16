@@ -41,11 +41,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Route files
 app.use(require("./routes/authAdmin.js"));
 app.use(require("./routes/authEmployee.js"));
-app.use(require("./routes/addClient.js"));
-app.use(require("./routes/addJob.js"));
-
+app.use(require("./routes/job.js"));
+app.use(require("./routes/jobOptions.js"));
+app.use(require("./routes/clientRoutes.js"));
 app.use(require("./routes/getJobs.js"));
 app.use(require("./routes/getJobOptions.js"));
 app.use(require("./routes/getClient.js"));
