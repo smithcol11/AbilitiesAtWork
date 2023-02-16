@@ -1,24 +1,25 @@
 <script setup>
 import ClientAdd from "../components/AddClient.vue";
 import SearchTable from "../components/SearchTable.vue";
+import Button from "../components/Button.vue";
 import { ref } from "vue";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
 const currentView = ref("Search");
-const activeBtnClass = ["bg-accentLight", "text-dark"];
 const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
+const activeBtnClass = ["accentLight-button"];
 
 function toggleView(view) {
   currentView.value = view;
-  let otherBtn = document.getElementById("searchClient");
-  let otherBtn1 = document.getElementById("addClient");
+  let btn = document.getElementById("searchClient");
+  let btn1 = document.getElementById("addClient");
 
   if (view === "Add") {
-    otherBtn1.classList.add(...activeBtnClass);
-    otherBtn.classList.remove(...activeBtnClass);
+    btn1.classList.add(...activeBtnClass);
+    btn.classList.remove(...activeBtnClass);
   } else if (view === "Search") {
-    otherBtn.classList.add(...activeBtnClass);
-    otherBtn1.classList.remove(...activeBtnClass);
+    btn.classList.add(...activeBtnClass);
+    btn1.classList.remove(...activeBtnClass);
   }
 }
 
@@ -27,21 +28,20 @@ const authorizeAddClient = () => auth.validateJWT() && auth.isAuthAdmin;
 </script>
 <template>
   <div class="text-center">
-    <button
-      v-if="authorizeAddClient() == true"
-      class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
-      @click="toggleView('Add')"
-      id="addClient"
-    >
-      Add Client
-    </button>
-    <button
-      class="duration-300 mx-2 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
-      @click="toggleView('Search')"
-      id="searchClient"
-    >
-      Search Clients
-    </button>
+    <div class="flex justify-center gap-10 my-5">
+      <Button
+        v-if="authorizeAddClient() == true"
+        @click="toggleView('Add')"
+        id="addClient"
+        text="Add Client"
+      />
+      <Button
+        class="accentLight-button"
+        @click="toggleView('Search')"
+        id="searchClient"
+        text="Search Clients"
+      />
+    </div>
     <div>
       <div v-if="currentView === 'Search'">
         <SearchTable />
@@ -52,5 +52,3 @@ const authorizeAddClient = () => auth.validateJWT() && auth.isAuthAdmin;
     </div>
   </div>
 </template>
-
-<style></style>

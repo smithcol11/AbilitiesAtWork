@@ -1,7 +1,8 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import { ref } from "vue";
-
+import Button from "../components/Button.vue";
+import Label from "../components/Label.vue";
 const auth = useAuthenticationStore();
 let showLogout = ref(false);
 
@@ -22,24 +23,9 @@ function toggleLogout() {
         class="p-3 border-b-2 hidden sm:block"
         src="../assets/images/logo.png"
       />
-      <RouterLink
-        class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
-        to="/clientMenu"
-      >
-        Client Menu
-      </RouterLink>
-      <RouterLink
-        class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
-        to="/JobMenu"
-      >
-        Job Menu
-      </RouterLink>
-      <RouterLink
-        class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
-        to="/match"
-      >
-        Match
-      </RouterLink>
+      <RouterLink class="nav-button" to="/clientMenu"> Client Menu </RouterLink>
+      <RouterLink class="nav-button" to="/JobMenu"> Job Menu </RouterLink>
+      <RouterLink class="nav-button" to="/match"> Match </RouterLink>
       <button
         class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
         @click="toggleLogout()"
@@ -48,10 +34,7 @@ function toggleLogout() {
       </button>
     </div>
   </nav>
-  <button
-    class="sm:hidden flex mx-auto border-b border-x shadow-l bg-light"
-    @click="toggleNav()"
-  >
+  <Button class="nav-button" @click="toggleNav()">
     <svg
       class="h-7 w-32 text-dark"
       viewBox="0 0 24 24"
@@ -65,29 +48,20 @@ function toggleLogout() {
       <line x1="3" y1="6" x2="21" y2="6" />
       <line x1="3" y1="18" x2="21" y2="18" />
     </svg>
-  </button>
+  </Button>
   <div
     v-if="showLogout"
     class="absolute top-0 w-screen h-screen bg-opacity-50 bg-dark mx-auto text-center z-10"
   >
-    <div class="w-72 h-32 shadow-lg mx-auto bg-light mt-24 p-5">
-      Do you want to logout?
-      <div>
-        <button
-          @click="auth.Logout()"
-          class="bg-rose-600 text-light shadow p-3 rounded-lg mt-5 mx-1 hover:bg-rose-700 duration-200"
-        >
-          Logout
-        </button>
-        <button
-          @click="toggleLogout()"
-          class="bg-slate-300 text-dark shadow p-3 rounded-lg mt-5 mx-1 hover:bg-slate-200 duration-200"
-        >
-          Cancel
-        </button>
+    <div class="w-72 h-28 shadow-lg mx-auto bg-light mt-24 p-5">
+      <Label text="Do you want to logout?"></Label>
+
+      <div class="grid grid-cols-2 gap-4 place-content-around mt-2">
+        <Button class="red-button my-5" @click="auth.Logout()" text="Logout">
+        </Button>
+        <Button class="grey-button my-5" @click="toggleLogout" text="Cancel">
+        </Button>
       </div>
     </div>
   </div>
 </template>
-
-<style></style>
