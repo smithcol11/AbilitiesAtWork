@@ -41,11 +41,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Route files
 app.use(require("./routes/authAdmin.js"));
 app.use(require("./routes/authEmployee.js"));
-app.use(require("./routes/addClient.js"));
 app.use(require("./routes/jobServer.js"));
-app.use(require("./routes/getJobOptions.js"));
+app.use(require("./routes/jobOptions.js"));
+app.use(require("./routes/clientRoutes.js"));
+
 const server = app.listen(port, () => {
   console.log(`AAW app listening on port ${port}`);
 });

@@ -56,27 +56,35 @@ export const useAuthenticationStore = defineStore("authorization", () => {
     return isAuthUser.value;
   }
 
+  function cookieIsPresent(cookieName) {
+    let firstMatch = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith(`${cookieName}=`));
+
+    return firstMatch != undefined;
+  }
+
   async function validateJWT() {
-    await fetch("http://localhost:3000/verifyJWT", {
+    if (!cookieIsPresent("token")) {
+      return false;
+    }
+
+    return await fetch("http://localhost:3000/verifyJWT", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
-        let result;
         if (data.admin) {
           isAuthAdmin.value = true;
-          result = true;
-          // router.push("/");
+          return true;
         } else if (data.auth) {
           isAuthUser.value = true;
-          result = true;
-          // router.push("/");
+          return true;
         } else {
-          result = false;
+          return false;
         }
-        return result;
       });
   }
 

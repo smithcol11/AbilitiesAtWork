@@ -9,11 +9,12 @@ export default {
   data() {
     return {
       exampleClient: {
-        initials: "ABC",
+        firstName: "First",
+        middleInitial: "M",
+        lastInitial: "L",
         preferences: "things",
         industry: "stuff",
         hours: "some",
-        appliedJobs: "many",
       },
     };
   },
@@ -28,7 +29,7 @@ export default {
           <ClientInfo :client="exampleClient" />
         </div>
         <div class="px-20 self-start">
-          <button type="submit" class="simple-button" @click="">
+          <button type="submit" class="simple-button px-4 py-1 my-1" @click="">
             Search new client
           </button>
         </div>
