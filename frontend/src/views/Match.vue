@@ -16,6 +16,18 @@ const banner = reactive({
     type: Boolean,
     default: false,
   },
+  data() {
+    return {
+      exampleClient: {
+        firstName: "First",
+        middleInitial: "M",
+        lastInitial: "L",
+        preferences: "things",
+        industry: "stuff",
+        hours: "some",
+      },
+    };
+  },
   visible: {
     type: Boolean,
     default: false,

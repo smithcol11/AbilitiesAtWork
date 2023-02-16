@@ -37,6 +37,8 @@ router.post("/verifyJWT", (req, res) => {
     } else if (result) {
       res.json({ auth: true, admin: false });
     } else res.json({ auth: false, admin: false });
+  } else {
+    res.status(400).json({ message: 'Token cookie not received', error });
   }
 });
 
@@ -59,7 +61,7 @@ router.post("/loginUser", (req, res) => {
     else if (result) {
       let token = jwt.sign(req.body.username, process.env.SESSION_SECRET);
 
-      res.cookie("token", token);
+      res.cookie("token", token, { sameSite: "none", secure: "false" });
 
       res.json({ auth: true, admin: false });
     } else {

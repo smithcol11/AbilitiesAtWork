@@ -4,7 +4,9 @@ const model = mongoose.model;
 
 const clientSchema = new Schema(
   {
-    initials: { type: String, required: true, minlength: 2 },
+    firstName: { type: String, required: true },
+    middleInitial: { type: String, required: true, minlength: 1, maxlength: 1 },
+    lastInitial: { type: String, required: true, minlength: 1, maxlength: 1 },
     industry: [{ type: String, required: true }],
     hours: {
       type: String,

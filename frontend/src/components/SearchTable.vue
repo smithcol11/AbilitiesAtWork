@@ -183,7 +183,7 @@ export default {
 </script>
 
 <template>
-  <div class="card">
+  <div class="card m-5  bg-light shadow-lg border">
     <DataTable
       :value="jobs"
       class="p-datatable-sm"
