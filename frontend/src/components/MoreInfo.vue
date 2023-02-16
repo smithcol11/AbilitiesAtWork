@@ -5,7 +5,7 @@ import InputText from "primevue/inputtext";
 export default {
   props: {
     data: {
-      type: Array,
+      type: Object,
       required: true,
     },
     index: {
