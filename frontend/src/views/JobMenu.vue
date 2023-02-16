@@ -2,46 +2,59 @@
 import SearchTable from "../components/SearchTable.vue";
 import { ref } from "vue";
 import CreateJob from "../components/CreateJob.vue";
+import Button from "../components/Button.vue";
+import ModifyLists from "../components/ModifyLists.vue";
 
 const currentView = ref("Search");
-const activeBtnClass = ["bg-accentLight", "text-dark"];
+const activeBtnClass = ["accentLight-button"];
 
 function toggleView(view) {
   currentView.value = view;
-  let otherBtn = document.getElementById("searchJob");
-  let otherBtn1 = document.getElementById("addJob");
+  let btn = document.getElementById("searchJob");
+  let btn1 = document.getElementById("addJob");
+  let btn2 = document.getElementById("modifyList");
 
   if (view === "Add") {
-    otherBtn1.classList.add(...activeBtnClass);
-    otherBtn.classList.remove(...activeBtnClass);
+    btn1.classList.add(...activeBtnClass);
+    btn.classList.remove(...activeBtnClass);
+    btn2.classList.remove(...activeBtnClass);
   } else if (view === "Search") {
-    otherBtn.classList.add(...activeBtnClass);
-    otherBtn1.classList.remove(...activeBtnClass);
+    btn.classList.add(...activeBtnClass);
+    btn1.classList.remove(...activeBtnClass);
+    btn2.classList.remove(...activeBtnClass);
+  } else if (view === "Modify") {
+    btn2.classList.add(...activeBtnClass);
+    btn1.classList.remove(...activeBtnClass);
+    btn.classList.remove(...activeBtnClass);
   }
 }
 </script>
 <template>
   <div class="text-center">
-    <button
-      class="duration-300 mr-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
-      @click="toggleView('Add')"
-      id="addJob"
-    >
-      Add Job
-    </button>
-    <button
-      class="duration-300 ml-5 bg-light border-2 border-black shadow-sm hover:bg-accentDark px-4 py-1 my-5 text-base text-black hover:text-white rounded"
-      @click="toggleView('Search')"
-      id="searchJob"
-    >
-      Search Jobs
-    </button>
+    <div class="flex justify-center gap-10 my-5">
+      <Button @click="toggleView('Add')" id="addJob" text="Add Job"> </Button>
+      <Button
+        class="accentLight-button"
+        @click="toggleView('Search')"
+        id="searchJob"
+        text="Search Jobs"
+      >
+      </Button>
+      <Button
+        @click="toggleView('Modify')"
+        id="modifyList"
+        text="Modify Lists"
+      />
+    </div>
     <form>
       <div v-if="currentView === 'Search'">
         <SearchTable />
       </div>
       <div v-else-if="currentView === 'Add'" class="mx-auto max-w-xl">
         <CreateJob />
+      </div>
+      <div v-else-if="currentView === 'Modify'" class="mx-auto max-w-xl">
+        <ModifyLists />
       </div>
     </form>
   </div>
