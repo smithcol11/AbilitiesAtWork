@@ -3,8 +3,10 @@ import ClientAdd from "../components/AddClient.vue";
 import SearchTable from "../components/SearchTable.vue";
 import Button from "../components/Button.vue";
 import { ref } from "vue";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
 const currentView = ref("Search");
+const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
 const activeBtnClass = ["accentLight-button"];
 
 function toggleView(view) {
@@ -20,11 +22,19 @@ function toggleView(view) {
     btn1.classList.remove(...activeBtnClass);
   }
 }
+
+//authorize action by validating the JWT and checking the isAdmin value after validation
+const authorizeAddClient = () => auth.validateJWT() && auth.isAuthAdmin;
 </script>
 <template>
   <div class="text-center">
     <div class="flex justify-center gap-10 my-5">
-      <Button @click="toggleView('Add')" id="addClient" text="Add Client" />
+      <Button
+        v-if="authorizeAddClient() == true"
+        @click="toggleView('Add')"
+        id="addClient"
+        text="Add Client"
+      />
       <Button
         class="accentLight-button"
         @click="toggleView('Search')"
