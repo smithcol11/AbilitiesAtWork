@@ -9,30 +9,28 @@ const activeBtnClass = ["accentLight-button"];
 
 function toggleView(view) {
   currentView.value = view;
-  let otherBtn = document.getElementById("searchClient");
-  let otherBtn1 = document.getElementById("addClient");
+  let btn = document.getElementById("searchClient");
+  let btn1 = document.getElementById("addClient");
 
   if (view === "Add") {
-    otherBtn1.classList.add(...activeBtnClass);
-    otherBtn.classList.remove(...activeBtnClass);
+    btn1.classList.add(...activeBtnClass);
+    btn.classList.remove(...activeBtnClass);
   } else if (view === "Search") {
-    otherBtn.classList.add(...activeBtnClass);
-    otherBtn1.classList.remove(...activeBtnClass);
+    btn.classList.add(...activeBtnClass);
+    btn1.classList.remove(...activeBtnClass);
   }
 }
 </script>
 <template>
   <div class="text-center">
     <div class="flex justify-center gap-10 my-5">
-      <Button @click="toggleView('Add')" id="addClient" text="Add Client">
-      </Button>
+      <Button @click="toggleView('Add')" id="addClient" text="Add Client" />
       <Button
         class="accentLight-button"
         @click="toggleView('Search')"
         id="searchClient"
         text="Search Clients"
-      >
-      </Button>
+      />
     </div>
     <div>
       <div v-if="currentView === 'Search'">

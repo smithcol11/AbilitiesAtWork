@@ -3,20 +3,29 @@ import SearchTable from "../components/SearchTable.vue";
 import { ref } from "vue";
 import CreateJob from "../components/CreateJob.vue";
 import Button from "../components/Button.vue";
+import ModifyLists from "../components/ModifyLists.vue";
+
 const currentView = ref("Search");
 const activeBtnClass = ["accentLight-button"];
 
 function toggleView(view) {
   currentView.value = view;
-  let otherBtn = document.getElementById("searchJob");
-  let otherBtn1 = document.getElementById("addJob");
+  let btn = document.getElementById("searchJob");
+  let btn1 = document.getElementById("addJob");
+  let btn2 = document.getElementById("modifyList");
 
   if (view === "Add") {
-    otherBtn1.classList.add(...activeBtnClass);
-    otherBtn.classList.remove(...activeBtnClass);
+    btn1.classList.add(...activeBtnClass);
+    btn.classList.remove(...activeBtnClass);
+    btn2.classList.remove(...activeBtnClass);
   } else if (view === "Search") {
-    otherBtn.classList.add(...activeBtnClass);
-    otherBtn1.classList.remove(...activeBtnClass);
+    btn.classList.add(...activeBtnClass);
+    btn1.classList.remove(...activeBtnClass);
+    btn2.classList.remove(...activeBtnClass);
+  } else if (view === "Modify") {
+    btn2.classList.add(...activeBtnClass);
+    btn1.classList.remove(...activeBtnClass);
+    btn.classList.remove(...activeBtnClass);
   }
 }
 </script>
@@ -31,6 +40,11 @@ function toggleView(view) {
         text="Search Jobs"
       >
       </Button>
+      <Button
+        @click="toggleView('Modify')"
+        id="modifyList"
+        text="Modify Lists"
+      />
     </div>
     <form>
       <div v-if="currentView === 'Search'">
@@ -38,6 +52,9 @@ function toggleView(view) {
       </div>
       <div v-else-if="currentView === 'Add'" class="mx-auto max-w-xl">
         <CreateJob />
+      </div>
+      <div v-else-if="currentView === 'Modify'" class="mx-auto max-w-xl">
+        <ModifyLists />
       </div>
     </form>
   </div>
