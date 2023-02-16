@@ -1,5 +1,3 @@
-"use strict";
-
 const express = require("express");
 const router = express.Router();
 const Job = require("../schema/job");
@@ -30,6 +28,15 @@ router.post("/createJob", async (req, res) => {
   });
 
   res.status(201).send();
+});
+
+router.get("/GetAllJobs", (req, res) => {
+  Jobs.find({})
+    .then((data) => {
+      console.log(data);
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
 });
 
 module.exports = router;
