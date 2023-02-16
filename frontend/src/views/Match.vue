@@ -26,6 +26,10 @@ const clientInfo = reactive({
   firstName: "",
   middleInitial: "",
   lastInitial: "",
+  preferences: "",
+  industry: "",
+  hours: "",
+  appliedJobs: "",
 });
 
 const rules = computed(() => {
@@ -71,8 +75,8 @@ let exampleClient = {
 };
 
 async function matchClient() {
-  await fetch("http://localhost:3000/matchClient", {
-    method: "POST",
+  await fetch("http://localhost:3000/matchClient?" + clientInfo.firstName, {
+    method: "GET",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({
