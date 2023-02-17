@@ -76,49 +76,19 @@ export default {
     },
     save() {
       if (this.index > -1) {
-        if (this.updatedJob.company == "")
-          //remain the same data if no new input
-          this.updatedJob.company = this.data.company;
-        if (this.updatedJob.contactName == "")
-          this.updatedJob.contactName = this.data.contactName;
-        if (this.updatedJob.contactPhoneNumber == "")
-          this.updatedJob.contactPhoneNumber = this.data.contactPhoneNumber;
-        if (this.updatedJob.contactEmail == "")
-          this.updatedJob.contactEmail = this.data.contactEmail;
-        if (this.updatedJob.address == "")
-          this.updatedJob.address = this.data.address;
-        if (this.updatedJob.city == "") this.updatedJob.city = this.data.city;
-        if (this.updatedJob.zip == "") this.updatedJob.zip = this.data.zip;
-        if (this.updatedJob.county == "")
-          this.updatedJob.county = this.data.county;
-        if (this.updatedJob.shift == "")
-          this.updatedJob.shift = this.data.shift;
-        if (this.updatedJob.industry == "")
-          this.updatedJob.industry = this.data.industry;
-        if (this.updatedJob.position == "")
-          this.updatedJob.position = this.data.position;
-        if (this.updatedJob.hours == "")
-          this.updatedJob.hours = this.data.hours;
-        if (this.updatedJob.datePosted == "")
-          this.updatedJob.datePosted = this.data.datePosted;
-        if (this.updatedJob.notes == "")
-          this.updatedJob.notes = this.data.notes;
+        for (let key in this.updatedJob) {
+          if (this.updatedJob[key] ==  "") {
+            //remain the same data if no new input
+            this.updatedJob[key] = this.data[key];
+          }
+        }
         this.saveUpdate(this.updatedJob, this.index);
       }
-      this.updatedJob.company = ""; //reset data
-      this.updatedJob.contactName = "";
-      this.updatedJob.contactPhoneNumber = "";
-      this.updatedJob.contactEmail = "";
-      this.updatedJob.address = "";
-      this.updatedJob.city = "";
-      this.updatedJob.zip = "";
-      this.updatedJob.county = "";
-      this.updatedJob.shift = "";
-      this.updatedJob.industry = "";
-      this.updatedJob.position = "";
-      this.updatedJob.hours = "";
-      this.updatedJob.datePosted = "";
-      this.updatedJob.notes = "";
+
+      //reset data
+      for (let key in this.updatedJob) {
+        this.updatedJob[key] = "";
+      }
 
       this.displayUpdate = false;
     },
