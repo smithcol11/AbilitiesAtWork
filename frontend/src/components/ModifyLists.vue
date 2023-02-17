@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, toRaw } from "vue";
 import DropDown from "./DropDown.vue";
 import Label from "./Label.vue";
 
@@ -124,16 +124,7 @@ async function sendChanges() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({
-      _id: formOptions._id,
-      counties: formOptions.counties,
-      cities: formOptions.cities,
-      zips: formOptions.zips,
-      positions: formOptions.positions,
-      industries: formOptions.industries,
-      shiftOptions: formOptions.shiftOptions,
-      timeCommitmentOptions: formOptions.timeCommitmentOptions,
-    }),
+    body: JSON.stringify(toRaw(formOptions)),
   })
     .then((response) => console.log(response))
     .catch((errors) => console.log(errors));
