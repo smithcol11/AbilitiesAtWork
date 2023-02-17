@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref, toRaw } from "vue";
+import DropDown from "./DropDown.vue";
 
 const listItems = ref([]);
 const listType = ref("");
@@ -38,10 +39,9 @@ const formOptions = reactive({
 });
 
 function chooseList(e) {
-  resetOptions();
-  listType.value = e.target.options[e.target.options.selectedIndex].text;
-
-  if (listType.value != "") {
+  if (e) {
+    resetOptions();
+    listType.value = e;
     getListContents(listType.value);
     chosen.value = true;
   }
@@ -75,7 +75,7 @@ function openInput(e) {
 
 function onSubmit() {
   let selectedList = null;
-
+  
   if (listType.value === "Positions") {
     selectedList = formOptions.positions;
   } else if (listType.value === "Industries") {
@@ -98,7 +98,8 @@ function onSubmit() {
     }
   } 
     
-  sendChanges();
+  console.log(toRaw(formOptions));
+  //sendChanges();
 }
 
 async function getListContents(listName) {
@@ -143,12 +144,12 @@ async function sendChanges() {
   <div class="flex flex-col items-center justify-center shadow-lg border bg-light m-3">
     <div class="w-3/4 p-5">
       <label class="block text-left px-1 p-3">Which List?</label>
-      <select v-on:change="chooseList($event)" class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="listType"
-        id="listpicker" required>
-        <option class="block w-full" value="0"></option>
-        <option class="block w-full" value="1">Industries</option>
-        <option class="block w-full" value="2">Positions</option>
-      </select>
+      <DropDown
+        class="l-2 w-full"
+        v-on:change="chooseList($event)"
+        :options="['Industries', 'Positions']"
+        placeholder="Text" 
+      />
     </div>
     <div v-if="chosen" class="w-3/4 p-5">
       <label class="block text-left">What would you like to do?</label>
