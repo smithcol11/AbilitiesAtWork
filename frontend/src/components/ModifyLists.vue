@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, toRaw } from "vue";
 
 const listItems = ref([]);
 const listType = ref("");
@@ -74,31 +74,30 @@ function openInput(e) {
 }
 
 function onSubmit() {
+  let selectedList = null;
+
   if (listType.value === "Positions") {
-    if (toAdd.value) {
-      formOptions.positions.push(choice.value);
-    } else if (toRemove.value) {
-      formOptions.positions.splice(
-        formOptions.positions.findIndex(matchText),
-        1
-      );
-    } else {
-      formOptions.positions[formOptions.positions.findIndex(matchText)] =
-        change.value;
-    }
+    selectedList = formOptions.positions;
+  } else if (listType.value === "Industries") {
+    selectedList = formOptions.industries;
   } else {
-    if (toAdd.value) {
-      formOptions.industries.push(choice.value);
-    } else if (toRemove.value) {
-      formOptions.industries.splice(
-        formOptions.industries.findIndex(matchText),
-        1
-      );
-    } else {
-      formOptions.industries[formOptions.industries.findIndex(matchText)] =
-        change.value;
-    }
+    // No list selected; modify nothing.
+    return;
   }
+
+  if (toAdd.value) {
+    selectedList.push(choice.value);
+  } else {
+    let matchIndex = selectedList.findIndex(matchText);
+    if (matchIndex < 0) {
+      // Due due dropdown selection, this case should be impossible.
+    } else if (toRemove.value) {
+      selectedList.splice(matchIndex, 1);
+    } else if (toEdit.value) {
+      selectedList[matchIndex] = change.value;
+    }
+  } 
+    
   sendChanges();
 }
 
@@ -141,18 +140,11 @@ async function sendChanges() {
 </script>
 
 <template>
-  <div
-    class="flex flex-col items-center justify-center shadow-lg border bg-light m-3"
-  >
+  <div class="flex flex-col items-center justify-center shadow-lg border bg-light m-3">
     <div class="w-3/4 p-5">
       <label class="block text-left px-1 p-3">Which List?</label>
-      <select
-        v-on:change="chooseList($event)"
-        class="rounded bg-white pl-2 pt-1 pb-2 border w-full"
-        name="listType"
-        id="listpicker"
-        required
-      >
+      <select v-on:change="chooseList($event)" class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="listType"
+        id="listpicker" required>
         <option class="block w-full" value="0"></option>
         <option class="block w-full" value="1">Industries</option>
         <option class="block w-full" value="2">Positions</option>
@@ -161,96 +153,55 @@ async function sendChanges() {
     <div v-if="chosen" class="w-3/4 p-5">
       <label class="block text-left">What would you like to do?</label>
       <div class="grid grid-cols-3">
-        <button
-          @click="startAdd()"
-          type="button"
-          class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-3 m-5 rounded"
-        >
+        <button @click="startAdd()" type="button"
+          class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-3 m-5 rounded">
           Add
         </button>
-        <button
-          @click="startRemove()"
-          type="button"
-          class="bg-red-600 hover:bg-red-900 text-white font-bold py-2 m-5 rounded"
-        >
+        <button @click="startRemove()" type="button"
+          class="bg-red-600 hover:bg-red-900 text-white font-bold py-2 m-5 rounded">
           Remove
         </button>
-        <button
-          @click="startEdit()"
-          type="button"
-          class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded"
-        >
+        <button @click="startEdit()" type="button"
+          class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded">
           Edit
         </button>
       </div>
 
       <div v-if="toEdit">
-        <label class="block text-left px-1 p-3"
-          >What would you like to edit?</label
-        >
-        <select
-          @change="openInput($event)"
-          class="rounded bg-white pl-2 pt-1 pb-2 border w-full"
-          name="listType"
-          id="list"
-          v-model="choice"
-          required
-        >
+        <label class="block text-left px-1 p-3">What would you like to edit?</label>
+        <select @change="openInput($event)" class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="listType"
+          id="list" v-model="choice" required>
           <option v-for="items in listItems" class="block w-full">
             {{ items }}
           </option>
         </select>
         <div v-if="toInput">
-          <label v-if="toEdit" class="block text-left px-1 p-3"
-            >Make changes here.</label
-          >
-          <input
-            class="rounded bg-white pl-2 pt-1 pb-2 border w-full"
-            v-model="change"
-            :placeholder="choice"
-          />
+          <label v-if="toEdit" class="block text-left px-1 p-3">Make changes here.</label>
+          <input class="rounded bg-white pl-2 pt-1 pb-2 border w-full" v-model="change" :placeholder="choice" />
         </div>
       </div>
 
       <div v-if="toAdd">
         <div v-if="toInput">
-          <label v-if="toAdd" class="block text-left px-1 p-3"
-            >What would you like to add?</label
-          >
-          <input
-            class="rounded bg-white pl-2 pt-1 pb-2 border w-full"
-            v-model="choice"
-            :placeholder="choice"
-          />
+          <label v-if="toAdd" class="block text-left px-1 p-3">What would you like to add?</label>
+          <input class="rounded bg-white pl-2 pt-1 pb-2 border w-full" v-model="choice" :placeholder="choice" />
         </div>
       </div>
 
       <div v-if="toRemove">
-        <label v-if="toRemove" class="block text-left px-1 p-3"
-          >What would you like to remove?</label
-        >
-        <select
-          @change="openInput($event)"
-          class="rounded bg-white pl-2 pt-1 pb-2 border w-full"
-          name="listType"
-          id="list"
-          v-model="choice"
-          required
-        >
+        <label v-if="toRemove" class="block text-left px-1 p-3">What would you like to remove?</label>
+        <select @change="openInput($event)" class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="listType"
+          id="list" v-model="choice" required>
           <option v-for="items in listItems" class="block w-full">
             {{ items }}
           </option>
         </select>
       </div>
 
-      <button
-        v-if="submitReady"
-        @click="onSubmit()"
-        type="button"
-        class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded"
-      >
+      <button v-if="submitReady" @click="onSubmit()" type="button"
+        class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded">
         Submit
       </button>
     </div>
-  </div>
+</div>
 </template>
