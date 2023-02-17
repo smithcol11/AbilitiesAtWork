@@ -6,11 +6,11 @@ router.get("/GetJobOptions", async (req, res) => {
   try{
     const option = await JobOptions.find({})
     if (!option){
-      return res.status(400).send('No job option found when searching')
+      return res.status(400).send({error: 'No job option found when searching'})
     }
     res.json(option)
   } catch(error){
-    res.status(500).send('Error getting job options')
+    res.status(500).send({error: 'Error getting job options'})
   }
 });
 
@@ -30,7 +30,7 @@ router.post("/updateJobOptions", async (req, res) => {
     );
     res.status(201).send();
   } catch(error){
-    res.status(500).send('Error updating job option')
+    res.status(500).send({error: 'Error updating job option'})
   }
 });
 

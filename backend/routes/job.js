@@ -29,7 +29,7 @@ router.post("/createJob", async (req, res) => {
     });
     res.status(201).send();
   } catch(error){
-    res.status(500).send('Error creating job')
+    res.status(500).send({error: 'Error creating job'})
   }
 });
 
@@ -37,11 +37,11 @@ router.get("/GetAllJobs", async (req, res) => {
   try{
     const Jobs = await Job.find({});
     if (!Jobs){
-      return res.status(400).send('No job found when searching')
+      return res.status(400).send({error: 'No job found when searching'})
     }
     res.json(Jobs)
   } catch(error){
-    res.status(500).send('Error getting all jobs')
+    res.status(500).send({error: 'Error getting all jobs'})
   }
 });
 
