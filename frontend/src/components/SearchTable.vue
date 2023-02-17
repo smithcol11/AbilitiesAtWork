@@ -3,7 +3,8 @@ import { FilterMatchMode, FilterOperator } from "primevue/api";
 import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
-import MoreInfo from "./MoreInfo.vue";
+import JobDetails from "./JobDetails.vue";
+import JobDetails from "./JobDetails.vue";
 
 export default {
   setup() {
@@ -267,8 +268,8 @@ export default {
     },
   },
   components: {
-    MoreInfo,
-  },
+    JobDetails,
+},
 };
 </script>
 
@@ -460,9 +461,9 @@ export default {
         </template>
       </Column>
 
-      <Column field="moreInfo">
+      <Column field="jobDetails">
         <template #body="{ data, index }">
-          <MoreInfo
+          <JobDetails
             :data="data"
             :index="index"
             :removeJob="removeJob"
