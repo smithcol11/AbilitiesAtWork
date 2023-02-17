@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, toRaw } from "vue";
+import { reactive, ref } from "vue";
 import DropDown from "./DropDown.vue";
 import Label from "./Label.vue";
 
@@ -99,8 +99,7 @@ function onSubmit() {
     }
   }
 
-  console.log(toRaw(formOptions));
-  //sendChanges();
+  sendChanges();
 }
 
 async function getListContents(listName) {
@@ -145,7 +144,6 @@ async function sendChanges() {
   <div class="flex flex-col items-center justify-center shadow-lg border bg-light m-3 pb-3">
     <div class="w-3/4 p-5">
       <Label position="left" text="Which List?" class="py-3" />
-      <!-- class="block text-left px-1 p-3">Which List? -->
       <DropDown class="w-full" v-on:change="chooseList($event)" :options="['Industries', 'Positions']" placeholder="" />
     </div>
     <div v-if="chosen" class="w-3/4 p-5">
@@ -176,7 +174,6 @@ async function sendChanges() {
 
       <div v-if="toAdd">
         <div v-if="toInput">
-          <!-- <label v-if="toAdd" class="block text-left px-1 p-3">What would you like to add?</label> -->
           <Label position="left" text="What would you like to add?" class="py-3" />
           <input class="rounded bg-white pl-2 pt-2 pb-2 border w-full" v-model="choice" :placeholder="choice" />
         </div>
