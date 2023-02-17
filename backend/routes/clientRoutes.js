@@ -45,7 +45,7 @@ router.put("/editClient", async (req, res) => {
 
 router.delete("/deleteClient", async (req, res) => {
   try {
-    client = await Client.deleteOne({
+    const client = await Client.deleteOne({
       firstName: req.body.firstName,
       middleInitial: req.body.middleInitial,
       lastInitial: req.body.lastInitial,

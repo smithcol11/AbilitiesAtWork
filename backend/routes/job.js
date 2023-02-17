@@ -35,19 +35,14 @@ router.post("/createJob", async (req, res) => {
 
 router.get("/GetAllJobs", async (req, res) => {
   try{
-    await Job.find({});
-    if (!Job){
+    const Jobs = await Job.find({});
+    if (!Jobs){
       return res.status(400).send('No job found when searching')
     }
-    res.send(Job)
+    res.json(Jobs)
   } catch(error){
-    res.status(500).send('Error finding jobs')
+    res.status(500).send('Error getting all jobs')
   }
-    /*.then((data) => {
-      console.log(data);
-      res.json(data);
-    })
-    .catch((err) => console.log(err));*/
 });
 
 module.exports = router;

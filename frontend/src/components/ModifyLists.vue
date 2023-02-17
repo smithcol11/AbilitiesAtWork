@@ -121,7 +121,7 @@ async function getListContents(listName) {
 
 async function sendChanges()
 {
-  await fetch("http://localhost:3000/jobOptions", {
+  await fetch("http://localhost:3000/updateJobOptions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
