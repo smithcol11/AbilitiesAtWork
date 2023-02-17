@@ -4,7 +4,6 @@ import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import JobDetails from "./JobDetails.vue";
-import JobDetails from "./JobDetails.vue";
 
 export default {
   setup() {
