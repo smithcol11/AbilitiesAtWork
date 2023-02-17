@@ -88,12 +88,16 @@ function onSubmit() {
   let matchIndex = selectedList.findIndex(matchText);
   if (toAdd.value && matchIndex < 0) {
     selectedList.push(choice.value);
+    selectedList.sort();
   } else if (toRemove.value && matchIndex >= 0) {
     selectedList.splice(matchIndex, 1);
   } else if (toEdit.value && matchIndex >= 0) {
     selectedList[matchIndex] = change.value;
+    selectedList.sort();
   }
 
+  choice.value = "";
+  change.value = "";
   sendChanges();
 }
 
@@ -149,15 +153,6 @@ async function sendChanges() {
         </button>
       </div>
 
-      <div v-if="toEdit">
-        <Label position="left" text="What would you like to edit?" class="py-3" />
-        <DropDown class="w-full" v-on:change="openInput($event)" v-model="choice" :options="listItems" placeholder="" />
-        <div v-if="toInput">
-          <label v-if="toEdit" class="block text-left px-1 p-3">Make changes here.</label>
-          <input class="rounded bg-white pl-2 pt-2 pb-2 border w-full" v-model="change" :placeholder="choice" />
-        </div>
-      </div>
-
       <div v-if="toAdd">
         <div v-if="toInput">
           <Label position="left" text="What would you like to add?" class="py-3" />
@@ -168,6 +163,15 @@ async function sendChanges() {
       <div v-if="toRemove">
         <Label position="left" text="What would you like to remove?" class="py-3" />
         <DropDown class="w-full" v-on:change="openInput($event)" v-model="choice" :options="listItems" placeholder="" />
+      </div>
+
+      <div v-if="toEdit">
+        <Label position="left" text="What would you like to edit?" class="py-3" />
+        <DropDown class="w-full" v-on:change="openInput($event)" v-model="choice" :options="listItems" placeholder="" />
+        <div v-if="toInput">
+          <Label position="left" text="Make changes here." class="pb-3 pt-6" />
+          <input class="rounded bg-white pl-2 pt-2 pb-2 border w-full" v-model="change" :placeholder="choice" />
+        </div>
       </div>
 
       <button v-if="submitReady" @click="onSubmit()" type="button"

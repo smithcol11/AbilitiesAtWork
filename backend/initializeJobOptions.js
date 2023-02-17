@@ -2,7 +2,7 @@
 
 const initialJobOptions = require("./initialJobOptions.json");
 const JobOptions =  require("./schema/jobOptions");
-const { connectDatabase } = require("./__test__/db-test");
+const { connectDatabase } = require("./__test__/dbTest");
 const { set } = require("mongoose");
 
 set("strictQuery", false);
