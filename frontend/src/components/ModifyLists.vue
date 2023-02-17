@@ -76,7 +76,6 @@ function openInput(e) {
 
 function onSubmit() {
   let selectedList = null;
-
   if (listType.value === "Positions") {
     selectedList = formOptions.positions;
   } else if (listType.value === "Industries") {
@@ -86,17 +85,13 @@ function onSubmit() {
     return;
   }
 
-  if (toAdd.value) {
+  let matchIndex = selectedList.findIndex(matchText);
+  if (toAdd.value && matchIndex < 0) {
     selectedList.push(choice.value);
-  } else {
-    let matchIndex = selectedList.findIndex(matchText);
-    if (matchIndex < 0) {
-      // Due due dropdown selection, this case should be impossible.
-    } else if (toRemove.value) {
-      selectedList.splice(matchIndex, 1);
-    } else if (toEdit.value) {
-      selectedList[matchIndex] = change.value;
-    }
+  } else if (toRemove.value && matchIndex >= 0) {
+    selectedList.splice(matchIndex, 1);
+  } else if (toEdit.value && matchIndex >= 0) {
+    selectedList[matchIndex] = change.value;
   }
 
   sendChanges();
