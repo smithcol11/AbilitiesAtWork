@@ -1,17 +1,17 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 import TextBox from "./TextBox.vue";
 import Button from "./Button.vue";
 import errorBanner from "./ErrorBanner.vue";
 import Label from "./Label.vue";
+
 const auth = useAuthenticationStore();
 const adminData = reactive({
   adminUser: "",
   adminPassword: "",
 });
-//const adminUser = reactive("");
-//const adminPassword = reactive("");
+
 const banner = reactive({
   display: {
     type: Boolean,
@@ -52,6 +52,7 @@ function ResetValues() {
   (adminData.adminUser = ""), (adminData.adminPassword = "");
 }
 </script>
+
 <template>
   <div id="Admin Login">
     <Label text="Administrator Login"></Label>

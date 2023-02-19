@@ -1,13 +1,10 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import PrimeVue from 'primevue/config';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column'
-import Dropdown from 'primevue/dropdown'
-import MultiSelect from 'primevue/multiselect'
-import Chips from 'primevue/chips';
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
+import Button from './components/Button.vue';
+import DropDown from './components/DropDown.vue';
+import Label from './components/Label.vue';
+import TextBox from './components/Label.vue';
 
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -21,13 +18,10 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.use(PrimeVue);
-app.component('DataTable', DataTable);
-app.component('Column', Column);
-app.component('Dropdown', Dropdown);
-app.component('MultiSelect', MultiSelect)
-app.component('Chips', Chips)
-app.component('Button', Button)
-app.component('InputText', InputText)
+app.component('Button', Button);
+app.component('DropDown', DropDown);
+app.component('Label', Label);
+app.component('TextBox', TextBox);
 
 
 app.mount("#app");

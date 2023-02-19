@@ -1,10 +1,20 @@
 <script>
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import Dropdown from "primevue/dropdown";
-import Chips from "primevue/chips";
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import MultiSelect from 'primevue/multiselect';
+import InputText from 'primevue/inputtext';
 import { ref } from "vue";
 
 export default {
+  components: {
+    Dropdown,
+    DataTable,
+    Column,
+    MultiSelect,
+    InputText,
+  },
   setup() {
     const loading = ref(false);
     const selectedJob = null;
