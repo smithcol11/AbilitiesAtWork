@@ -1,13 +1,8 @@
 <script setup>
-import { reactive, ref, computed, onBeforeMount } from "vue";
-import DropDown from "./DropDown.vue";
+import { reactive, computed, onBeforeMount } from "vue";
 import TextBox from "./TextBox.vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, integer } from "@vuelidate/validators";
-import successBanner from "./SuccessBanner.vue";
-import errorBanner from "./ErrorBanner.vue";
-import Button from "./Button.vue";
-import Label from "./Label.vue";
+import { required, email } from "@vuelidate/validators";
 
 const banner = reactive({
   displaySuccess: {
@@ -180,16 +175,16 @@ onBeforeMount(async () => {
         <Transition>
           <div role="alert">
             <div v-if="banner.displaySuccess == true">
-              <successBanner
+              <SuccessBanner
                 topText="Job has been successfully created"
                 bottomText="Job was added to the available jobs! "
-              ></successBanner>
+              ></SuccessBanner>
             </div>
             <div v-if="banner.displayFailed == true">
-              <errorBanner
+              <ErrorBanner
                 topText="ERROR: Invalid data field!"
                 bottomText="One or more data fields is missing or incorrect!"
-              ></errorBanner>
+              ></ErrorBanner>
             </div>
           </div>
         </Transition>
@@ -204,8 +199,7 @@ onBeforeMount(async () => {
               type="text"
               placeholder="Enter Business Name"
               v-model="formData.businessName"
-            >
-            </TextBox>
+            />
             <span class="text-red-700" v-if="v$.businessName.$error"
               >Enter a Business Name!</span
             >
@@ -216,8 +210,7 @@ onBeforeMount(async () => {
               type="text"
               placeholder="Enter Contact Name "
               v-model="formData.contactName"
-            >
-            </TextBox>
+            />
             <span class="text-red-700" v-if="v$.contactName.$error"
               >Enter a Contact Name!</span
             >
@@ -228,8 +221,7 @@ onBeforeMount(async () => {
               type="number"
               placeholder="Enter Contact Phone"
               v-model="formData.contactPhoneNumber"
-            >
-            </TextBox>
+            />
             <span class="text-red-700" v-if="v$.contactPhoneNumber.$error"
               >Enter a Phone Number!</span
             >
@@ -240,8 +232,7 @@ onBeforeMount(async () => {
               type="email"
               placeholder="Enter Email (optional)"
               v-model="formData.contactEmail"
-            >
-            </TextBox>
+            />
             <span class="text-red-700" v-if="v$.contactEmail.$error"
               >Enter a Valid Email!</span
             >
@@ -252,8 +243,7 @@ onBeforeMount(async () => {
               type="text"
               placeholder="Enter Address Info"
               v-model="formData.address"
-            >
-            </TextBox>
+            />
             <span class="text-red-700" v-if="v$.address.$error"
               >Enter Address Info!</span
             >
@@ -264,7 +254,7 @@ onBeforeMount(async () => {
               v-model="formData.city"
               :options="formOptions.cities"
               placeholder="Select City"
-            ></DropDown>
+            />
             <span class="text-red-700" v-if="v$.city.$error">Select City!</span>
           </div>
           <div class="basis-2/5">
@@ -273,7 +263,7 @@ onBeforeMount(async () => {
               v-model="formData.zip"
               :options="formOptions.zips"
               placeholder="Select Zip Code"
-            ></DropDown>
+            />
             <span class="text-red-700" v-if="v$.zip.$error"
               >Select Zip Code!</span
             >
@@ -285,7 +275,7 @@ onBeforeMount(async () => {
               v-model="formData.county"
               :options="formOptions.counties"
               placeholder="Select County"
-            ></DropDown>
+            />
 
             <span class="text-red-700" v-if="v$.county.$error"
               >Select County!</span
@@ -297,7 +287,7 @@ onBeforeMount(async () => {
               v-model="formData.position"
               :options="formOptions.positions"
               placeholder="Select Position"
-            ></DropDown>
+            />
             <span class="text-red-700" v-if="v$.position.$error"
               >Select Position!</span
             >
@@ -308,7 +298,7 @@ onBeforeMount(async () => {
               v-model="formData.industry"
               :options="formOptions.industries"
               placeholder="Select Industy"
-            ></DropDown>
+            />
             <span class="text-red-700" v-if="v$.industry.$error"
               >Select Industry!</span
             >
@@ -319,7 +309,7 @@ onBeforeMount(async () => {
               v-model="formData.shift"
               :options="formOptions.shiftOptions"
               placeholder="Select Shift"
-            ></DropDown>
+            />
             <span class="text-red-700" v-if="v$.shift.$error"
               >Select Shift!</span
             >
@@ -330,14 +320,14 @@ onBeforeMount(async () => {
               v-model="formData.hours"
               :options="formOptions.timeCommitmentOptions"
               placeholder="Select Hours"
-            ></DropDown>
+            />
             <span class="text-red-700" v-if="v$.hours.$error"
               >Select Hours!</span
             >
           </div>
           <div class="basis-2/5">
             <Label position="middle" text="Date"></Label>
-            <TextBox type="date" v-model="formData.date"> </TextBox>
+            <TextBox type="date" v-model="formData.date" />
             <span class="text-red-700" v-if="v$.date.$error">Select Date!</span>
           </div>
           <div class="basis-2/5">

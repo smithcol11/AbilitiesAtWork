@@ -2,9 +2,6 @@
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import { reactive } from "vue";
 import TextBox from "./TextBox.vue";
-import Button from "./Button.vue";
-import errorBanner from "./ErrorBanner.vue";
-import Label from "./Label.vue";
 
 const auth = useAuthenticationStore();
 const adminData = reactive({
@@ -109,10 +106,10 @@ function ResetValues() {
     <Transition>
       <div role="alert" class="mt-5">
         <div v-if="banner.display == true">
-          <errorBanner
+          <ErrorBanner
             topText="ERROR: Invalid data field!"
             bottomText="One or more data fields is missing or incorrect!"
-          ></errorBanner>
+          />
         </div>
       </div>
     </Transition>

@@ -1,11 +1,10 @@
 <script>
 import ClientInfo from "../components/ClientInfo.vue";
-import Button from "../components/Button.vue";
+
 export default {
   name: "App",
   components: {
     ClientInfo,
-    Button,
   },
   data() {
     return {
@@ -30,7 +29,7 @@ export default {
           <ClientInfo :client="exampleClient" />
         </div>
         <div class="px-20 self-start">
-          <Button text="Search new client" @click=""></Button>
+          <Button text="Search new client" @click=""/>
         </div>
       </div>
     </div>

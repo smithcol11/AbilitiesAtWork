@@ -2,12 +2,7 @@
 import { reactive, toRaw, computed, onBeforeMount } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, maxLength, helpers } from "@vuelidate/validators";
-import successBanner from "./SuccessBanner.vue";
-import errorBanner from "./ErrorBanner.vue";
-import Button from "./Button.vue";
-import DropDown from "./DropDown.vue";
 import TextBox from "./TextBox.vue";
-import Label from "./Label.vue";
 
 const formOptions = reactive({
   industries: [],
@@ -119,7 +114,6 @@ const submitForm = async () => {
   banner.displayFailed = false;
 
   // check that the data matches requirements
-  const result = await v$.value.$validate();
   if (await v$.value.$validate()) {
     // if an error prevents saving the client, warn the user
     if (await postClient()) {
@@ -152,12 +146,12 @@ async function postClient() {
         <Transition>
           <div role="alert">
             <div v-if="banner.displaySuccess == true">
-              <successBanner class="mb-4" topText="Job has been successfully created"
-                bottomText="Job was added to the available jobs! "></successBanner>
+              <SuccessBanner class="mb-4" topText="Job has been successfully created"
+                bottomText="Job was added to the available jobs! "></SuccessBanner>
             </div>
             <div v-if="banner.displayFailed == true">
-              <errorBanner class="mb-4" topText="ERROR: Invalid data field!"
-                bottomText="One or more data fields is missing or incorrect!"></errorBanner>
+              <ErrorBanner class="mb-4" topText="ERROR: Invalid data field!"
+                bottomText="One or more data fields is missing or incorrect!"></ErrorBanner>
             </div>
           </div>
         </Transition>

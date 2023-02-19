@@ -2,7 +2,6 @@
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import AdminLogin from "../components/AdminLogin.vue";
 import UserLogin from "../components/UserLogin.vue";
-import Button from "../components/Button.vue";
 import { ref } from "vue";
 
 const auth = useAuthenticationStore();
@@ -24,7 +23,7 @@ function ChangeLoginType() {
       />
       <!--onsubmit="return false", prevents page from reloading when a button is pressed -->
       <div class="my-5">
-        <Button text="Change Login Type" @click="ChangeLoginType()"></Button>
+        <Button text="Change Login Type" @click="ChangeLoginType()"/>
       </div>
       <form>
         <div v-if="isAdmin">
