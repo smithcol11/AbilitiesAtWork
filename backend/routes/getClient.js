@@ -9,6 +9,7 @@ function matchInitials(client) {
   return client.body.initials === 'JAR';
 }
 
+/*
 router.get("/matchClient", async (req, res) => {
   //console.log(req._parsedOriginalUrl.query);
   let matchedClient = await fetch(baseURL + '/getClient?' + req._parsedOriginalUrl.query, {method: 'GET'});
@@ -21,7 +22,57 @@ router.get("/matchClient", async (req, res) => {
   console.log("Display return from jobs")
   console.log(matchedJobs);
 })
+*/
 
+router.post("/matchClient", async (req, res) => {
+  let matchedClient = await fetch(baseURL + '/getClient', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      firstName: req.body.firstName,
+      middleInitial: req.body.middleInitial,
+      lastInitial: req.body.lastInitial
+    })
+  });
+  
+
+  
+  if (!matchedClient) {
+
+    try {
+      matchedClient = await matchedClient.json();
+      console.log("Found client: ", matchedClient)
+    } catch(error) {
+      console.log("Could not find client with those credentials ", error)
+      res.json("[]")
+    }
+    
+    let matchedJobs = await fetch(baseURL + '/getJobs', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        industry: matchedClient.industry,
+        timeCommitment: matchedClient.hours
+      })
+    });  
+  
+    try {
+        matchedJobs = await matchedJobs.json();
+        console.log("Matched jobs: ", matchedJobs)
+        res.json(matchedJobs)
+      } catch(error) {
+        console.log(error)
+        res.json("[]")
+      }
+  }
+  else {
+    console.log("Could not find client with those credentials ")
+  }
+
+})
+/*
 router.get("/getClient", (req, res) => {
   Client.find({})
     .then((data) => {
@@ -33,22 +84,20 @@ router.get("/getClient", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+*/
 
-router.post("/getClientPost", async (req, res) => {
-  await Client.find({
-    initials: req.body.initials
+router.post("/getClient", async (req, res) => {
+  let matchedClient = await Client.find({}).then((data) => {
+    let match = data.find(({firstName, middleInitial, lastInitial}) =>
+    firstName === req.body.firstName &&
+    middleInitial === req.body.middleInitial &&
+    lastInitial === req.body.lastInitial
+    )
+
+    return match
   });
-  res.status(201).send();
+  res.json(matchedClient);
 });
 
-router.get("/getAllClients", (req, res) => {
-  Client.find({})
-    .then((data) => {
-      console.log(data);
-      res.json(data);
-      //console.log(res);
-    })
-    .catch((err) => console.log(err));
-});
 
 module.exports = router;

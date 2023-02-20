@@ -1,4 +1,5 @@
 <script setup>
+// class="form-control block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-accentLight rounded"
 const props = defineProps({
   type: {
     type: String,
@@ -12,7 +13,11 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  label: {
+  name: {
+    type: String,
+    default: null,
+  },
+  id: {
     type: String,
     default: null,
   },
@@ -23,16 +28,13 @@ const props = defineProps({
 });
 </script>
 <template>
-  <div v-if="label != null">
-    <label class="form-label inline-block mb-2 text-gray-700">{{
-      label
-    }}</label>
-  </div>
   <input
     :type="type"
     class="form-control block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-accentLight rounded"
     :placeholder="placeholder"
     :value="modelValue"
+    :name="name"
+    :id="id"
     :maxlength="maxLength"
     @input="$emit('update:modelValue', $event.target.value)"
   />
