@@ -1,193 +1,176 @@
-<script>
+<script setup>
 import { FilterMatchMode } from "primevue/api";
 import Dropdown from "primevue/dropdown";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import MultiSelect from 'primevue/multiselect';
 import InputText from 'primevue/inputtext';
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 
-export default {
-  components: {
-    Dropdown,
-    DataTable,
-    Column,
-    MultiSelect,
-    InputText,
+const loading = ref(false);
+
+const selectedJob = null;
+
+let filters1 = reactive({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  company: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  city: { value: null, matchMode: FilterMatchMode.IN },
+  zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  county: { value: null, matchMode: FilterMatchMode.IN },
+  industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  hours: { value: null, matchMode: FilterMatchMode.EQUALS },
+});
+
+const columns = reactive([
+  { field: "company", header: "Company" },
+  { field: "city", header: "City" },
+  { field: "zip", header: "Zip" },
+  { field: "county", header: "County" },
+  { field: "industry", header: "Industry" },
+  { field: "hours", header: "Hours" },
+]);
+
+const jobs = reactive([
+  {
+    id: 5,
+    company: "ABC Inc.",
+    city: "Portland",
+    zip: "97223",
+    county: "Washington",
+    industry: "Manufacturing",
+    hours: "Full Time",
   },
-  setup() {
-    const loading = ref(false);
-    const selectedJob = null;
-    const filters1 = ref({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      company: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      city: { value: null, matchMode: FilterMatchMode.IN },
-      zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      county: { value: null, matchMode: FilterMatchMode.IN },
-      industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-    });
-    const columns = ref([
-      { field: "company", header: "Company" },
-      { field: "city", header: "City" },
-      { field: "zip", header: "Zip" },
-      { field: "county", header: "County" },
-      { field: "industry", header: "Industry" },
-      { field: "hours", header: "Hours" },
-    ]);
-    const jobs = ref([
-      {
-        id: 5,
-        company: "ABC Inc.",
-        city: "Portland",
-        zip: "97223",
-        county: "Washington",
-        industry: "Manufacturing",
-        hours: "Full Time",
-      },
-      {
-        company: "XYZ Co.",
-        city: "Beaverton",
-        zip: "97002",
-        county: "Multnomah",
-        industry: "Retail",
-        hours: "Part Time",
-      },
-      {
-        company: "Might Ent.",
-        city: "Dalles",
-        zip: "99696",
-        county: "Washington",
-        industry: "Buisness",
-        hours: "Part Time",
-      },
-      {
-        company: "GoodieMax",
-        city: "Dalles",
-        zip: "98868",
-        county: "Washington",
-        industry: "Manufacturing",
-        hours: "Full Time",
-      },
-      {
-        company: "TempCo",
-        city: "Portland",
-        zip: "97223",
-        county: "Washington",
-        industry: "Buisness",
-        hours: "Part Time",
-      },
-      {
-        company: "DiceCity",
-        city: "Portland",
-        zip: "97223",
-        county: "Washington",
-        industry: "Retail",
-        hours: "Part Time",
-      },
-      {
-        company: "BigMeyer",
-        city: "Portland",
-        zip: "97223",
-        county: "Washington",
-        industry: "Retail",
-        hours: "Full Time",
-      },
-      {
-        company: "WorstPlace",
-        city: "Eugene",
-        zip: "93556",
-        county: "Washington",
-        industry: "Buisness",
-        hours: "Full Time",
-      },
-    ]);
-    const filterData = ref([
-      {
-        county: [],
-        company: [],
-        city: [],
-        hours: [],
-      },
-    ]);
-    const selectedFilter = ref([
-      {
-        county: null,
-        city: null,
-      },
-    ]);
+  {
+    company: "XYZ Co.",
+    city: "Beaverton",
+    zip: "97002",
+    county: "Multnomah",
+    industry: "Retail",
+    hours: "Part Time",
+  },
+  {
+    company: "Might Ent.",
+    city: "Dalles",
+    zip: "99696",
+    county: "Washington",
+    industry: "Buisness",
+    hours: "Part Time",
+  },
+  {
+    company: "GoodieMax",
+    city: "Dalles",
+    zip: "98868",
+    county: "Washington",
+    industry: "Manufacturing",
+    hours: "Full Time",
+  },
+  {
+    company: "TempCo",
+    city: "Portland",
+    zip: "97223",
+    county: "Washington",
+    industry: "Buisness",
+    hours: "Part Time",
+  },
+  {
+    company: "DiceCity",
+    city: "Portland",
+    zip: "97223",
+    county: "Washington",
+    industry: "Retail",
+    hours: "Part Time",
+  },
+  {
+    company: "BigMeyer",
+    city: "Portland",
+    zip: "97223",
+    county: "Washington",
+    industry: "Retail",
+    hours: "Full Time",
+  },
+  {
+    company: "WorstPlace",
+    city: "Eugene",
+    zip: "93556",
+    county: "Washington",
+    industry: "Buisness",
+    hours: "Full Time",
+  },
+]);
 
-    function onRowSelect(event) {
-      console.log(event.data.company);
+const filterData = ref([
+  {
+    county: [],
+    company: [],
+    city: [],
+    hours: [],
+  },
+]);
+
+const selectedFilter = ref([
+  {
+    county: null,
+    city: null,
+  },
+]);
+
+function onRowSelect(event) {
+  console.log(event.data.company);
+}
+
+function onRowUnselect(event) {}
+
+//Sets all filters to default. Can be called to reset all filters.
+function initFilters1() {
+  filters1 = {
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    company: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    city: { value: null, matchMode: FilterMatchMode.IN },
+    zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    county: { value: null, matchMode: FilterMatchMode.IN },
+    industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    hours: { value: null, matchMode: FilterMatchMode.EQUALS },
+  };
+}
+
+function clearFilter1() {
+  initFilters1();
+}
+
+//This dynamically populates the drop-down and multiselect filters used in the table.
+function getFilters() {
+  filterData.county = new Array();
+  filterData.city = new Array();
+  filterData.company = new Array();
+  filterData.hours = new Array();
+
+  filterData.hours.push("Full Time", "Part Time");
+
+  for (var i = 0, row; (row = jobs[i]); ++i) {
+    if (!filterData.county.includes(row.county)) {
+      filterData.county.push(row.county);
     }
+    if (!filterData.city.includes(row.city)) {
+      filterData.city.push(row.city);
+    }
+    if (!filterData.company.includes(row.company)) {
+      filterData.company.push(row.company);
+    }
+  }
+}
 
-    function onRowUnselect(event) {}
-    return {
-      jobs,
-      filters1,
-      onRowSelect,
-      onRowUnselect,
-      columns,
-      loading,
-      selectedJob,
-      filterData,
-      selectedFilter,
-    };
-  },
-  created() {
-    this.initFilters1();
-    this.getFilters();
-    //Get the data from the backend. Just a stub for now, does nothing!
-    let response = this.getData();
-  },
-  mounted() {},
-  methods: {
-    clearFilter1() {
-      this.initFilters1();
-    },
-    //Sets all filters to default. Can be called to reset all filters.
-    initFilters1() {
-      this.filters1 = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        company: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        city: { value: null, matchMode: FilterMatchMode.IN },
-        zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        county: { value: null, matchMode: FilterMatchMode.IN },
-        industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-      };
-    },
+async function getData() {
+  try {
+    return jobs;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-    //This dynamically populates the drop-down and multiselect filters used in the table.
-    getFilters() {
-      this.filterData.county = new Array();
-      this.filterData.city = new Array();
-      this.filterData.company = new Array();
-      this.filterData.hours = new Array();
-
-      this.filterData.hours.push("Full Time", "Part Time");
-
-      for (var i = 0, row; (row = this.jobs[i]); ++i) {
-        if (!this.filterData.county.includes(row.county)) {
-          this.filterData.county.push(row.county);
-        }
-        if (!this.filterData.city.includes(row.city)) {
-          this.filterData.city.push(row.city);
-        }
-        if (!this.filterData.company.includes(row.company)) {
-          this.filterData.company.push(row.company);
-        }
-      }
-    },
-    async getData() {
-      try {
-        return this.jobs;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
+initFilters1();
+getFilters();
+//Get the data from the backend. Just a stub for now, does nothing!
+let response = getData();
 </script>
 
 <template>
@@ -198,7 +181,7 @@ export default {
       stripedRows
       @rowSelect="onRowSelect"
       @rowUnselect="onRowUnselect"
-      v-model:selection="this.selectedJob"
+      v-model:selection="selectedJob"
       selectionMode="single"
       v-model:filters="filters1"
       filterDisplay="row"

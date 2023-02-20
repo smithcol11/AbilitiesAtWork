@@ -28,6 +28,7 @@ function toggleView(view) {
   }
 }
 </script>
+
 <template>
   <div class="text-center">
     <div class="flex justify-center gap-10 my-5">
@@ -57,5 +58,3 @@ function toggleView(view) {
     </form>
   </div>
 </template>
-
-<style></style>

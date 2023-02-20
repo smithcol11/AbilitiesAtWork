@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed, onBeforeMount } from "vue";
+import { reactive, computed, onBeforeMount, toRaw } from "vue";
 import TextBox from "./TextBox.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
@@ -114,42 +114,16 @@ async function createPOST() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({
-      contactName: formData.contactName,
-      contactPhoneNumber: formData.contactPhoneNumber,
-      contactEmail: formData.contactEmail,
-      businessName: formData.businessName,
-      city: formData.city,
-      zip: formData.zip,
-      industry: formData.industry,
-      position: formData.position,
-      shift: formData.shift,
-      hours: formData.hours,
-      date: formData.date,
-      address: formData.address,
-      county: formData.county,
-      notes: formData.notes,
-    }),
+    body: JSON.stringify(toRaw(formData)),
   })
     .then((response) => console.log(response))
     .catch((errors) => console.log(errors));
 }
 
 function ResetFormValues() {
-  (formData.contactName = ""),
-    (formData.businessName = ""),
-    (formData.industry = ""),
-    (formData.position = ""),
-    (formData.shift = ""),
-    (formData.hours = ""),
-    (formData.city = ""),
-    (formData.zip = ""),
-    (formData.date = ""),
-    (formData.address = ""),
-    (formData.county = ""),
-    (formData.notes = ""),
-    (formData.contactEmail = ""),
-    (formData.contactPhoneNumber = "");
+  for (let key in formData) {
+    formData[key] = ""
+  }
 }
 
 let requestFormOptions = async () => {

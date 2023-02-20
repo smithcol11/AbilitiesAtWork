@@ -1,24 +1,15 @@
-<script>
+<script setup>
 import ClientInfo from "../components/ClientInfo.vue";
+import { reactive } from "vue";
 
-export default {
-  name: "App",
-  components: {
-    ClientInfo,
-  },
-  data() {
-    return {
-      exampleClient: {
-        firstName: "First",
-        middleInitial: "M",
-        lastInitial: "L",
-        preferences: "things",
-        industry: "stuff",
-        hours: "some",
-      },
-    };
-  },
-};
+let exampleClient = reactive({
+  firstName: "First",
+  middleInitial: "M",
+  lastInitial: "L",
+  preferences: "things",
+  industry: "stuff",
+  hours: "some",
+});
 </script>
 
 <template>
@@ -35,5 +26,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style></style>
