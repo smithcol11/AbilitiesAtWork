@@ -97,7 +97,7 @@ created() {
       this.filterData.hours = new Array();
       this.filterData.industry = new Array();
 
-      this.filterData.hours.push("Full Time", "Part Time");
+      this.filterData.hours.push("Full Time", "Part Time", "Any");
 
       for (var i = 0, row; (row = this.clients[i]); ++i) {
         if (!this.filterData.initials.includes(row.initials)) {
