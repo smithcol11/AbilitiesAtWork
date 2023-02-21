@@ -55,4 +55,13 @@ router.delete("/deleteClient", async (req, res) => {
   }
 });
 
+router.get("/GetAllClients", (req, res) => {
+  Client.find({})
+    .then((data) => {
+      console.log(data);
+      res.json(data);
+    })
+    .catch((err) => console.log(err));
+});
+
 module.exports = router;
