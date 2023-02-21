@@ -10,59 +10,74 @@ export default {
     const selectedClient = null;
     const filters1 = ref({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      initials: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      lastInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
       industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
       hours: { value: null, matchMode: FilterMatchMode.EQUALS },
     });
     const columns = ref([
-      { field: "initials", header: "Initials" },
+      { field: "firstName", header: "First Name" },
+      { field: "middleInitial", header: "Middle Initial" },
+      { field: "lastInitial", header: "Last Initial" },
       { field: "industry", header: "Industry" },
       { field: "hours", header: "Hours" },
     ]);
-    const clients = ref([
-      {
-        id: 5,
-        initials: "R.M.K",
-        industry: "Manufacturing",
-        hours: "Full Time",
-      },
-      {
-        initials: "S.T.P",
-        industry: "Retail",
-        hours: "Part Time",
-      },
-      {
-        initials: "O.P.R",
-        industry: "Buisness",
-        hours: "Part Time",
-      },
-      {
-        initials: "P.B.G",
-        industry: "Manufacturing",
-        hours: "Full Time",
-      },
-    ]);
+   
     const filterData = ref([
       {
-        initials: [],
+        firstName: [],
+        middleInitial: [],
+        lastInitial: [],
         industry: [],
         hours: [],
       },
     ]);
     const selectedFilter = ref([
       {
-        initials: null,
+        firstName: null,
+        middleInitial: null,
+        lastInitial: null,
         industry: null,
         hours: null,
       },
     ]);
     function onRowSelect(event) {
-      console.log(event.data.initials);
-    }
-
+      console.log(event.data.firstName);
+      console.log(event.data.middleInitial);
+      console.log(event.data.lastInitial);
+  }
+  /*
+  const clients = ref([
+      {
+        id: 5,
+        firstName: "Jim",
+        middleInitial: "K",
+        lastInitial: "Z",
+        industry: "Manufacturing",
+        hours: "Full Time",
+      },
+      {
+        id: 5,
+        firstName: "Sam",
+        middleInitial: "P",
+        lastInitial: "R",
+        industry: "Restaurant",
+        hours: "Part Time",
+      },
+      {
+        id: 5,
+        firstName: "Kim",
+        middleInitial: "L",
+        lastInitial: "T",
+        industry: "Grocery",
+        hours: "Any",
+      }
+    ]);
+    */
+   
     function onRowUnselect(event) {}
     return {
-      clients,
       filters1,
       onRowSelect,
       onRowUnselect,
@@ -73,11 +88,30 @@ export default {
       selectedFilter,
     };
 },
+  data(){
+    return {
+      clients: [],
+    };
+
+},
+methods:{
+  async getData(){
+    try{
+      let response = await fetch("http://localhost:3000/GetAllCients")
+      this.clients = await response.json();
+    }catch(error){
+      console.log(error);
+    }
+  },
+},
+
 created() {
     this.initFilters1();
     this.getFilters();
-    //Get the data from the backend.
+    //Get the data from the backend
     let response = this.getData();
+
+
   },
   mounted() {},
   methods: {
@@ -87,21 +121,31 @@ created() {
     initFilters1() {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        initials: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        middleInitial:{ value: null, matchMode: FilterMatchMode.CONTAINS },
+        lastInitial:{ value: null, matchMode: FilterMatchMode.CONTAINS },
         industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
         hours: { value: null, matchMode: FilterMatchMode.EQUALS },
       };
     },
     getFilters() {
-      this.filterData.initials = new Array();
+      this.filterData.firstName = new Array();
+      this.filterData.middleInitial = new Array();
+      this.filterData.lastInitial = new Array();
       this.filterData.hours = new Array();
       this.filterData.industry = new Array();
 
       this.filterData.hours.push("Full Time", "Part Time", "Any");
 
       for (var i = 0, row; (row = this.clients[i]); ++i) {
-        if (!this.filterData.initials.includes(row.initials)) {
-          this.filterData.initials.push(row.initials);
+        if (!this.filterData.firstName.includes(row.firstName)) {
+          this.filterData.firstName.push(row.firstName);
+        }
+        if (!this.filterData.middleInitial.includes(row.middleInitial)) {
+          this.filterData.middleInitial.push(row.middleInitial);
+        }
+        if (!this.filterData.lastInitial.includes(row.lastInitial)) {
+          this.filterData.lastInitial.push(row.firstName);
         }
         if (!this.filterData.industry.includes(row.industry)) {
           this.filterData.industry.push(row.industry);
@@ -135,7 +179,9 @@ created() {
         :paginator="true"
         :rows="10"
         :globalFilterFields="[
-          'initials',
+          'firstName',
+          'middleInitial',
+          'lastInitial',
           'industry',
           'hours',
         ]"
@@ -162,9 +208,10 @@ created() {
         <h1>No records found</h1>
       </template>
       <template #loading> Loading records, please wait... </template>
-      <Column field="initials" header="Initials" style="min-width: 12rem">
+  
+      <Column field="firstName" header="First Name" style="min-width: 12rem">
         <template #body="{ data }">
-          {{ data.initials }}
+          {{ data.firstName }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText
@@ -172,7 +219,35 @@ created() {
             v-model="filterModel.value"
             @input="filterCallback()"
             class="p-column-filter"
-            placeholder="Search by initials"
+            placeholder="Search by First Name"
+          />
+        </template>
+      </Column>
+      <Column field="middleInitial" header="Middle Initiaal" style="min-width: 5rem">
+        <template #body="{ data }">
+          {{ data.middleInitial }}
+        </template>
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText
+            type="text"
+            v-model="filterModel.value"
+            @input="filterCallback()"
+            class="p-column-filter"
+            placeholder="Search by Middle Initial"
+          />
+        </template>
+      </Column>
+      <Column field="lastInitial" header="Last Initiaal" style="min-width: 5rem">
+        <template #body="{ data }">
+          {{ data.lastInitial }}
+        </template>
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText
+            type="text"
+            v-model="filterModel.value"
+            @input="filterCallback()"
+            class="p-column-filter"
+            placeholder="Search by Last Initial"
           />
         </template>
       </Column>
