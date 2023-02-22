@@ -3,6 +3,10 @@ import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import { ref } from "vue";
 import Button from "../components/Button.vue";
 import Label from "../components/Label.vue";
+import {useDark, useToggle} from "@vueuse/core";
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark)
 const auth = useAuthenticationStore();
 let showLogout = ref(false);
 
@@ -18,16 +22,21 @@ function toggleLogout() {
 
 <template>
   <nav id="nav-bar" class="hidden sm:block duration-300">
-    <div class="sm:w-32 sm:h-screen shadow-sm text-center bg-light">
+    <div class="sm:w-32 sm:h-screen shadow-sm text-center bg-light dark:bg-darkGray dark:text-light">
       <img
         class="p-3 border-b-2 hidden sm:block"
         src="../assets/images/logo.png"
       />
-      <RouterLink class="nav-button" to="/clientMenu"> Client Menu </RouterLink>
-      <RouterLink class="nav-button" to="/JobMenu"> Job Menu </RouterLink>
-      <RouterLink class="nav-button" to="/match"> Match </RouterLink>
+      <RouterLink class="nav-button dark:hover:bg-darkGrayAccent" to="/clientMenu"> Client Menu </RouterLink>
+      <RouterLink class="nav-button dark:hover:bg-darkGrayAccent" to="/JobMenu"> Job Menu </RouterLink>
+      <RouterLink class="nav-button dark:hover:bg-darkGrayAccent" to="/match"> Match </RouterLink>
+      <button 
+      class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light dark:hover:bg-darkGrayAccent dark:text-light"
+      @click="toggleDark()">
+      Dark Mode
+      </button>
       <button
-        class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
+        class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light dark:hover:bg-darkGrayAccent dark:text-light"
         @click="toggleLogout()"
       >
         Logout
@@ -51,9 +60,9 @@ function toggleLogout() {
   </Button>
   <div
     v-if="showLogout"
-    class="absolute top-0 w-screen h-screen bg-opacity-50 bg-dark mx-auto text-center z-10"
+    class="absolute top-0 w-screen h-screen bg-opacity-50 dark:bg-darkGrayAccent dark:bg-opacity-50 mx-auto text-center z-10"
   >
-    <div class="w-72 h-28 shadow-lg mx-auto bg-light mt-24 p-5">
+    <div class="w-72 h-28 shadow-lg mx-auto bg-light dark:bg-darkGray mt-24 p-5">
       <Label text="Do you want to logout?"></Label>
 
       <div class="grid grid-cols-2 gap-4 place-content-around mt-2">

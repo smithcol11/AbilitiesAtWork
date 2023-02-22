@@ -52,18 +52,19 @@ function DisplayErrorBanner() {
 
 <template>
   <div id="User Login">
-    <Label text="User Login"></Label>
+    <Label class="dark:text-light" text="User Login"></Label>
     <form class="w-full max-w-md" method="post" @submit.prevent>
       <div class="md:flex md:items-center mb-6 mt-2">
         <div class="md:w-1/4">
           <Label
-            class="block md:text-right mb-1 md:mb-0 pr-4"
+            class="block md:text-right mb-1 md:mb-0 pr-4 dark:text-light"
             position="middle"
             text="First"
           ></Label>
         </div>
         <div class="md:w-1/2">
           <TextBox
+            class="dark:bg-darkGrayAccent dark:text-light dark:border-darkGray"
             type="text"
             placeholder="Enter first name"
             v-model="userData.firstName"
@@ -75,13 +76,14 @@ function DisplayErrorBanner() {
       <div class="md:flex md:items-center mb-6 mt-2">
         <div class="md:w-1/4">
           <Label
-            class="block md:text-right mb-1 md:mb-0 pr-4"
+            class="block md:text-right mb-1 md:mb-0 pr-4 dark:text-light"
             position="middle"
             text="Last"
           ></Label>
         </div>
         <div class="md:w-1/2">
           <TextBox
+            class="dark:bg-darkGrayAccent dark:text-light dark:border-darkGray"
             type="text"
             placeholder="Enter last name"
             v-model="userData.lastName"

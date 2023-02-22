@@ -2,6 +2,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
+  darkMode: 'class',
   content: ["./src/**/*.{html,js,vue}"],
   theme: {
     extend: {
@@ -11,6 +12,8 @@ module.exports = {
         main: "#c026d3",
         accentDark: "#5b21b6",
         dark: "#0f172a",
+        darkGray: "#1e1e1e",
+        darkGrayAccent: "#2a2a2a",
       },
     },
   },

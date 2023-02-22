@@ -16,7 +16,7 @@ function ChangeLoginType() {
 <template>
   <div class="px-1 sm:px-10 max-w-xl py-5 mx-auto">
     <div
-      class="mx-auto rounded w-full h-1/2 bg-light p-5 text-center shadow-lg border"
+      class="mx-auto rounded w-full h-1/2 bg-light dark:bg-darkGrayAccent p-5 text-center shadow-lg border dark:border-darkGrayAccent" 
     >
       <img
         src="../assets/images/logo.png"
