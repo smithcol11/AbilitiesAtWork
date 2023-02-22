@@ -23,7 +23,7 @@ export default {
       { field: "industry", header: "Industry" },
       { field: "hours", header: "Hours" },
     ]);
-   
+
     const filterData = ref([
       {
         firstName: [],
@@ -46,37 +46,37 @@ export default {
       console.log(event.data.firstName);
       console.log(event.data.middleInitial);
       console.log(event.data.lastInitial);
-  }
-  /*
-  const clients = ref([
-      {
-        id: 5,
-        firstName: "Jim",
-        middleInitial: "K",
-        lastInitial: "Z",
-        industry: "Manufacturing",
-        hours: "Full Time",
-      },
-      {
-        id: 5,
-        firstName: "Sam",
-        middleInitial: "P",
-        lastInitial: "R",
-        industry: "Restaurant",
-        hours: "Part Time",
-      },
-      {
-        id: 5,
-        firstName: "Kim",
-        middleInitial: "L",
-        lastInitial: "T",
-        industry: "Grocery",
-        hours: "Any",
-      }
-    ]);
-    */
-   
-    function onRowUnselect(event) {}
+    }
+    /*
+    const clients = ref([
+        {
+          id: 5,
+          firstName: "Jim",
+          middleInitial: "K",
+          lastInitial: "Z",
+          industry: "Manufacturing",
+          hours: "Full Time",
+        },
+        {
+          id: 5,
+          firstName: "Sam",
+          middleInitial: "P",
+          lastInitial: "R",
+          industry: "Restaurant",
+          hours: "Part Time",
+        },
+        {
+          id: 5,
+          firstName: "Kim",
+          middleInitial: "L",
+          lastInitial: "T",
+          industry: "Grocery",
+          hours: "Any",
+        }
+      ]);
+      */
+
+    function onRowUnselect(event) { }
     return {
       filters1,
       onRowSelect,
@@ -87,25 +87,15 @@ export default {
       filterData,
       selectedFilter,
     };
-},
-  data(){
+  },
+  data() {
     return {
       clients: [],
     };
 
-},
-methods:{
-  async getData(){
-    try{
-      let response = await fetch("http://localhost:3000/GetAllCients")
-      this.clients = await response.json();
-    }catch(error){
-      console.log(error);
-    }
   },
-},
 
-created() {
+  created() {
     this.initFilters1();
     this.getFilters();
     //Get the data from the backend
@@ -113,7 +103,7 @@ created() {
 
 
   },
-  mounted() {},
+  mounted() { },
   methods: {
     clearFilter1() {
       this.initFilters1();
@@ -122,8 +112,8 @@ created() {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        middleInitial:{ value: null, matchMode: FilterMatchMode.CONTAINS },
-        lastInitial:{ value: null, matchMode: FilterMatchMode.CONTAINS },
+        middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        lastInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
         industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
         hours: { value: null, matchMode: FilterMatchMode.EQUALS },
       };
@@ -154,7 +144,8 @@ created() {
     },
     async getData() {
       try {
-        return this.clients;
+        let response = await fetch("http://localhost:3000/GetAllClients");
+        this.clients = await response.json();
       } catch (error) {
         console.log(error);
       }
@@ -164,43 +155,23 @@ created() {
 </script>
 
 <template>
-    <div class="card">
-      <DataTable
-        :value="clients"
-        class="p-datatable-sm"
-        stripedRows
-        @rowSelect="onRowSelect"
-        @rowUnselect="onRowUnselect"
-        v-model:selection="this.selectedClient"
-        selectionMode="single"
-        v-model:filters="filters1"
-        filterDisplay="row"
-        :loading="loading"
-        :paginator="true"
-        :rows="10"
-        :globalFilterFields="[
-          'firstName',
-          'middleInitial',
-          'lastInitial',
-          'industry',
-          'hours',
-        ]"
-      >
-        <template #header>
-          <div class="flex justify-content-between">
-            <button
-              type="button"
-              icon="pi pi-filter-slash"
-              label="Clear"
-              class="p-button-outlined"
-              @click="clearFilter1()"
-            />
-            <span class="">
+  <div class="card">
+    <DataTable :value="clients" class="p-datatable-sm" stripedRows @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
+      v-model:selection="this.selectedClient" selectionMode="single" v-model:filters="filters1" filterDisplay="row"
+      :loading="loading" :paginator="true" :rows="10" :globalFilterFields="[
+        'firstName',
+        'middleInitial',
+        'lastInitial',
+        'industry',
+        'hours',
+      ]">
+      <template #header>
+        <div class="flex justify-content-between">
+          <button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined"
+            @click="clearFilter1()" />
+          <span class="">
             <i class="pi pi-search pr-3" />
-            <InputText
-              v-model="filters1['global'].value"
-              placeholder="Keyword Search"
-            />
+            <InputText v-model="filters1['global'].value" placeholder="Keyword Search" />
           </span>
         </div>
       </template>
@@ -208,74 +179,43 @@ created() {
         <h1>No records found</h1>
       </template>
       <template #loading> Loading records, please wait... </template>
-  
+
       <Column field="firstName" header="First Name" style="min-width: 12rem">
         <template #body="{ data }">
           {{ data.firstName }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            type="text"
-            v-model="filterModel.value"
-            @input="filterCallback()"
-            class="p-column-filter"
-            placeholder="Search by First Name"
-          />
+          <InputText type="text" v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
+            placeholder="Search by First Name" />
         </template>
       </Column>
-      <Column field="middleInitial" header="Middle Initiaal" style="min-width: 5rem">
+      <Column field="middleInitial" header="Middle Initial" style="min-width: 5rem">
         <template #body="{ data }">
           {{ data.middleInitial }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            type="text"
-            v-model="filterModel.value"
-            @input="filterCallback()"
-            class="p-column-filter"
-            placeholder="Search by Middle Initial"
-          />
+          <InputText type="text" v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
+            placeholder="Search by Middle Initial" />
         </template>
       </Column>
-      <Column field="lastInitial" header="Last Initiaal" style="min-width: 5rem">
+      <Column field="lastInitial" header="Last Initial" style="min-width: 5rem">
         <template #body="{ data }">
           {{ data.lastInitial }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            type="text"
-            v-model="filterModel.value"
-            @input="filterCallback()"
-            class="p-column-filter"
-            placeholder="Search by Last Initial"
-          />
+          <InputText type="text" v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
+            placeholder="Search by Last Initial" />
         </template>
       </Column>
-      <Column
-        field="industry"
-        header="Industry"
-        :showFilterMenu="false"
-        style="min-width: 12rem"
-      >
+      <Column field="industry" header="Industry" :showFilterMenu="false" style="min-width: 12rem">
         <template #body="{ data }">
           {{ data.industry }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <Dropdown
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="filterData.industry"
-            placeholder="Any"
-            :filter="false"
-            class="p-dropdown-filter"
-            :showClear="true"
-          >
+          <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="filterData.industry"
+            placeholder="Any" :filter="false" class="p-dropdown-filter" :showClear="true">
             <template #value="slotProps">
-              <span
-                :class="'p-dropdown-value' + slotProps.value"
-                v-if="slotProps.value"
-                >{{ slotProps.value }}</span
-              >
+              <span :class="'p-dropdown-value' + slotProps.value" v-if="slotProps.value">{{ slotProps.value }}</span>
               <span v-else>{{ slotProps.placeholder }}</span>
             </template>
             <template #option="slotProps">
@@ -287,31 +227,15 @@ created() {
         </template>
       </Column>
 
-      <Column
-        field="hours"
-        header="Hours"
-        :showFilterMenu="false"
-        style="min-width: 12rem"
-      >
+      <Column field="hours" header="Hours" :showFilterMenu="false" style="min-width: 12rem">
         <template #body="{ data }">
           {{ data.hours }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <Dropdown
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="filterData.hours"
-            placeholder="Any"
-            :filter="false"
-            class="p-dropdown-filter"
-            :showClear="true"
-          >
+          <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="filterData.hours" placeholder="Any"
+            :filter="false" class="p-dropdown-filter" :showClear="true">
             <template #value="slotProps">
-              <span
-                :class="'p-dropdown-value' + slotProps.value"
-                v-if="slotProps.value"
-                >{{ slotProps.value }}</span
-              >
+              <span :class="'p-dropdown-value' + slotProps.value" v-if="slotProps.value">{{ slotProps.value }}</span>
               <span v-else>{{ slotProps.placeholder }}</span>
             </template>
             <template #option="slotProps">
