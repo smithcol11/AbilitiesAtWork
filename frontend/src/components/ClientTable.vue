@@ -47,34 +47,7 @@ export default {
       console.log(event.data.middleInitial);
       console.log(event.data.lastInitial);
     }
-    /*
-    const clients = ref([
-        {
-          id: 5,
-          firstName: "Jim",
-          middleInitial: "K",
-          lastInitial: "Z",
-          industry: "Manufacturing",
-          hours: "Full Time",
-        },
-        {
-          id: 5,
-          firstName: "Sam",
-          middleInitial: "P",
-          lastInitial: "R",
-          industry: "Restaurant",
-          hours: "Part Time",
-        },
-        {
-          id: 5,
-          firstName: "Kim",
-          middleInitial: "L",
-          lastInitial: "T",
-          industry: "Grocery",
-          hours: "Any",
-        }
-      ]);
-      */
+   
 
     function onRowUnselect(event) { }
     return {
@@ -209,7 +182,7 @@ export default {
       </Column>
       <Column field="industry" header="Industry" :showFilterMenu="false" style="min-width: 12rem">
         <template #body="{ data }">
-          {{ data.industry }}
+          {{ data.industry.toString() }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="filterData.industry"
