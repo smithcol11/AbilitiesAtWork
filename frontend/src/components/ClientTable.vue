@@ -1,136 +1,118 @@
-<script>
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+<script setup>
+import { FilterMatchMode } from "primevue/api";
 import Dropdown from "primevue/dropdown";
-import Chips from "primevue/chips";
-import { ref } from "vue";
+import { onMounted, ref, reactive } from "vue";
 
-export default {
-  setup() {
-    const loading = ref(false);
-    const selectedClient = null;
-    const filters1 = ref({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      lastInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-    });
-    const columns = ref([
-      { field: "firstName", header: "First Name" },
-      { field: "middleInitial", header: "Middle Initial" },
-      { field: "lastInitial", header: "Last Initial" },
-      { field: "industry", header: "Industry" },
-      { field: "hours", header: "Hours" },
-    ]);
+const clients = ref([]);
+const loading = ref(false);
+const selectedClient = null;
 
-    const filterData = ref([
-      {
-        firstName: [],
-        middleInitial: [],
-        lastInitial: [],
-        industry: [],
-        hours: [],
-      },
-    ]);
-    const selectedFilter = ref([
-      {
-        firstName: null,
-        middleInitial: null,
-        lastInitial: null,
-        industry: null,
-        hours: null,
-      },
-    ]);
-    function onRowSelect(event) {
-      console.log(event.data.firstName);
-      console.log(event.data.middleInitial);
-      console.log(event.data.lastInitial);
+let filters1 = reactive({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  lastInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  hours: { value: null, matchMode: FilterMatchMode.EQUALS },
+});
+
+// const columns = ref([
+//   { field: "firstName", header: "First Name" },
+//   { field: "middleInitial", header: "Middle Initial" },
+//   { field: "lastInitial", header: "Last Initial" },
+//   { field: "industry", header: "Industry" },
+//   { field: "hours", header: "Hours" },
+// ]);
+
+const filterData = ref([
+  {
+    firstName: [],
+    middleInitial: [],
+    lastInitial: [],
+    industry: [],
+    hours: [],
+  },
+]);
+
+// const selectedFilter = ref([
+//   {
+//     firstName: null,
+//     middleInitial: null,
+//     lastInitial: null,
+//     industry: null,
+//     hours: null,
+//   },
+// ]);
+
+function onRowSelect(event) {
+  console.log(event.data.firstName);
+  console.log(event.data.middleInitial);
+  console.log(event.data.lastInitial);
+}
+
+
+function onRowUnselect(event) { }
+
+function clearFilter1() {
+  initFilters1();
+}
+
+function initFilters1() {
+  filters1 = {
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    lastInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    hours: { value: null, matchMode: FilterMatchMode.EQUALS },
+  };
+}
+
+function getFilters() {
+  filterData.firstName = new Array();
+  filterData.middleInitial = new Array();
+  filterData.lastInitial = new Array();
+  filterData.hours = new Array();
+  filterData.industry = new Array();
+
+  filterData.hours.push("Full Time", "Part Time", "Any");
+
+  for (var i = 0, row; (row = clients[i]); ++i) {
+    if (!filterData.firstName.includes(row.firstName)) {
+      filterData.firstName.push(row.firstName);
     }
-   
+    if (!filterData.middleInitial.includes(row.middleInitial)) {
+      filterData.middleInitial.push(row.middleInitial);
+    }
+    if (!filterData.lastInitial.includes(row.lastInitial)) {
+      filterData.lastInitial.push(row.firstName);
+    }
+    if (!filterData.industry.includes(row.industry)) {
+      filterData.industry.push(row.industry);
+    }
+  }
+}
 
-    function onRowUnselect(event) { }
-    return {
-      filters1,
-      onRowSelect,
-      onRowUnselect,
-      columns,
-      loading,
-      selectedClient,
-      filterData,
-      selectedFilter,
-    };
-  },
-  data() {
-    return {
-      clients: [],
-    };
+async function requestClients() {
+  try {
+    let response = await fetch("http://localhost:3000/GetAllClients");
+    clients.value = await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-  },
-
-  created() {
-    this.initFilters1();
-    this.getFilters();
-    //Get the data from the backend
-    let response = this.getData();
-
-
-  },
-  mounted() { },
-  methods: {
-    clearFilter1() {
-      this.initFilters1();
-    },
-    initFilters1() {
-      this.filters1 = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        lastInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-      };
-    },
-    getFilters() {
-      this.filterData.firstName = new Array();
-      this.filterData.middleInitial = new Array();
-      this.filterData.lastInitial = new Array();
-      this.filterData.hours = new Array();
-      this.filterData.industry = new Array();
-
-      this.filterData.hours.push("Full Time", "Part Time", "Any");
-
-      for (var i = 0, row; (row = this.clients[i]); ++i) {
-        if (!this.filterData.firstName.includes(row.firstName)) {
-          this.filterData.firstName.push(row.firstName);
-        }
-        if (!this.filterData.middleInitial.includes(row.middleInitial)) {
-          this.filterData.middleInitial.push(row.middleInitial);
-        }
-        if (!this.filterData.lastInitial.includes(row.lastInitial)) {
-          this.filterData.lastInitial.push(row.firstName);
-        }
-        if (!this.filterData.industry.includes(row.industry)) {
-          this.filterData.industry.push(row.industry);
-        }
-      }
-    },
-    async getData() {
-      try {
-        let response = await fetch("http://localhost:3000/GetAllClients");
-        this.clients = await response.json();
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
-</script>
+onMounted(async () => {
+  initFilters1();
+  await requestClients();
+  getFilters();
+});
+</script >
 
 <template>
   <div class="card">
     <DataTable :value="clients" class="p-datatable-sm" stripedRows @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
-      v-model:selection="this.selectedClient" selectionMode="single" v-model:filters="filters1" filterDisplay="row"
+      v-model:selection="selectedClient" selectionMode="single" v-model:filters="filters1" filterDisplay="row"
       :loading="loading" :paginator="true" :rows="10" :globalFilterFields="[
         'firstName',
         'middleInitial',
