@@ -182,7 +182,7 @@ export default {
       </Column>
       <Column field="industry" header="Industry" :showFilterMenu="false" style="min-width: 12rem">
         <template #body="{ data }">
-          {{ data.industry.toString() }}
+          {{ data.industry.join(", ") }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="filterData.industry"
