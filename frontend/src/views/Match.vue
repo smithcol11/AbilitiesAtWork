@@ -24,14 +24,14 @@ export default {
 
 <template>
   <div class="Match">
-    <div class="p-4 bg-light">
-      <div class="p-2 py-2 flex flex-row items-center">
+    <div class="p-4 bg-light dark:bg-darkGray">
+      <div class="p-2 py-2 flex flex-row items-center dark:bg-darkGrayAccent">
         <div>
           <ClientInfo :client="exampleClient" />
         </div>
-        <div class="px-20 self-start">
+      </div>
+      <div class="px-20 text-center self-start">
           <Button text="Search new client" @click=""></Button>
-        </div>
       </div>
     </div>
   </div>

@@ -181,10 +181,10 @@ export default {
 </script>
 
 <template>
-  <div class="card m-5  bg-light shadow-lg border">
+  <div class="card m-5  bg-light dark:bg-darkGrayAccent dark:border-darkGray shadow-lg border">
     <DataTable
       :value="jobs"
-      class="p-datatable-sm"
+      class="p-datatable-sm dark:bg-darkGrayAccent"
       stripedRows
       @rowSelect="onRowSelect"
       @rowUnselect="onRowUnselect"
@@ -205,7 +205,7 @@ export default {
       ]"
     >
       <template #header>
-        <div class="flex justify-content-between">
+        <div class="flex justify-content-between dark:bg-darkGray">
           <button
             type="button"
             icon="pi pi-filter-slash"
@@ -217,6 +217,7 @@ export default {
             <i class="pi pi-search pr-3" />
             <InputText
               v-model="filters1['global'].value"
+              class="dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light"
               placeholder="Keyword Search"
             />
           </span>
@@ -236,7 +237,7 @@ export default {
             type="text"
             v-model="filterModel.value"
             @input="filterCallback()"
-            class="p-column-filter"
+            class="p-column-filter dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light"
             placeholder="Search by company"
           />
         </template>
@@ -260,7 +261,7 @@ export default {
             :showClear="true"
             optionLabel="city"
             placeholder="Any"
-            class="p-column-filter"
+            class="p-column-filter dark:bg-darkGrayAccent"
           >
             <template #value="slotProps">
               <span
@@ -288,7 +289,7 @@ export default {
             type="text"
             v-model="filterModel.value"
             @input="filterCallback()"
-            class="p-column-filter"
+            class="p-column-filter dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light"
             placeholder="Search by zip"
           />
         </template>
@@ -313,10 +314,12 @@ export default {
             label="county"
             placeholder="Any"
             display="chip"
+            class="dark:bg-darkGrayAccent"
           >
             <template #value="slotProps">
               <span
                 :class="p - chip"
+                class = "dark:bg-darkGrayAccent"
                 display="chip"
                 v-if="slotProps.value && slotProps.value.length > 0"
                 >{{ slotProps.value.join(", ") }}</span
@@ -348,12 +351,13 @@ export default {
             :options="filterData.hours"
             placeholder="Any"
             :filter="false"
-            class="p-dropdown-filter"
+            class="p-dropdown-filter dark:bg-darkGrayAccent"
             :showClear="true"
           >
             <template #value="slotProps">
               <span
                 :class="'p-dropdown-value' + slotProps.value"
+                class = "dark:bg-darkGray"
                 v-if="slotProps.value"
                 >{{ slotProps.value }}</span
               >

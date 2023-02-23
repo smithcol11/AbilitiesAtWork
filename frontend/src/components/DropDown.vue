@@ -14,7 +14,7 @@ const props = defineProps({
 <template>
   <multiselect
     v-bind="$attrs"
-    class="vueform-multiselect"
+    class="vueform-multiselect dark:bg-darkGrayAccent"
     :options="options"
     :clear-on-select="true"
     :preserve-search="true"
