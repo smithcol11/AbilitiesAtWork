@@ -31,7 +31,7 @@ router.post("/createJob", async (req, res) => {
 });
 
 router.get("/GetAllJobs", (req, res) => {
-  Jobs.find({})
+  Job.find({})
     .then((data) => {
       console.log(data);
       res.json(data);
