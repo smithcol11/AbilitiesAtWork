@@ -4,6 +4,7 @@ const Jobs = require("../schema/job");
 module.exports = router;
 
 router.get("/GetAllJobs", (req, res) => {
+  console.log("in get all jobs")
   Jobs.find({})
     .then((data) => {
       console.log(data);
