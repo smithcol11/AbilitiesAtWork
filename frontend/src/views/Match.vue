@@ -19,12 +19,12 @@ const banner = reactive({
   data() {
     return {
       exampleClient: {
-        firstName: "First",
-        middleInitial: "M",
-        lastInitial: "L",
-        preferences: "things",
-        industry: "stuff",
-        hours: "some",
+        firstName: clientInfo.firstName,
+        middleInitial: clientInfo.middleInitial,
+        lastInitial: clientInfo.lastInitial,
+        preferences: clientInfo.preferences,
+        industry: clientInfo.industry,
+        hours: clientInfo.hours,
       },
     };
   },
@@ -87,8 +87,8 @@ let exampleClient = {
 };
 
 async function matchClient() {
-  await fetch("http://localhost:3000/matchClient?" + clientInfo.firstName, {
-    method: "GET",
+  await fetch("http://localhost:3000/matchClient", {
+    method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({
@@ -97,7 +97,7 @@ async function matchClient() {
       lastInitial: clientInfo.lastInitial,
     }),
   })
-    .then((response) => console.log(response))
+    .then((response) => console.log(response.json()))
     .then((data) => {
       let responseBody = data;
       console.log(responseBody);

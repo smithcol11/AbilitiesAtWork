@@ -38,11 +38,11 @@ router.post("/matchClient", async (req, res) => {
   
 
   
-  if (!matchedClient) {
+  if (matchedClient) {
 
     try {
       matchedClient = await matchedClient.json();
-      console.log("Found client: ", matchedClient)
+      //console.log("Found client: ", matchedClient)
     } catch(error) {
       console.log("Could not find client with those credentials ", error)
       res.json("[]")
@@ -60,7 +60,7 @@ router.post("/matchClient", async (req, res) => {
   
     try {
         matchedJobs = await matchedJobs.json();
-        console.log("Matched jobs: ", matchedJobs)
+        //console.log("Matched jobs: ", matchedJobs)
         res.json(matchedJobs)
       } catch(error) {
         console.log(error)
