@@ -1,5 +1,7 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, toRaw } from "vue";
+import DropDown from "./DropDown.vue";
+import Label from "./Label.vue";
 
 const listItems = ref([]);
 const listType = ref("");
@@ -18,12 +20,12 @@ const matchText = (element) => element === choice.value;
 
 function resetOptions() {
   submitReady.value = false;
-  choice.value = ""
+  choice.value = "";
   toEdit.value = false;
   toRemove.value = false;
   toInput.value = false;
   toAdd.value = false;
-  change.value = ""
+  change.value = "";
 }
 
 const formOptions = reactive({
@@ -38,123 +40,104 @@ const formOptions = reactive({
 });
 
 function chooseList(e) {
-  resetOptions();
-  listType.value = e.target.options[e.target.options.selectedIndex].text;
-
-  if (listType.value != "") {
-    getListContents(listType.value)
+  if (e) {
+    resetOptions();
+    listType.value = e;
+    getListContents(listType.value);
     chosen.value = true;
   }
 }
 
 function startAdd() {
-  resetOptions()
+  resetOptions();
   toAdd.value = true;
   toInput.value = true;
   submitReady.value = true;
 }
 
 function startRemove() {
-  resetOptions()
+  resetOptions();
   toRemove.value = true;
-
 }
 
 function startEdit() {
-  resetOptions()
+  resetOptions();
   toEdit.value = true;
 }
 
 function openInput(e) {
   if (toRemove.value == false) {
-    toInput.value = true
+    toInput.value = true;
   }
 
-  choice.value = e.target.options[e.target.options.selectedIndex].text;
+  choice.value = e;
   submitReady.value = true;
 }
 
 function onSubmit() {
+  let selectedList = null;
   if (listType.value === "Positions") {
-    if (toAdd.value) {
-      formOptions.positions.push(choice.value)
-    }
-    else if (toRemove.value) {
-      formOptions.positions.splice(formOptions.positions.findIndex(matchText), 1);
-    }
-    else {
-      formOptions.positions[formOptions.positions.findIndex(matchText)] = change.value
-    }
+    selectedList = formOptions.positions;
+  } else if (listType.value === "Industries") {
+    selectedList = formOptions.industries;
+  } else {
+    // No list selected; modify nothing.
+    return;
   }
-  else {
-    if(toAdd.value) {
-      formOptions.industries.push(choice.value)
-    }
-    else if (toRemove.value) {
-      formOptions.industries.splice(formOptions.industries.findIndex(matchText), 1);
-    }
-    else {
-      formOptions.industries[formOptions.industries.findIndex(matchText)] = change.value
-    }
+
+  let matchIndex = selectedList.findIndex(matchText);
+  if (toAdd.value && matchIndex < 0) {
+    selectedList.push(choice.value);
+    selectedList.sort();
+  } else if (toRemove.value && matchIndex >= 0) {
+    selectedList.splice(matchIndex, 1);
+  } else if (toEdit.value && matchIndex >= 0) {
+    selectedList[matchIndex] = change.value;
+    selectedList.sort();
   }
+
+  choice.value = "";
+  change.value = "";
   sendChanges();
 }
 
 async function getListContents(listName) {
   await fetch("http://localhost:3000/GetJobOptions")
-    .then(res => res.json())
-    
-    .then(newOptions => {
+    .then((res) => res.json())
+
+    .then((newOptions) => {
       for (const key in formOptions) {
         formOptions[key] = newOptions[key];
-      };
+      }
     })
     .catch((err) => console.log(err));
   if (listName === "Positions") {
     listItems.value = formOptions.positions;
-  }
-  else {
+  } else {
     listItems.value = formOptions.industries;
   }
-
 }
 
-async function sendChanges()
-{
+async function sendChanges() {
   await fetch("http://localhost:3000/jobOptions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({
-      _id : formOptions._id,
-      counties: formOptions.counties,
-      cities: formOptions.cities,
-      zips: formOptions.zips,
-      positions: formOptions.positions,
-      industries: formOptions.industries,
-      shiftOptions: formOptions.shiftOptions,
-      timeCommitmentOptions: formOptions.timeCommitmentOptions,
-    }),
+    body: JSON.stringify(toRaw(formOptions)),
   })
     .then((response) => console.log(response))
     .catch((errors) => console.log(errors));
 }
-
 </script>
 
 <template>
-  <div class="flex flex-col  items-center justify-center shadow-lg border bg-light m-3">
+  <div class="flex flex-col items-center justify-center shadow-lg border bg-light m-3 pb-3">
     <div class="w-3/4 p-5">
-      <label class="block text-left px-1 p-3">Which List?</label>
-      <select v-on:change="chooseList($event)" class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="listType"
-        id="listpicker" required>
-        <option class="block w-full" value="0"></option>
-        <option class="block w-full" value="1">Industries</option>
-        <option class="block w-full" value="2">Positions</option>
-      </select>
+      <Label position="left" text="Which List?" class="py-3" />
+      <DropDown class="w-full" v-on:change="chooseList($event)" :options="['Industries', 'Positions']" placeholder="" />
     </div>
     <div v-if="chosen" class="w-3/4 p-5">
-      <label class="block text-left">What would you like to do?</label>
+      <Label position="left" text="What would you like to do?" />
       <div class="grid grid-cols-3">
         <button @click="startAdd()" type="button"
           class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-3 m-5 rounded">
@@ -170,38 +153,31 @@ async function sendChanges()
         </button>
       </div>
 
-      <div v-if="toEdit">
-        <label class="block text-left px-1 p-3">What would you like to edit?</label>
-        <select @change="openInput($event)" class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="listType"
-          id="list" v-model="choice" required>
-          <option v-for="items in listItems" class="block w-full"> {{ items }}</option>
-        </select>
-        <div v-if="toInput">
-          <label v-if="toEdit" class="block text-left px-1 p-3">Make changes here.</label>
-          <input class="rounded bg-white pl-2 pt-1 pb-2 border w-full" v-model="change" :placeholder="choice">
-        </div>
-      </div>
-
       <div v-if="toAdd">
         <div v-if="toInput">
-          <label v-if="toAdd" class="block text-left px-1 p-3">What would you like to add?</label>
-          <input class="rounded bg-white pl-2 pt-1 pb-2 border w-full" v-model="choice" :placeholder="choice">
+          <Label position="left" text="What would you like to add?" class="py-3" />
+          <input class="rounded bg-white pl-2 pt-2 pb-2 border w-full" v-model="choice" :placeholder="choice" />
         </div>
       </div>
 
       <div v-if="toRemove">
-        <label v-if="toRemove" class="block text-left px-1 p-3">What would you like to remove?</label>
-        <select @change="openInput($event)" class="rounded bg-white pl-2 pt-1 pb-2 border w-full" name="listType"
-          id="list" v-model="choice" required>
-          <option v-for="items in listItems" class="block w-full"> {{ items }}</option>
-        </select>
+        <Label position="left" text="What would you like to remove?" class="py-3" />
+        <DropDown class="w-full" v-on:change="openInput($event)" v-model="choice" :options="listItems" placeholder="" />
+      </div>
+
+      <div v-if="toEdit">
+        <Label position="left" text="What would you like to edit?" class="py-3" />
+        <DropDown class="w-full" v-on:change="openInput($event)" v-model="choice" :options="listItems" placeholder="" />
+        <div v-if="toInput">
+          <Label position="left" text="Make changes here." class="pb-3 pt-6" />
+          <input class="rounded bg-white pl-2 pt-2 pb-2 border w-full" v-model="change" :placeholder="choice" />
+        </div>
       </div>
 
       <button v-if="submitReady" @click="onSubmit()" type="button"
-        class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded">
+        class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mx-5 mt-5 rounded">
         Submit
       </button>
     </div>
-
-  </div>
+</div>
 </template>
