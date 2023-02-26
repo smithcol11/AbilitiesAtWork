@@ -24,7 +24,7 @@ let filters1 = reactive({
 //   { field: "hours", header: "Hours" },
 // ]);
 
-const filterData = ref([
+const filterData = reactive([
   {
     firstName: [],
     middleInitial: [],
@@ -50,8 +50,7 @@ function onRowSelect(event) {
   console.log(event.data.lastInitial);
 }
 
-
-function onRowUnselect(event) { }
+function onRowUnselect(event) {}
 
 function clearFilter1() {
   initFilters1();
@@ -69,28 +68,24 @@ function initFilters1() {
 }
 
 function getFilters() {
-  filterData.firstName = new Array();
-  filterData.middleInitial = new Array();
-  filterData.lastInitial = new Array();
-  filterData.hours = new Array();
-  filterData.industry = new Array();
+  filterData.firstName = new Set();
+  filterData.middleInitial = new Set();
+  filterData.lastInitial = new Set();
+  filterData.industry = new Set();
 
-  filterData.hours.push("Full Time", "Part Time", "Any");
+  clients.value.forEach((client) => {
+    filterData.firstName.add(client.firstName);
+    filterData.middleInitial.add(client.middleInitial);
+    filterData.lastInitial.add(client.lastInitial);
+    client.industry.forEach((i) => filterData.industry.add(i));
+  });
 
-  for (var i = 0, row; (row = clients[i]); ++i) {
-    if (!filterData.firstName.includes(row.firstName)) {
-      filterData.firstName.push(row.firstName);
-    }
-    if (!filterData.middleInitial.includes(row.middleInitial)) {
-      filterData.middleInitial.push(row.middleInitial);
-    }
-    if (!filterData.lastInitial.includes(row.lastInitial)) {
-      filterData.lastInitial.push(row.firstName);
-    }
-    if (!filterData.industry.includes(row.industry)) {
-      filterData.industry.push(row.industry);
-    }
-  }
+  filterData.firstName = Array.from(filterData.firstName);
+  filterData.middleInitial = Array.from(filterData.middleInitial);
+  filterData.lastInitial = Array.from(filterData.lastInitial);
+  filterData.industry = Array.from(filterData.industry);
+
+  filterData.hours = new Array("Full-Time", "Part-Time", "Any");
 }
 
 async function requestClients() {
@@ -107,26 +102,46 @@ onMounted(async () => {
   await requestClients();
   getFilters();
 });
-</script >
+</script>
 
 <template>
   <div class="card">
-    <DataTable :value="clients" class="p-datatable-sm" stripedRows @rowSelect="onRowSelect" @rowUnselect="onRowUnselect"
-      v-model:selection="selectedClient" selectionMode="single" v-model:filters="filters1" filterDisplay="row"
-      :loading="loading" :paginator="true" :rows="10" :globalFilterFields="[
+    <DataTable
+      :value="clients"
+      class="p-datatable-sm"
+      stripedRows
+      @rowSelect="onRowSelect"
+      @rowUnselect="onRowUnselect"
+      v-model:selection="selectedClient"
+      selectionMode="single"
+      v-model:filters="filters1"
+      filterDisplay="row"
+      :loading="loading"
+      :paginator="true"
+      :rows="10"
+      :globalFilterFields="[
         'firstName',
         'middleInitial',
         'lastInitial',
         'industry',
         'hours',
-      ]">
+      ]"
+    >
       <template #header>
         <div class="flex justify-content-between">
-          <button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined"
-            @click="clearFilter1()" />
+          <button
+            type="button"
+            icon="pi pi-filter-slash"
+            label="Clear"
+            class="p-button-outlined"
+            @click="clearFilter1()"
+          />
           <span class="">
             <i class="pi pi-search pr-3" />
-            <InputText v-model="filters1['global'].value" placeholder="Keyword Search" />
+            <InputText
+              v-model="filters1['global'].value"
+              placeholder="Keyword Search"
+            />
           </span>
         </div>
       </template>
@@ -140,17 +155,31 @@ onMounted(async () => {
           {{ data.firstName }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <InputText type="text" v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
-            placeholder="Search by First Name" />
+          <InputText
+            type="text"
+            v-model="filterModel.value"
+            @input="filterCallback()"
+            class="p-column-filter"
+            placeholder="Search by First Name"
+          />
         </template>
       </Column>
-      <Column field="middleInitial" header="Middle Initial" style="min-width: 5rem">
+      <Column
+        field="middleInitial"
+        header="Middle Initial"
+        style="min-width: 5rem"
+      >
         <template #body="{ data }">
           {{ data.middleInitial }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <InputText type="text" v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
-            placeholder="Search by Middle Initial" />
+          <InputText
+            type="text"
+            v-model="filterModel.value"
+            @input="filterCallback()"
+            class="p-column-filter"
+            placeholder="Search by Middle Initial"
+          />
         </template>
       </Column>
       <Column field="lastInitial" header="Last Initial" style="min-width: 5rem">
@@ -158,19 +187,40 @@ onMounted(async () => {
           {{ data.lastInitial }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <InputText type="text" v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
-            placeholder="Search by Last Initial" />
+          <InputText
+            type="text"
+            v-model="filterModel.value"
+            @input="filterCallback()"
+            class="p-column-filter"
+            placeholder="Search by Last Initial"
+          />
         </template>
       </Column>
-      <Column field="industry" header="Industry" :showFilterMenu="false" style="min-width: 12rem">
+      <Column
+        field="industry"
+        header="Industry"
+        :showFilterMenu="false"
+        style="min-width: 12rem"
+      >
         <template #body="{ data }">
           {{ data.industry.join(", ") }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="filterData.industry"
-            placeholder="Any" :filter="false" class="p-dropdown-filter" :showClear="true">
+          <Dropdown
+            v-model="filterModel.value"
+            @change="filterCallback()"
+            :options="filterData.industry"
+            placeholder="Any"
+            :filter="false"
+            class="p-dropdown-filter"
+            :showClear="true"
+          >
             <template #value="slotProps">
-              <span :class="'p-dropdown-value' + slotProps.value" v-if="slotProps.value">{{ slotProps.value }}</span>
+              <span
+                :class="'p-dropdown-value' + slotProps.value"
+                v-if="slotProps.value"
+                >{{ slotProps.value }}</span
+              >
               <span v-else>{{ slotProps.placeholder }}</span>
             </template>
             <template #option="slotProps">
@@ -182,15 +232,31 @@ onMounted(async () => {
         </template>
       </Column>
 
-      <Column field="hours" header="Hours" :showFilterMenu="false" style="min-width: 12rem">
+      <Column
+        field="hours"
+        header="Hours"
+        :showFilterMenu="false"
+        style="min-width: 12rem"
+      >
         <template #body="{ data }">
           {{ data.hours }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <Dropdown v-model="filterModel.value" @change="filterCallback()" :options="filterData.hours" placeholder="Any"
-            :filter="false" class="p-dropdown-filter" :showClear="true">
+          <Dropdown
+            v-model="filterModel.value"
+            @change="filterCallback()"
+            :options="filterData.hours"
+            placeholder="Any"
+            :filter="false"
+            class="p-dropdown-filter"
+            :showClear="true"
+          >
             <template #value="slotProps">
-              <span :class="'p-dropdown-value' + slotProps.value" v-if="slotProps.value">{{ slotProps.value }}</span>
+              <span
+                :class="'p-dropdown-value' + slotProps.value"
+                v-if="slotProps.value"
+                >{{ slotProps.value }}</span
+              >
               <span v-else>{{ slotProps.placeholder }}</span>
             </template>
             <template #option="slotProps">
