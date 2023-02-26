@@ -80,18 +80,15 @@ function remove() {
 }
 
 function save() {
-  console.log(props.index);
-  console.log(index);
-  throw "error";
-
-  if (index > -1) {
-    for (let key in updatedJob) {
-      if (updatedJob[key] == "") {
+  if (props.index > -1) {
+    for (let key in updatedJob.value) {
+      if (updatedJob.value[key] == "") {
         //remain the same data if no new input
-        updatedJob[key] = data[key];
+        updatedJob.value[key] = props.data[key];
       }
     }
-    saveUpdate(updatedJob, index);
+
+    props.saveUpdate(updatedJob.value, props.index);
   }
 
   //reset data
