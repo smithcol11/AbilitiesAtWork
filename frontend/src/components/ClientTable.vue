@@ -104,11 +104,10 @@ onMounted(async () => {
 function customFilterCallback() {
   console.log(filters1);
 }
-
 </script>
 
 <template>
-  <div class="card">
+  <div class="card m-5 bg-light shadow-lg border">
     <DataTable
       :value="clients"
       class="p-datatable-sm"
@@ -161,7 +160,10 @@ function customFilterCallback() {
           <InputText
             type="text"
             v-model="filterModel.value"
-            @input="customFilterCallback(); filterCallback();"
+            @input="
+              customFilterCallback();
+              filterCallback();
+            "
             class="p-column-filter"
             placeholder="Search by First Name"
           />
