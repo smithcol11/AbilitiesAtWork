@@ -12,7 +12,17 @@ const loading = ref(false);
 
 const selectedJob = null;
 
-const filterDefaults = {
+// const filterDefaults = {
+//   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+//   company: { value: null, matchMode: FilterMatchMode.CONTAINS },
+//   city: { value: null, matchMode: FilterMatchMode.IN },
+//   zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
+//   county: { value: null, matchMode: FilterMatchMode.IN },
+//   industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
+//   hours: { value: null, matchMode: FilterMatchMode.EQUALS },
+// };
+
+let filters1 = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   company: { value: null, matchMode: FilterMatchMode.CONTAINS },
   city: { value: null, matchMode: FilterMatchMode.IN },
@@ -20,17 +30,15 @@ const filterDefaults = {
   county: { value: null, matchMode: FilterMatchMode.IN },
   industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
   hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-};
+});
 
-let filters1 = ref(filterDefaults);
-
-const columns = reactive([
-  { field: "company", header: "Company" },
-  { field: "city", header: "City" },
-  { field: "zip", header: "Zip" },
-  { field: "county", header: "County" },
-  { field: "hours", header: "Hours" },
-]);
+// const columns = reactive([
+//   { field: "company", header: "Company" },
+//   { field: "city", header: "City" },
+//   { field: "zip", header: "Zip" },
+//   { field: "county", header: "County" },
+//   { field: "hours", header: "Hours" },
+// ]);
 
 const jobs = reactive([
   {
@@ -192,7 +200,15 @@ function onRowUnselect(event) {}
 
 //Sets all filters to default. Can be called to reset all filters.
 function initFilters1() {
-  filters1 = filterDefaults;
+  filters1 = {
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    company: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    city: { value: null, matchMode: FilterMatchMode.IN },
+    zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    county: { value: null, matchMode: FilterMatchMode.IN },
+    industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    hours: { value: null, matchMode: FilterMatchMode.EQUALS },
+  };
 }
 
 function clearFilter1() {
@@ -451,7 +467,6 @@ requestJobs();
 .p-multiselect {
   max-width: 16rem;
 }
-
 .p-filter-column {
   max-width: 12rem;
 }

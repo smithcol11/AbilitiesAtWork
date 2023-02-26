@@ -1,103 +1,107 @@
-<script>
+<script setup>
+import { ref } from "vue";
+import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 
-export default {
-  props: {
-    data: {
-      type: Object,
-      required: true,
-    },
-    index: {
-      type: Number,
-      required: true,
-    },
-    removeJob: {
-      //from parent(SearchTable.vue)
-      type: Function,
-      default: null,
-    },
-    saveUpdate: {
-      //from parent(SearchTable.vue)
-      type: Function,
-      default: null,
-    },
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
   },
-  data() {
-    return {
-      displayBasic: false,
-      displayDel: false,
-      displayUpdate: false,
+  index: {
+    type: Number,
+    required: true,
+    default: 100,
+  },
+  removeJob: {
+    //from parent(SearchTable.vue)
+    type: Function,
+    default: null,
+  },
+  saveUpdate: {
+    //from parent(SearchTable.vue)
+    type: Function,
+    default: null,
+  },
+});
 
-      updatedJob: {
-        company: "",
-        contactName: "",
-        contactPhoneNumber: "",
-        contactEmail: "",
-        address: "",
-        city: "",
-        zip: "",
-        county: "",
-        shift: "",
-        industry: "",
-        position: "",
-        hours: "",
-        datePosted: "",
-        notes: "",
-      },
-    };
-  },
-  mounted() {},
-  methods: {
-    openDel() {
-      this.displayBasic = false;
-      this.displayDel = true;
-    },
-    closeDel() {
-      this.displayDel = false;
-    },
-    openUpdate() {
-      this.displayBasic = false;
-      this.displayUpdate = true;
-    },
-    closeUpdate() {
-      this.displayUpdate = false;
-    },
-    openBasic() {
-      this.displayBasic = true;
-    },
-    closeBasic() {
-      this.displayBasic = false;
-    },
-    remove() {
-      if (this.index > -1) this.removeJob(this.index);
-      this.displayBasic = false;
-      this.displayDel = false;
-    },
-    save() {
-      if (this.index > -1) {
-        for (let key in this.updatedJob) {
-          if (this.updatedJob[key] ==  "") {
-            //remain the same data if no new input
-            this.updatedJob[key] = this.data[key];
-          }
-        }
-        this.saveUpdate(this.updatedJob, this.index);
+const displayBasic = ref(false);
+const displayDel = ref(false);
+const displayUpdate = ref(false);
+
+const updatedJob = ref({
+  company: "",
+  contactName: "",
+  contactPhoneNumber: "",
+  contactEmail: "",
+  address: "",
+  city: "",
+  zip: "",
+  county: "",
+  shift: "",
+  industry: "",
+  position: "",
+  hours: "",
+  datePosted: "",
+  notes: "",
+});
+
+function openDel() {
+  displayBasic.value = false;
+  displayDel.value = true;
+}
+
+function closeDel() {
+  displayDel.value = false;
+}
+
+function openUpdate() {
+  displayBasic.value = false;
+  displayUpdate.value = true;
+}
+
+function closeUpdate() {
+  displayUpdate.value = false;
+}
+
+function openBasic() {
+  displayBasic.value = true;
+}
+
+function closeBasic() {
+  displayBasic.value = false;
+}
+
+function remove() {
+  if (index > -1) remove(index);
+  displayBasic.value = false;
+  displayDel.value = false;
+}
+
+function save() {
+  console.log(props.index);
+  console.log(index);
+  throw "error";
+
+  if (index > -1) {
+    for (let key in updatedJob) {
+      if (updatedJob[key] == "") {
+        //remain the same data if no new input
+        updatedJob[key] = data[key];
       }
+    }
+    saveUpdate(updatedJob, index);
+  }
 
-      //reset data
-      for (let key in this.updatedJob) {
-        this.updatedJob[key] = "";
-      }
+  //reset data
+  for (let key in updatedJob) {
+    updatedJob[key] = "";
+  }
 
-      this.displayUpdate = false;
-    },
-  },
-  components: {
-    Dialog,
-    InputText,
-  },
-};
+  displayUpdate.value = false;
+}
+
 </script>
 
 <template>
