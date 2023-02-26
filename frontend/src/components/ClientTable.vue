@@ -7,7 +7,7 @@ const clients = ref([]);
 const loading = ref(false);
 const selectedClient = null;
 
-let filters1 = reactive({
+const filters1 = reactive({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -57,14 +57,12 @@ function clearFilter1() {
 }
 
 function initFilters1() {
-  filters1 = {
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    lastInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-  };
+  filters1.global.value = null;
+  filters1.firstName.value = null;
+  filters1.middleInitial.value = null;
+  filters1.lastInitial.value = null;
+  filters1.industry.value = null;
+  filters1.hours.value = null;
 }
 
 function getFilters() {
