@@ -7,7 +7,7 @@ const clients = ref([]);
 const loading = ref(false);
 const selectedClient = null;
 
-const filters1 = reactive({
+const filters1 = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   firstName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   middleInitial: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -57,12 +57,12 @@ function clearFilter1() {
 }
 
 function initFilters1() {
-  filters1.global.value = null;
-  filters1.firstName.value = null;
-  filters1.middleInitial.value = null;
-  filters1.lastInitial.value = null;
-  filters1.industry.value = null;
-  filters1.hours.value = null;
+  filters1.value.global.value = null;
+  filters1.value.firstName.value = null;
+  filters1.value.middleInitial.value = null;
+  filters1.value.lastInitial.value = null;
+  filters1.value.industry.value = null;
+  filters1.value.hours.value = null;
 }
 
 function getFilters() {
@@ -100,6 +100,11 @@ onMounted(async () => {
   await requestClients();
   getFilters();
 });
+
+function customFilterCallback() {
+  console.log(filters1);
+}
+
 </script>
 
 <template>
@@ -156,7 +161,7 @@ onMounted(async () => {
           <InputText
             type="text"
             v-model="filterModel.value"
-            @input="filterCallback()"
+            @input="customFilterCallback(); filterCallback();"
             class="p-column-filter"
             placeholder="Search by First Name"
           />
