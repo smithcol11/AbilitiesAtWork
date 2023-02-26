@@ -81,13 +81,13 @@ const submitForm = async () => {
 let exampleClient = {
   initials: clientInfo.firstName + " " + clientInfo.middleInitial + " " + clientInfo.lastInitial,
   preferences: "things",
-  industry: "stuff",
+  industry: "",
   hours: "some",
   appliedJobs: "many",
 };
 
 async function matchClient() {
-  await fetch("http://localhost:3000/matchClient", {
+  await fetch("http://localhost:3000/getMatch", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -97,10 +97,11 @@ async function matchClient() {
       lastInitial: clientInfo.lastInitial,
     }),
   })
-    .then((response) => console.log(response.json()))
+    .then((response) => response.json())
     .then((data) => {
       let responseBody = data;
-      console.log(responseBody);
+      exampleClient.industry = responseBody[0].industry
+      exampleClient.hours = responseBody[0].hours
     })
     .catch((errors) => console.log(errors));
 }
