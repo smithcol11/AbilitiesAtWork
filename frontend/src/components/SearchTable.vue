@@ -61,62 +61,6 @@ const jobs2 = ref([
     industry: "Manufacturing",
     hours: "Full Time",
   },
-  {
-    company: "XYZ Co.",
-    city: "Beaverton",
-    zip: "97002",
-    county: "Multnomah",
-    industry: "Retail",
-    hours: "Part Time",
-  },
-  {
-    company: "Might Ent.",
-    city: "Dalles",
-    zip: "99696",
-    county: "Washington",
-    industry: "Buisness",
-    hours: "Part Time",
-  },
-  {
-    company: "GoodieMax",
-    city: "Dalles",
-    zip: "98868",
-    county: "Washington",
-    industry: "Manufacturing",
-    hours: "Full Time",
-  },
-  {
-    company: "TempCo",
-    city: "Portland",
-    zip: "97223",
-    county: "Washington",
-    industry: "Buisness",
-    hours: "Part Time",
-  },
-  {
-    company: "DiceCity",
-    city: "Portland",
-    zip: "97223",
-    county: "Washington",
-    industry: "Retail",
-    hours: "Part Time",
-  },
-  {
-    company: "BigMeyer",
-    city: "Portland",
-    zip: "97223",
-    county: "Washington",
-    industry: "Retail",
-    hours: "Full Time",
-  },
-  {
-    company: "WorstPlace",
-    city: "Eugene",
-    zip: "93556",
-    county: "Washington",
-    industry: "Buisness",
-    hours: "Full Time",
-  },
 ]);
 
 var filterData = ref([
@@ -182,27 +126,34 @@ function getFilters() {
 };
 
 onBeforeMount(async () => {
-  await getJobs().then((data) => {
-    for (var i=0; (data[i]); ++i)
-    {
-      jobs.value.push(data[i]);
-    }
-  }).then(() => {
+  // await getJobs().then((data) => {
+  //   for (var i=0; (data[i]); ++i)
+  //   {
+  //     jobs.value.push(data[i]);
+  //   }
+  // }).then(() => {
+  //   initFilters1();
+  //   getFilters();
+  // });
+  console.log(message)
+  await message.then(() => {
     initFilters1();
     getFilters();
   });
-  
   });
 
   onMounted(async () => {
 
-    console.log("OnMounted, jobs: ", jobs);
-    console.log("OnMounted, filterData: ", filterData);
+    //console.log("OnMounted, jobs: ", jobs);
+    //console.log("OnMounted, filterData: ", filterData);
 
 
 
   });
 
+</script>
+
+<script>
 </script>
 
 <template>

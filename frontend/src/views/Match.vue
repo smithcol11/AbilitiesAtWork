@@ -64,6 +64,8 @@ const displayError = () => {
   }, 3000);
 };
 
+let allMatchedJobs = [];
+
 // use the rules the data must follow
 const v$ = useVuelidate(rules, clientInfo);
 
@@ -99,21 +101,37 @@ async function matchClient() {
   })
     .then((response) => response.json())
     .then((data) => {
-      let responseBody = data;
-      exampleClient.industry = responseBody[0].industry
-      exampleClient.hours = responseBody[0].hours
+      allMatchedJobs = data;
+      //console.log(allMatchedJobs)
     })
     .catch((errors) => console.log(errors));
 }
+
+</script>
+
+<script>
+  export default {
+  components: {
+    SearchTable
+  },
+    data() {
+      return {
+        message: null
+      }
+    },
+    created() {
+      this.message = this.allMatchedJobs;
+    },
+  }
 </script>
 
 <template>
   <div class="Match">
     <div class="p-4 bg-light">
       <div class="p-2 py-2 flex flex-row items-center">
-        <div>
+        <!-- <div>
           <ClientInfo :client="exampleClient" />
-        </div>
+        </div> -->
         <div class="px-20 self-start">
           <form>
             <div>
@@ -153,7 +171,7 @@ async function matchClient() {
       </div>
     </div>
     <div class="text-center">
-      <SearchTable />
+      <SearchTable v-bind:message = "message"/>
     </div>
   </div>
 </template>

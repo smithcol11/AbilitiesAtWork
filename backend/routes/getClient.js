@@ -102,8 +102,6 @@ router.post("/getMatch", async (req, res) => {
       });
       matchingJobs = matchingJobs.concat(jobs);
     }
-
-    console.log(matchingJobs);
     res.json(matchingJobs);
   } catch (error) {
     console.error("Error:", error);
