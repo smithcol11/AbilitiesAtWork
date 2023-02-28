@@ -103,9 +103,9 @@ async function matchClient() {
 
 <template>
   <div class="Match">
-    <div class="p-4 bg-light">
+    <div class="p-2">
       <div class="p-2 py-2 flex flex-row items-center">
-        <div class="px-20 self-start">
+        <div class=" self-start">
           <form>
             <div>
               <form method="post" ref="clientForm" @submit.prevent>
@@ -113,34 +113,15 @@ async function matchClient() {
                   <div
                     class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border"
                   >
-                    <div>
-                      <label class="block px-1 py-1">Enter Client's Name</label>
-                      <input
-                        class="rounded border px-1 py-1 sm:w-1/2"
-                        type="text"
-                        name="initials"
-                        id="initials"
-                        placeholder="First Name"
-                        v-model="clientInfo.firstName"
-                        style="margin-right: 1rem"
-                      />
-                      <input
-                        class="rounded border px-1 py-1 sm:w-1/5"
-                        type="text"
-                        name="initials"
-                        id="initials"
-                        placeholder="Middle initial"
-                        v-model="clientInfo.middleInitial"
-                      />
-                      <input
-                        class="rounded border px-1 py-1 sm:w-3/4"
-                        type="text"
-                        name="initials"
-                        id="initials"
-                        placeholder="Last Initial"
-                        v-model="clientInfo.lastInitial"
-                      />
-                    </div>
+                  <div>
+                    <label class="block px-1 py-1 mb-2">Enter Client's Name</label>
+                    <input class="rounded border p-2 px-1 py-1 sm:w-1/2 mb-2" type="text" name="initials" id="initials"
+                      placeholder="First Name" v-model="clientInfo.firstName" style="margin-right: 1rem" />
+                    <input class="rounded border px-1 py-1 sm:w-1/5 mb-2" type="text" name="initials" id="initials"
+                      placeholder="Middle initial" v-model="clientInfo.middleInitial" />
+                    <input class="rounded border px-1 py-1 sm:w-3/4" type="text" name="initials" id="initials"
+                      placeholder="Last Initial" v-model="clientInfo.lastInitial" />
+                  </div>
                     <button
                       class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
                       @click="submitForm()"
