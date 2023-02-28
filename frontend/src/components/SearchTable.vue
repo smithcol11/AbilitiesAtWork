@@ -184,8 +184,7 @@ export default {
   <div class="card m-5  bg-light dark:bg-darkGrayAccent dark:border-darkGray shadow-lg border">
     <DataTable
       :value="jobs"
-      class="p-datatable-sm"
-      
+      class="p-datatable-sm datatable-dark"
       @rowSelect="onRowSelect"
       @rowUnselect="onRowUnselect"
       v-model:selection="this.selectedJob"
@@ -398,12 +397,25 @@ export default {
   background-color: theme(colors.accentDark)
 }
 
-.p-datatable tr:nth-child(even) {
-    color: #f8fafc;
-    background-color: #1e1e1e;
-  }
-  .p-datatable tr:nth-child(odd) {
-    color: #f8fafc;
-    background-color: #2a2a2a;
-  }
+.datatable-dark tr:nth-child(even) {
+  color: #f8fafc;
+  background-color: #1e1e1e;
+}
+
+.datatable-dark tr:nth-child(odd) {
+  color: #f8fafc;
+  background-color: #2a2a2a;
+}
+
+.datatable-light tr:nth-child(even) {
+  color: #1e1e1e;
+  background-color: #f8fafc;
+}
+
+.datatable-light tr:nth-child(odd) {
+  color: #1e1e1e;
+  background-color: #f8fafc;
+}
+
+
 </style>

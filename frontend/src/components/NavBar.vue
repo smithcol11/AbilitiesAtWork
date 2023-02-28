@@ -6,7 +6,25 @@ import Label from "../components/Label.vue";
 import {useDark, useToggle} from "@vueuse/core";
 
 const isDark = reactive(useDark());
-const toggleDark = useToggle(isDark);
+
+const toggleDark = () => {
+  useToggle(isDark)();
+  
+  const allTables = document.querySelectorAll(".p-datatable");
+
+  if (!isDark.value) {
+    for (let i = 0; i < allTables.length; i++) {
+      allTables[i].classList.remove("datatable-dark");
+      allTables[i].classList.add("datatable-light");
+    }
+  } else {
+    for (let i = 0; i < allTables.length; i++) {
+      allTables[i].classList.remove("datatable-light");
+      allTables[i].classList.add("datatable-dark");
+    }
+  }
+}
+
 const auth = useAuthenticationStore();
 let showLogout = ref(false);
 // watch (() => isDark.value, (newvalue) => {console.log(newvalue);});
