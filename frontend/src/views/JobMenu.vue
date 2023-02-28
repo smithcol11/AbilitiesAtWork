@@ -31,8 +31,8 @@ function toggleView(view) {
 </script>
 <template>
   <div class="text-center">
-    <div class="flex justify-center gap-10 my-5">
-      <Button @click="toggleView('Add')" id="addJob" text="Add Job"> </Button>
+    <div class="flex justify-center gap-5 md:gap-10 lg:gap-10 my-5">
+      <Button class="ml-4" @click="toggleView('Add')" id="addJob" text="Add Job"> </Button>
       <Button
         class="accentLight-button"
         @click="toggleView('Search')"
@@ -40,7 +40,7 @@ function toggleView(view) {
         text="Search Jobs"
       >
       </Button>
-      <Button
+      <Button class="mr-4"
         @click="toggleView('Modify')"
         id="modifyList"
         text="Modify Lists"
