@@ -3,36 +3,49 @@ import ClientInfo from "../components/ClientInfo.vue";
 import SearchTable from "../components/SearchTable.vue";
 import { reactive, ref, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
+import successBanner from "../components/SuccessBanner.vue";
+import errorBanner from "../components/ErrorBanner.vue";
 
 const success = ref(false);
 const visible = ref(false);
 
 const banner = reactive({
-  success: {
+  displaySuccess: {
     type: Boolean,
     default: false,
   },
-  failure: {
+  displayFailed: {
     type: Boolean,
     default: false,
   },
-  data() {
-    return {
-      exampleClient: {
-        firstName: clientInfo.firstName,
-        middleInitial: clientInfo.middleInitial,
-        lastInitial: clientInfo.lastInitial,
-        preferences: clientInfo.preferences,
-        industry: clientInfo.industry,
-        hours: clientInfo.hours,
-      },
-    };
+  duration: 4,
+  timeRemaining: {
+    type: Number,
+    default: 4,
   },
-  visible: {
-    type: Boolean,
-    default: false,
+  timer: {
+    type: Number,
+    default: 4,
   },
 });
+
+function DisplayBanner(bannerType) {
+  if (bannerType == "success") banner.displaySuccess = true;
+  else banner.displayFailed = true;
+
+  clearInterval(banner.timer);
+  banner.timeRemaining = banner.duration;
+
+  //create a timer to display banner
+  banner.timer = setInterval(() => {
+    banner.timeRemaining--;
+    if (banner.timeRemaining <= 0) {
+      clearInterval(banner.timer);
+      banner.displaySuccess = false;
+      banner.displayFailed = false;
+    }
+  }, 1000);
+}
 
 const clientInfo = reactive({
   firstName: "",
@@ -47,6 +60,8 @@ const clientInfo = reactive({
 const rules = computed(() => {
   return {};
 });
+
+const bannerText = ref("");
 
 // display success banner if post succeeded
 const displaySuccess = () => {
@@ -94,34 +109,83 @@ async function matchClient() {
   })
     .then((response) => response.json())
     .then((data) => {
-      allMatchedJobs.value = data;
-      console.log(allMatchedJobs);
+      if (data.error == "No Client Found") {
+        bannerText.value = "No client exists for given name.";
+        DisplayBanner("error");
+      } else if (data.length < 1) {
+        bannerText.value = "No matches for given client.";
+        DisplayBanner("error");
+      } else {
+        allMatchedJobs.value = data;
+        bannerText.value = "Check table below for matches.";
+        DisplayBanner("success");
+      }
     })
-    .catch((errors) => console.log(errors));
+    .catch((errors) => {
+      console.log(errors);
+      DisplayBanner("error");
+    });
 }
 </script>
 
 <template>
   <div class="Match">
-    <div class="p-2">
-      <div class="p-2 py-2 flex flex-row items-center">
-        <div class=" self-start">
+    <div class="">
+      <div class="px-4 flex flex-row items-center">
+        <div class="self-start">
           <form>
             <div>
+              <Transition>
+                <div role="alert">
+                  <div v-if="banner.displaySuccess == true">
+                    <successBanner
+                      topText="Client Found!"
+                      :bottomText="bannerText"
+                    />
+                  </div>
+                  <div v-if="banner.displayFailed == true">
+                    <errorBanner
+                      topText="ERROR: No client matches found!"
+                      :bottomText="bannerText"
+                    />
+                  </div>
+                </div>
+              </Transition>
               <form method="post" ref="clientForm" @submit.prevent>
-                <div class="px-1 sm:px-1 max-w-xl py-5 w-full">
+                <div class="px-1 sm:px-1 max-w-md pt-4 w-full">
                   <div
                     class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border"
                   >
-                  <div>
-                    <label class="block px-1 py-1 mb-2">Enter Client's Name</label>
-                    <input class="rounded border p-2 px-1 py-1 sm:w-1/2 mb-2" type="text" name="initials" id="initials"
-                      placeholder="First Name" v-model="clientInfo.firstName" style="margin-right: 1rem" />
-                    <input class="rounded border px-1 py-1 sm:w-1/5 mb-2" type="text" name="initials" id="initials"
-                      placeholder="Middle initial" v-model="clientInfo.middleInitial" />
-                    <input class="rounded border px-1 py-1 sm:w-3/4" type="text" name="initials" id="initials"
-                      placeholder="Last Initial" v-model="clientInfo.lastInitial" />
-                  </div>
+                    <div>
+                      <label class="block px-1 py-1 mb-2"
+                        >Enter Client's Name</label
+                      >
+                      <input
+                        class="rounded border p-2 px-1 py-1 w-full mb-2"
+                        type="text"
+                        name="initials"
+                        id="initials"
+                        placeholder="First Name"
+                        v-model="clientInfo.firstName"
+                        style="margin-right: 1rem"
+                      />
+                      <input
+                        class="rounded border px-1 py-1 w-1/2 mb-2"
+                        type="text"
+                        name="initials"
+                        id="initials"
+                        placeholder="Middle initial"
+                        v-model="clientInfo.middleInitial"
+                      />
+                      <input
+                        class="rounded border px-1 py-1 w-1/2"
+                        type="text"
+                        name="initials"
+                        id="initials"
+                        placeholder="Last Initial"
+                        v-model="clientInfo.lastInitial"
+                      />
+                    </div>
                     <button
                       class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
                       @click="submitForm()"
@@ -141,5 +205,3 @@ async function matchClient() {
     </div>
   </div>
 </template>
-
-<style></style>

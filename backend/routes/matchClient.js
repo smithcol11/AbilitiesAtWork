@@ -12,8 +12,14 @@ router.post("/getMatch", async (req, res) => {
       lastInitial: req.body.lastInitial,
     });
     console.log(client);
-    if (client.length == 0) return;
+    if (client.length == 0) {
+      res.json({
+        error: "No Client Found",
+      });
+      return;
+    }
 
+    // CLients have an array of industries, must loop over each industry to check all matches
     for (let i in client[0].industry) {
       const jobs = await Job.find({
         industry: client[0].industry[i],
