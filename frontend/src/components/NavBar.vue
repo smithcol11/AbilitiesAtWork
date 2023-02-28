@@ -1,14 +1,15 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
-import { ref } from "vue";
+import { ref, watch, reactive } from "vue";
 import Button from "../components/Button.vue";
 import Label from "../components/Label.vue";
 import {useDark, useToggle} from "@vueuse/core";
 
-const isDark = useDark();
-const toggleDark = useToggle(isDark)
+const isDark = reactive(useDark());
+const toggleDark = useToggle(isDark);
 const auth = useAuthenticationStore();
 let showLogout = ref(false);
+// watch (() => isDark.value, (newvalue) => {console.log(newvalue);});
 
 function toggleNav() {
   let nav = document.getElementById("nav-bar");
@@ -21,8 +22,8 @@ function toggleLogout() {
 </script>
 
 <template>
-  <nav id="nav-bar" class="hidden sm:block duration-300">
-    <div class="sm:w-32 sm:h-screen shadow-sm text-center bg-light dark:bg-darkGray dark:text-light">
+  <nav id="nav-bar" class="hidden sm:block transition duration-300">
+    <div class="sm:w-32 sm:h-screen shadow-sm text-center duration-300 bg-light dark:bg-darkGray dark:text-light">
       <img
         class="p-3 border-b-2 hidden sm:block"
         src="../assets/images/logo.png"
@@ -33,7 +34,7 @@ function toggleLogout() {
       <button 
       class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light dark:hover:bg-darkGrayAccent dark:text-light"
       @click="toggleDark()">
-      Dark Mode
+      Dark Mode: {{ isDark }}
       </button>
       <button
         class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light dark:hover:bg-darkGrayAccent dark:text-light"

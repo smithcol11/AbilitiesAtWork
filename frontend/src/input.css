@@ -27,6 +27,28 @@
   --ms-option-bg-pointed: theme(colors.accentLight);
 }
 
+.dark-vueform-multiselect {
+  --ms-bg: theme(colors.darkGrayAccent);
+  --ms-border-color: theme(colors.darkGray);
+  --ms-ring-color: theme(colors.dark);
+  --ms-max-height: 15rem;
+  --ms-clear-color-hover: theme(colors.light);
+  --ms-dropdown-bg: theme(colors.darkGrayAccent);
+  --ms-dropdown-border-color: theme(colors.darkGray);
+  --ms-label-color: theme(colors.light);
+  --ms-group-label-color: theme(colors.light);
+  --ms-group-label-bg-selected: theme(colors.darkGray);
+  --ms-group-label-color-selected: theme(colors.light);
+  --ms-group-label-bg-selected-pointed: theme(colors.darkGray);
+  --ms-group-label-color-selected-pointed: theme(colors.light);
+  --ms-option-bg-selected: theme(colors.darkGray);
+  --ms-option-color-selected: theme(colors.light);
+  --ms-option-color-pointed: theme(colors.light);
+  --ms-option-bg-selected-pointed: theme(colors.darkGray);
+  --ms-option-color-selected-pointed: theme(colors.light);
+  --ms-option-bg-pointed: theme(colors.darkGray);
+}
+
 /* CSS for buttons */
 
 .simple-button {

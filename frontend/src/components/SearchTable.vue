@@ -205,7 +205,7 @@ export default {
       ]"
     >
       <template #header>
-        <div class="flex justify-content-between dark:bg-darkGray">
+        <div class="flex justify-content-between dark:bg-darkGrayAccent">
           <button
             type="button"
             icon="pi pi-filter-slash"
@@ -213,11 +213,11 @@ export default {
             class="p-button-outlined"
             @click="clearFilter1()"
           />
-          <span class="">
+          <span>
             <i class="pi pi-search pr-3" />
             <InputText
               v-model="filters1['global'].value"
-              class="dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light"
+              class="dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light dark:border-darkGray"
               placeholder="Keyword Search"
             />
           </span>
@@ -261,7 +261,7 @@ export default {
             :showClear="true"
             optionLabel="city"
             placeholder="Any"
-            class="p-column-filter dark:bg-darkGrayAccent"
+            
           >
             <template #value="slotProps">
               <span

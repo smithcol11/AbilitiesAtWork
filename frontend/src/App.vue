@@ -19,7 +19,7 @@ const auth = useAuthenticationStore();
       <div>
         <NavBar />
       </div>
-      <div class="sm:text-align-center h-screen w-full dark:bg-darkGray">
+      <div class="sm:text-align-center h-screen w-full dark:bg-darkGray transition duration-300">
         <RouterView />
       </div>
     </div>

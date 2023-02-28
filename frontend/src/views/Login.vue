@@ -4,6 +4,9 @@ import AdminLogin from "../components/AdminLogin.vue";
 import UserLogin from "../components/UserLogin.vue";
 import Button from "../components/Button.vue";
 import { ref } from "vue";
+import {useDark, useToggle} from "@vueuse/core";
+
+const isDark = useDark();
 
 const auth = useAuthenticationStore();
 const isAdmin = ref(false);
