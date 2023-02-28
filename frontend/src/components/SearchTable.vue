@@ -4,34 +4,20 @@ import Dropdown from "primevue/dropdown";
 import Chips from "primevue/chips";
 import { reactive, ref, computed, onBeforeMount, onMounted } from "vue";
 
-var jobs = ref([]);
-var rawJobs = [];
+const props = defineProps({
+  jobMatches: {
+    type: Array,
+    default() {
+      return [];
+    },
+  },
+});
 
-
-//Gets the raw data from getAllJobs. The raw data is used to create the filters.
-let getJobs = async () => {
-  rawJobs = await fetch("http://localhost:3000/GetAllJobs")
-  .then((response) => {
-    console.log(response)
-    let data = response.json();
-    return data;
-  }
-  );
-
-  return rawJobs;
-};
-
+const jobs = ref([]);
 const loading = ref(false);
 const selectedJob = null;
-var filters1 = ref({/*
-  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  company: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  city: { value: null, matchMode: FilterMatchMode.IN },
-  zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  county: { value: null, matchMode: FilterMatchMode.IN },
-  industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-  */
+
+var filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
   city: { value: null, matchMode: FilterMatchMode.IN },
@@ -40,30 +26,8 @@ var filters1 = ref({/*
   industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
   timeCommitment: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
-const columns = ref([
-  { field: "employer", header: "Employer" },
-  { field: "city", header: "City" },
-  { field: "zip", header: "Zip" },
-  { field: "county", header: "County" },
-  { field: "industry", header: "Industry" },
-  { field: "TimeCommitment", header: "TimeCommitment" },
-]);
 
-
-
-const jobs2 = ref([
-  {
-    id: 5,
-    company: "ABC Inc.",
-    city: "Portland",
-    zip: "97223",
-    county: "Washington",
-    industry: "Manufacturing",
-    hours: "Full Time",
-  },
-]);
-
-var filterData = ref([
+const filterData = reactive([
   {
     county: [],
     employer: [],
@@ -71,93 +35,70 @@ var filterData = ref([
     timeCommitment: [],
   },
 ]);
-const selectedFilter = ref([
-  {
-    county: null,
-    city: null,
-  },
-]);
 
 function onRowSelect(event) {
   console.log(event.data.employer);
-};
+}
 
-function onRowUnselect(event) {};
+function onRowUnselect(event) {}
 
-
-function clearFilter1() {
-  initFilters1();
-};
+function clearFilter() {
+  initFilters();
+}
 
 //Sets all filters to default. Can be called to reset all filters.
-function initFilters1() {
-  //console.log("In initFilters), jobs is ", jobs)
-  filters1 = {
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    city: { value: null, matchMode: FilterMatchMode.IN },
-    zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    county: { value: null, matchMode: FilterMatchMode.IN },
-    industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    timeCommitment: { value: null, matchMode: FilterMatchMode.EQUALS },
-  };
-};
+function initFilters() {
+  filters.value.global.value = null;
+  filters.value.employer.value = null;
+  filters.value.city.value = null;
+  filters.value.zip.value = null;
+  filters.value.county.value = null;
+  filters.value.industry.value = null;
+  filters.value.timeCommitment.value = null;
+}
 
 //This dynamically populates the drop-down and multiselect filters used in the table.
 function getFilters() {
   filterData.county = new Array();
-  filterData.city = new Array();
   filterData.employer = new Array();
+  filterData.city = new Array();
   filterData.timeCommitment = new Array();
+  filterData.timeCommitment.push("Full-Time", "Part-Time", "Any");
 
-  filterData.timeCommitment.push("Full Time", "Part Time");
+  jobs.value.forEach((job) => {
+    if (!filterData.county.includes(job.county))
+      filterData.county.push(job.county);
+    if (!filterData.city.includes(job.city)) filterData.city.push(job.city);
+    if (!filterData.employer.includes(job.employer))
+      filterData.employer.push(job.employer);
+  });
+}
 
-  for (var i = 0, row; (row = rawJobs[i]); ++i) {
-    if (!filterData.county.includes(row.county)) {
-      filterData.county.push(row.county);
+async function loadJobs() {
+  if (props.jobMatches.length < 1) {
+    await fetch("http://localhost:3000/GetAllJobs")
+      .then((response) => response.json())
+      .then((data) => {
+        jobs.value = data;
+      })
+      .then(() => {
+        initFilters();
+        getFilters();
+      });
+  } else {
+    for (let i in props.jobMatches) {
+      jobs.value.push(props.jobMatches[i]);
     }
-    if (!filterData.city.includes(row.city)) {
-      filterData.city.push(row.city);
-    }
-    if (!filterData.employer.includes(row.employer)) {
-      filterData.employer.push(row.employer);
-    }
-  }
-};
-
-onBeforeMount(async () => {
-  // await getJobs().then((data) => {
-  //   for (var i=0; (data[i]); ++i)
-  //   {
-  //     jobs.value.push(data[i]);
-  //   }
-  // }).then(() => {
-  //   initFilters1();
-  //   getFilters();
-  // });
-  console.log(message)
-  await message.then(() => {
-    initFilters1();
+    initFilters();
     getFilters();
-  });
-  });
+  }
+}
 
-  onMounted(async () => {
-
-    //console.log("OnMounted, jobs: ", jobs);
-    //console.log("OnMounted, filterData: ", filterData);
-
-
-
-  });
-
-</script>
-
-<script>
+loadJobs();
 </script>
 
 <template>
-  <div class="card m-5  bg-light shadow-lg border">
+  <div class="card m-5 bg-light shadow-lg border">
     <DataTable
       :value="jobs"
       class="p-datatable-sm"
@@ -166,7 +107,7 @@ onBeforeMount(async () => {
       @rowUnselect="onRowUnselect"
       v-model:selection="selectedJob"
       selectionMode="single"
-      v-model:filters="filters1"
+      v-model:filters="filters"
       filterDisplay="row"
       :loading="loading"
       :paginator="true"
@@ -187,12 +128,12 @@ onBeforeMount(async () => {
             icon="pi pi-filter-slash"
             label="Clear"
             class="p-button-outlined"
-            @click="clearFilter1()"
+            @click="clearFilter()"
           />
           <span class="">
             <i class="pi pi-search pr-3" />
             <InputText
-              v-model="filters1['global'].value"
+              v-model="filters['global'].value"
               placeholder="Keyword Search"
             />
           </span>
@@ -232,7 +173,7 @@ onBeforeMount(async () => {
             v-model="filterModel.value"
             @change="filterCallback()"
             :options="filterData.city"
-            :filter="false"
+            :filter="true"
             :showClear="true"
             optionLabel="city"
             placeholder="Any"
@@ -281,7 +222,7 @@ onBeforeMount(async () => {
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <MultiSelect
-            v-model="selectedFilter.county"
+            v-model="filterModel.value"
             @change="filterCallback()"
             :options="filterData.county"
             :filter="false"
@@ -292,8 +233,7 @@ onBeforeMount(async () => {
           >
             <template #value="slotProps">
               <span
-                :class="p - chip"
-                display="chip"
+                :class="'p-dropdown' + slotProps.value"
                 v-if="slotProps.value && slotProps.value.length > 0"
                 >{{ slotProps.value.join(", ") }}</span
               >

@@ -49,7 +49,7 @@ app.use(require("./routes/jobOptions.js"));
 app.use(require("./routes/clientRoutes.js"));
 app.use(require("./routes/getJobs.js"));
 app.use(require("./routes/jobOptions.js"));
-app.use(require("./routes/getClient.js"));
+app.use(require("./routes/matchClient.js"));
 
 const server = app.listen(port, () => {
   console.log(`AAW app listening on port ${port}`);

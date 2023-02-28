@@ -1,7 +1,7 @@
 <script setup>
 import ClientInfo from "../components/ClientInfo.vue";
 import SearchTable from "../components/SearchTable.vue";
-import { reactive, ref, computed} from "vue";
+import { reactive, ref, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 
 const success = ref(false);
@@ -64,7 +64,7 @@ const displayError = () => {
   }, 3000);
 };
 
-let allMatchedJobs = [];
+const allMatchedJobs = ref([]);
 
 // use the rules the data must follow
 const v$ = useVuelidate(rules, clientInfo);
@@ -81,7 +81,12 @@ const submitForm = async () => {
 };
 
 let exampleClient = {
-  initials: clientInfo.firstName + " " + clientInfo.middleInitial + " " + clientInfo.lastInitial,
+  initials:
+    clientInfo.firstName +
+    " " +
+    clientInfo.middleInitial +
+    " " +
+    clientInfo.lastInitial,
   preferences: "things",
   industry: "",
   hours: "some",
@@ -89,6 +94,7 @@ let exampleClient = {
 };
 
 async function matchClient() {
+  allMatchedJobs.value = [];
   await fetch("http://localhost:3000/getMatch", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -101,28 +107,11 @@ async function matchClient() {
   })
     .then((response) => response.json())
     .then((data) => {
-      allMatchedJobs = data;
-      //console.log(allMatchedJobs)
+      allMatchedJobs.value = data;
+      console.log(allMatchedJobs);
     })
     .catch((errors) => console.log(errors));
 }
-
-</script>
-
-<script>
-  export default {
-  components: {
-    SearchTable
-  },
-    data() {
-      return {
-        message: null
-      }
-    },
-    created() {
-      this.message = this.allMatchedJobs;
-    },
-  }
 </script>
 
 <template>
@@ -149,12 +138,24 @@ async function matchClient() {
                         id="initials"
                         placeholder="First Name"
                         v-model="clientInfo.firstName"
-                        style="margin-right: 1rem;"
+                        style="margin-right: 1rem"
                       />
-                      <input class="rounded border px-1 py-1 sm:w-1/5" type="text" name="initials" id="initials"
-                        placeholder="Middle initial" v-model="clientInfo.middleInitial" />
-                      <input class="rounded border px-1 py-1 sm:w-3/4" type="text" name="initials" id="initials"
-                        placeholder="Last Name" v-model="clientInfo.lastInitial" />
+                      <input
+                        class="rounded border px-1 py-1 sm:w-1/5"
+                        type="text"
+                        name="initials"
+                        id="initials"
+                        placeholder="Middle initial"
+                        v-model="clientInfo.middleInitial"
+                      />
+                      <input
+                        class="rounded border px-1 py-1 sm:w-3/4"
+                        type="text"
+                        name="initials"
+                        id="initials"
+                        placeholder="Last Name"
+                        v-model="clientInfo.lastInitial"
+                      />
                     </div>
                     <button
                       class="duration-300 bg-accentDark hover:bg-accentLight px-4 py-1 mt-5 mr-3 font-bold text-base text-light hover:text-dark rounded"
@@ -170,8 +171,8 @@ async function matchClient() {
         </div>
       </div>
     </div>
-    <div class="text-center">
-      <SearchTable v-bind:message = "message"/>
+    <div v class="text-center">
+      <SearchTable :key="allMatchedJobs" :job-matches="allMatchedJobs" />
     </div>
   </div>
 </template>
