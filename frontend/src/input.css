@@ -28,6 +28,7 @@
 }
 
 .dark-vueform-multiselect {
+  color: theme(colors.light);
   --ms-bg: theme(colors.darkGrayAccent);
   --ms-border-color: theme(colors.darkGray);
   --ms-ring-color: theme(colors.dark);
