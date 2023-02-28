@@ -35,23 +35,23 @@ router.post("/addJob", async (req, res) => {
 // Gell all jobs
 router.get("/allJobs", async (req, res) => {
   try {
-    await Job.find({})
-    .then((data) => { res.json(data); })
+    await Job.find({}).then((data) => {
+      res.json(data);
+    });
   } catch (error) {
-    res.status(500).json({ message : error});
+    res.status(500).json({ message: error });
   }
 });
 
 // Get a job
-router.get("/job", async (req, res) => {  
+router.get("/job", async (req, res) => {
   try {
-    await Job.findById(req.body._id)
-    .then((data) => {
+    await Job.findById(req.body._id).then((data) => {
       res.json(data);
-    })
+    });
   } catch (err) {
-    res.status(500).json({ message : error});
-  };
+    res.status(500).json({ message: error });
+  }
 });
 
 // update a job
@@ -67,40 +67,25 @@ router.patch("/editJob", async (req, res) => {
   }
   res.job = job;
 
-  if (req.body.contact.email != null) 
-    res.job.contact.email = req.body.contact.email;
-  if (req.body.contact.name != null) 
-    res.job.contact.name = req.body.contact.name;
-  if (req.body.contact.phone != null) 
-    res.job.contact.phone = req.body.contact.phone;
-  if (req.body.employer != null)
-    res.job.employer = req.body.employer;
-  if (req.body.industry != null) 
-    res.job.industry = req.body.industry;
-  if (req.body.shift != null)
-    res.job.shift = req.body.shift;
-  if (req.body.timeCommitment != null)
-    res.job.timeCommitment = req.body.timeCommitment;
-  if (req.body.city != null)
-    res.job.city = req.body.city;
-  if (req.body.zip != null)
-    res.job.zip = req.body.zip;
-  if (req.body.openingDate != null)
-    res.job.openingDate = req.body.openingDate;
-  if (req.body.address != null)
-    res.job.address = req.body.address;
-  if (req.body.county != null)
-    res.job.county = req.body.county;
-  if (req.body.notes != null) 
-    res.job.notes = req.body.notes;
-  if (req.body.hourlyWage != null)
-    res.job.hourlyWage = req.body.hourlyWage;
-  if (req.body.enteredBy != null)
-    res.job.enteredBy = req.body.enteredBy;
-  if (req.body.updatedBy != null)
-    res.job.updatedBy = req.body.updatedBy;
-  if (req.body.benefits != null) 
-    res.job.benefits = req.body.benefits;
+  if (req.body.contact) {
+    if (req.body.contact.email) res.job.contact.email = req.body.contact.email;
+    if (req.body.contact.name) res.job.contact.name = req.body.contact.name;
+    if (req.body.contact.phone) res.job.contact.phone = req.body.contact.phone;
+  }
+  if (req.body.employer) res.job.employer = req.body.employer;
+  if (req.body.industry) res.job.industry = req.body.industry;
+  if (req.body.shift) res.job.shift = req.body.shift;
+  if (req.body.timeCommitment) res.job.timeCommitment = req.body.timeCommitment;
+  if (req.body.city) res.job.city = req.body.city;
+  if (req.body.zip) res.job.zip = req.body.zip;
+  if (req.body.openingDate) res.job.openingDate = req.body.openingDate;
+  if (req.body.address) res.job.address = req.body.address;
+  if (req.body.county) res.job.county = req.body.county;
+  if (req.body.notes) res.job.notes = req.body.notes;
+  if (req.body.hourlyWage) res.job.hourlyWage = req.body.hourlyWage;
+  if (req.body.enteredBy) res.job.enteredBy = req.body.enteredBy;
+  if (req.body.updatedBy) res.job.updatedBy = req.body.updatedBy;
+  if (req.body.benefits) res.job.benefits = req.body.benefits;
 
   try {
     const updatedJob = await res.job.save();
