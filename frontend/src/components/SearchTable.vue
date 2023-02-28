@@ -184,14 +184,15 @@ export default {
   <div class="card m-5  bg-light dark:bg-darkGrayAccent dark:border-darkGray shadow-lg border">
     <DataTable
       :value="jobs"
-      class="p-datatable-sm dark:bg-darkGrayAccent"
-      stripedRows
+      class="p-datatable-sm"
+      
       @rowSelect="onRowSelect"
       @rowUnselect="onRowUnselect"
       v-model:selection="this.selectedJob"
       selectionMode="single"
       v-model:filters="filters1"
       filterDisplay="row"
+      rowStyleClass = "#{isDark ? 'dark' : null}"
       :loading="loading"
       :paginator="true"
       :rows="10"
@@ -246,6 +247,7 @@ export default {
       <Column
         field="city"
         header="City"
+        headerClass= "bg-darkGray"
         :showFilterMenu="false"
         style="min-width: 12rem"
       >
@@ -350,14 +352,14 @@ export default {
             @change="filterCallback()"
             :options="filterData.hours"
             placeholder="Any"
+            style="dropdownlabel"
             :filter="false"
-            class="p-dropdown-filter dark:bg-darkGrayAccent"
+            class="dropdownfilter"
             :showClear="true"
           >
             <template #value="slotProps">
               <span
                 :class="'p-dropdown-value' + slotProps.value"
-                class = "dark:bg-darkGray"
                 v-if="slotProps.value"
                 >{{ slotProps.value }}</span
               >
@@ -383,4 +385,25 @@ export default {
 .p-filter-column {
   max-width: 12rem;
 }
+
+.p-dropdown-option{
+  background-color: theme(colors.darkGrayAccent);
+}
+
+.dropdownlabel{
+  background-color: theme(colors.accentDark);
+}
+
+.p-dropdown-item{
+  background-color: theme(colors.accentDark)
+}
+
+.p-datatable tr:nth-child(even) {
+    color: #f8fafc;
+    background-color: #1e1e1e;
+  }
+  .p-datatable tr:nth-child(odd) {
+    color: #f8fafc;
+    background-color: #2a2a2a;
+  }
 </style>
