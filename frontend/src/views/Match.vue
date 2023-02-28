@@ -153,7 +153,7 @@ async function matchClient() {
                         type="text"
                         name="initials"
                         id="initials"
-                        placeholder="Last Name"
+                        placeholder="Last Initial"
                         v-model="clientInfo.lastInitial"
                       />
                     </div>
