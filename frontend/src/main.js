@@ -8,6 +8,7 @@ import MultiSelect from 'primevue/multiselect'
 import Chips from 'primevue/chips';
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
+//import ConfirmationService from 'primevue/confirmationservice';
 
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -21,6 +22,8 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.use(PrimeVue);
+//app.use(ConfirmationService);
+
 app.component('DataTable', DataTable);
 app.component('Column', Column);
 app.component('Dropdown', Dropdown);

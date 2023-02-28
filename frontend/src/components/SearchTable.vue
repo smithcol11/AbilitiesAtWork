@@ -3,6 +3,7 @@ import { FilterMatchMode, FilterOperator } from "primevue/api";
 import Dropdown from "primevue/dropdown";
 import Chips from "primevue/chips";
 import { reactive, ref, computed, onBeforeMount, onMounted } from "vue";
+import JobDetails from "./JobDetails.vue";
 
 const props = defineProps({
   jobMatches: {
@@ -72,6 +73,27 @@ function getFilters() {
     if (!filterData.employer.includes(job.employer))
       filterData.employer.push(job.employer);
   });
+}
+
+function removeJob(SelectedIndex) {
+  if (SelectedIndex > -1) this.jobs.splice(SelectedIndex, 1);
+}
+function saveUpdate(updatedJob, SelectedIndex) {
+  console.log(updatedJob.employer);
+  this.jobs[SelectedIndex].employer = updatedJob.employer;
+  this.jobs[SelectedIndex].contact.name = updatedJob.contact.name;
+  this.jobs[SelectedIndex].contact.phone = updatedJob.contact.phone;
+  this.jobs[SelectedIndex].contact.email = updatedJob.contact.email;
+  this.jobs[SelectedIndex].address = updatedJob.address;
+  this.jobs[SelectedIndex].city = updatedJob.city;
+  this.jobs[SelectedIndex].zip = updatedJob.zip;
+  this.jobs[SelectedIndex].county = updatedJob.county;
+  this.jobs[SelectedIndex].shift = updatedJob.shift;
+  this.jobs[SelectedIndex].industry = updatedJob.industry;
+  this.jobs[SelectedIndex].position = updatedJob.position;
+  this.jobs[SelectedIndex].timeCommitment = updatedJob.timeCommitment;
+  this.jobs[SelectedIndex].openingDate = updatedJob.openingDate;
+  this.jobs[SelectedIndex].notes = updatedJob.notes;
 }
 
 async function loadJobs() {
@@ -281,6 +303,17 @@ loadJobs();
               }}</span>
             </template>
           </Dropdown>
+        </template>
+      </Column>
+
+      <Column field="jobDetails">
+        <template #body="{ data, index }">
+          <JobDetails
+            :data="data"
+            :index="index"
+            :removeJob="removeJob"
+            :saveUpdate="saveUpdate"
+          />
         </template>
       </Column>
     </DataTable>
