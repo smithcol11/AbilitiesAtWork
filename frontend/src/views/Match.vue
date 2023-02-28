@@ -80,19 +80,6 @@ const submitForm = async () => {
   }
 };
 
-let exampleClient = {
-  initials:
-    clientInfo.firstName +
-    " " +
-    clientInfo.middleInitial +
-    " " +
-    clientInfo.lastInitial,
-  preferences: "things",
-  industry: "",
-  hours: "some",
-  appliedJobs: "many",
-};
-
 async function matchClient() {
   allMatchedJobs.value = [];
   await fetch("http://localhost:3000/getMatch", {
@@ -118,9 +105,6 @@ async function matchClient() {
   <div class="Match">
     <div class="p-4 bg-light">
       <div class="p-2 py-2 flex flex-row items-center">
-        <!-- <div>
-          <ClientInfo :client="exampleClient" />
-        </div> -->
         <div class="px-20 self-start">
           <form>
             <div>
