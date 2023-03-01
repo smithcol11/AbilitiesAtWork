@@ -1,9 +1,10 @@
 <script setup>
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+import { FilterMatchMode, FilterOperator, FilterService } from "primevue/api";
 import Dropdown from "primevue/dropdown";
 import Chips from "primevue/chips";
 import { reactive, ref, computed, onBeforeMount, onMounted } from "vue";
 import JobDetails from "./JobDetails.vue";
+//import { stringify } from "querystring";
 
 const props = defineProps({
   jobMatches: {
@@ -13,6 +14,16 @@ const props = defineProps({
     },
   },
 });
+
+//Custom hours filter to handle the 'Any' condition displaying
+//both Full-Time and Part-Time
+const hoursFilter = 'hoursFilter';
+FilterService.register(hoursFilter, (value, filter) => {
+  if (filter === 'Any' || filter === null)
+    return true;
+  if (filter === value)
+    return true;  
+})
 
 const jobs = ref([]);
 const loading = ref(false);
@@ -25,7 +36,7 @@ var filters = ref({
   zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
   county: { value: null, matchMode: FilterMatchMode.IN },
   industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  timeCommitment: { value: null, matchMode: FilterMatchMode.EQUALS },
+  timeCommitment: { value: null, matchMode: hoursFilter },
 });
 
 const filterData = reactive([
@@ -33,7 +44,7 @@ const filterData = reactive([
     county: [],
     employer: [],
     city: [],
-    timeCommitment: [],
+    timeCommitment: []
   },
 ]);
 
@@ -60,6 +71,7 @@ function initFilters() {
 
 //This dynamically populates the drop-down and multiselect filters used in the table.
 function getFilters() {
+
   filterData.county = new Array();
   filterData.employer = new Array();
   filterData.city = new Array();
@@ -69,7 +81,8 @@ function getFilters() {
   jobs.value.forEach((job) => {
     if (!filterData.county.includes(job.county))
       filterData.county.push(job.county);
-    if (!filterData.city.includes(job.city)) filterData.city.push(job.city);
+    if (!filterData.city.includes(job.city))
+      filterData.city.push(job.city);
     if (!filterData.employer.includes(job.employer))
       filterData.employer.push(job.employer);
   });
@@ -293,8 +306,7 @@ loadJobs();
               <span
                 :class="'p-dropdown-value' + slotProps.value"
                 v-if="slotProps.value"
-                >{{ slotProps.value }}</span
-              >
+                >{{ slotProps.value }}</span>
               <span v-else>{{ slotProps.placeholder }}</span>
             </template>
             <template #option="slotProps">
