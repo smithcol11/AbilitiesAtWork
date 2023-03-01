@@ -21,10 +21,19 @@ router.post("/getMatch", async (req, res) => {
 
     // CLients have an array of industries, must loop over each industry to check all matches
     for (let i in client[0].industry) {
-      const jobs = await Job.find({
-        industry: client[0].industry[i],
-        timeCommitment: client[0].hours,
-      });
+      var jobs = null
+      
+      if (client[0].hours == 'Any') {
+        jobs = await Job.find({
+          industry: client[0].industry[i],
+        });
+      }
+      else {
+        jobs = await Job.find({
+          industry: client[0].industry[i],
+          timeCommitment: client[0].hours,
+        });
+      }
       matchingJobs = matchingJobs.concat(jobs);
     }
     console.log(matchingJobs);
