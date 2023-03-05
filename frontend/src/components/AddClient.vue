@@ -77,7 +77,7 @@ const rules = computed(() => {
       ),
     },
     industry: {
-      required: helpers.withMessage("Please enter an industry.", required),
+      required: helpers.withMessage("At least 1 industry required.", required),
     },
     hours: {
       required: helpers.withMessage("Please enter hours.", required),
@@ -119,7 +119,6 @@ const submitForm = async () => {
   banner.displayFailed = false;
 
   // check that the data matches requirements
-  const result = await v$.value.$validate();
   if (await v$.value.$validate()) {
     // if an error prevents saving the client, warn the user
     if (await postClient()) {
@@ -211,9 +210,9 @@ async function postClient() {
               mode="multiple"
               placeholder="Select Industries"
             />
-            <!-- <p class="text-red-700" v-if="v$.hours.$error">
+            <p class="text-red-700" v-if="v$.industry.$error">
               {{ v$.industry.$errors[0].$message }}
-            </p> -->
+            </p>
           </div>
           <div class="basis-1/5">
             <Label text="Hours"></Label>
