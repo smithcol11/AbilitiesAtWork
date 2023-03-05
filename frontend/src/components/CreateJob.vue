@@ -85,7 +85,7 @@ const SubmitForm = async () => {
   //check that all required fields have valid input
   const result = await v$.value.$validate();
   if (result) {
-    createPOST();
+    addJob();
     ResetFormValues();
     DisplayBanner("success");
     v$.value.$reset();
@@ -112,10 +112,9 @@ function DisplayBanner(bannerType) {
   }, 1000);
 }
 
-async function createPOST() {
+async function addJob() {
   console.log("POST request called");
-  // will need routing in the backend for this to work
-  await fetch("http://localhost:3000/createJob", {
+  await fetch("http://localhost:3000/addJob", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
