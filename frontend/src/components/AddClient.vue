@@ -13,6 +13,7 @@ const formOptions = reactive({
   industries: [],
   timeCommitmentOptions: [],
 });
+
 let requestFormOptions = async () => {
   await fetch("http://localhost:3000/GetJobOptions")
     .then((res) => res.json())
@@ -23,6 +24,7 @@ let requestFormOptions = async () => {
     })
     .catch((err) => console.log(err));
 };
+
 onBeforeMount(async () => {
   await requestFormOptions();
 });
@@ -54,6 +56,7 @@ const data = reactive({
   industry: [],
   hours: "",
 });
+
 const rules = computed(() => {
   return {
     firstName: {
@@ -81,6 +84,7 @@ const rules = computed(() => {
     },
   };
 });
+
 // reset form values to default or empty values
 const resetForm = () => {
   v$.value.$reset();
@@ -200,15 +204,16 @@ async function postClient() {
             </p>
           </div>
           <div class="basis-1/5">
-            <Label text="Industry"></Label>
+            <Label text="Industries"></Label>
             <DropDown
               v-model="data.industry"
               :options="formOptions.industries"
-              placeholder="Select Industry"
+              mode="multiple"
+              placeholder="Select Industries"
             />
-            <p class="text-red-700" v-if="v$.industry.$error">
+            <!-- <p class="text-red-700" v-if="v$.hours.$error">
               {{ v$.industry.$errors[0].$message }}
-            </p>
+            </p> -->
           </div>
           <div class="basis-1/5">
             <Label text="Hours"></Label>
