@@ -7,5 +7,3 @@ import SearchTable from "../components/SearchTable.vue";
     <SearchTable />
   </div>
 </template>
-
-<style></style>

@@ -1,8 +1,6 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import { ref } from "vue";
-import Button from "../components/Button.vue";
-import Label from "../components/Label.vue";
 const auth = useAuthenticationStore();
 let showLogout = ref(false);
 

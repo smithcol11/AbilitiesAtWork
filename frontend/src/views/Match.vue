@@ -1,25 +1,15 @@
-<script>
+<script setup>
 import ClientInfo from "../components/ClientInfo.vue";
-import Button from "../components/Button.vue";
-export default {
-  name: "App",
-  components: {
-    ClientInfo,
-    Button,
-  },
-  data() {
-    return {
-      exampleClient: {
-        firstName: "First",
-        middleInitial: "M",
-        lastInitial: "L",
-        preferences: "things",
-        industry: "stuff",
-        hours: "some",
-      },
-    };
-  },
-};
+import { reactive } from "vue";
+
+let exampleClient = reactive({
+  firstName: "First",
+  middleInitial: "M",
+  lastInitial: "L",
+  preferences: "things",
+  industry: "stuff",
+  hours: "some",
+});
 </script>
 
 <template>
@@ -30,11 +20,9 @@ export default {
           <ClientInfo :client="exampleClient" />
         </div>
         <div class="px-20 self-start">
-          <Button text="Search new client" @click=""></Button>
+          <Button text="Search new client" @click=""/>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style></style>
