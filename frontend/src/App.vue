@@ -15,7 +15,7 @@ const auth = useAuthenticationStore();
     </div>
   </div>
   <div v-else>
-    <div class="flex">
+    <div class="sm:flex">
       <div>
         <NavBar />
       </div>
