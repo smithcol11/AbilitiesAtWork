@@ -1,5 +1,8 @@
-<script setup>
-import { FilterMatchMode, FilterOperator, FilterService } from "primevue/api";
+<script setup setup>
+import { ref, reactive } from "vue";
+import { FilterMatchMode, FilterService } from "primevue/api";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
 import Dropdown from "primevue/dropdown";
 import Chips from "primevue/chips";
 import { reactive, ref, computed, onBeforeMount, onMounted } from "vue";
@@ -336,7 +339,6 @@ loadJobs();
 .p-multiselect {
   max-width: 16rem;
 }
-
 .p-filter-column {
   max-width: 12rem;
 }
