@@ -2,12 +2,7 @@
 import { reactive, toRaw, computed, onBeforeMount } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, maxLength, helpers } from "@vuelidate/validators";
-import successBanner from "./SuccessBanner.vue";
-import errorBanner from "./ErrorBanner.vue";
-import Button from "./Button.vue";
-import DropDown from "./DropDown.vue";
 import TextBox from "./TextBox.vue";
-import Label from "./Label.vue";
 
 const formOptions = reactive({
   industries: [],
@@ -151,18 +146,18 @@ async function postClient() {
         <Transition>
           <div role="alert">
             <div v-if="banner.displaySuccess == true">
-              <successBanner
+              <SuccessBanner
                 class="mb-4"
                 topText="Job has been successfully created"
                 bottomText="Job was added to the available jobs! "
-              ></successBanner>
+              ></SuccessBanner>
             </div>
             <div v-if="banner.displayFailed == true">
-              <errorBanner
+              <ErrorBanner
                 class="mb-4"
                 topText="ERROR: Invalid data field!"
                 bottomText="One or more data fields is missing or incorrect!"
-              ></errorBanner>
+              ></ErrorBanner>
             </div>
           </div>
         </Transition>
