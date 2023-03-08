@@ -1,183 +1,134 @@
-<script>
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+<script setup>
+import { ref, reactive } from "vue";
+import { FilterMatchMode, FilterService } from "primevue/api";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
 import Dropdown from "primevue/dropdown";
-import Chips from "primevue/chips";
-import { ref } from "vue";
+import MultiSelect from "primevue/multiselect";
+import InputText from "primevue/inputtext";
+import JobDetails from "./JobDetails.vue";
 
-export default {
-  setup() {
-    const loading = ref(false);
-    const selectedJob = null;
-    const filters1 = ref({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      company: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      city: { value: null, matchMode: FilterMatchMode.IN },
-      zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      county: { value: null, matchMode: FilterMatchMode.IN },
-      industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-    });
-    const columns = ref([
-      { field: "company", header: "Company" },
-      { field: "city", header: "City" },
-      { field: "zip", header: "Zip" },
-      { field: "county", header: "County" },
-      { field: "industry", header: "Industry" },
-      { field: "hours", header: "Hours" },
-    ]);
-    const jobs = ref([
-      {
-        id: 5,
-        company: "ABC Inc.",
-        city: "Portland",
-        zip: "97223",
-        county: "Washington",
-        industry: "Manufacturing",
-        hours: "Full Time",
-      },
-      {
-        company: "XYZ Co.",
-        city: "Beaverton",
-        zip: "97002",
-        county: "Multnomah",
-        industry: "Retail",
-        hours: "Part Time",
-      },
-      {
-        company: "Might Ent.",
-        city: "Dalles",
-        zip: "99696",
-        county: "Washington",
-        industry: "Buisness",
-        hours: "Part Time",
-      },
-      {
-        company: "GoodieMax",
-        city: "Dalles",
-        zip: "98868",
-        county: "Washington",
-        industry: "Manufacturing",
-        hours: "Full Time",
-      },
-      {
-        company: "TempCo",
-        city: "Portland",
-        zip: "97223",
-        county: "Washington",
-        industry: "Buisness",
-        hours: "Part Time",
-      },
-      {
-        company: "DiceCity",
-        city: "Portland",
-        zip: "97223",
-        county: "Washington",
-        industry: "Retail",
-        hours: "Part Time",
-      },
-      {
-        company: "BigMeyer",
-        city: "Portland",
-        zip: "97223",
-        county: "Washington",
-        industry: "Retail",
-        hours: "Full Time",
-      },
-      {
-        company: "WorstPlace",
-        city: "Eugene",
-        zip: "93556",
-        county: "Washington",
-        industry: "Buisness",
-        hours: "Full Time",
-      },
-    ]);
-    const filterData = ref([
-      {
-        county: [],
-        company: [],
-        city: [],
-        hours: [],
-      },
-    ]);
-    const selectedFilter = ref([
-      {
-        county: null,
-        city: null,
-      },
-    ]);
+const props = defineProps({
+  jobMatches: {
+    type: Array,
+    default() {
+      return [];
+    },
+  },
+});
 
-    function onRowSelect(event) {
-      console.log(event.data.company);
+//Custom hours filter to handle the 'Any' condition displaying
+//both Full-Time and Part-Time
+const hoursFilter = "hoursFilter";
+FilterService.register(hoursFilter, (value, filter) => {
+  if (filter === "Any" || filter === null) return true;
+  if (filter === value) return true;
+});
+
+const jobs = ref([]);
+const loading = ref(false);
+const selectedJob = null;
+
+var filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  city: { value: null, matchMode: FilterMatchMode.IN },
+  zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  county: { value: null, matchMode: FilterMatchMode.IN },
+  industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  timeCommitment: { value: null, matchMode: hoursFilter },
+});
+
+const filterData = reactive([
+  {
+    county: [],
+    employer: [],
+    city: [],
+    timeCommitment: [],
+  },
+]);
+
+function onRowSelect(event) {
+  console.log(event.data.employer);
+}
+
+function onRowUnselect(event) {}
+
+function clearFilter() {
+  initFilters();
+}
+
+//Sets all filters to default. Can be called to reset all filters.
+function initFilters() {
+  filters.value.global.value = null;
+  filters.value.employer.value = null;
+  filters.value.city.value = null;
+  filters.value.zip.value = null;
+  filters.value.county.value = null;
+  filters.value.industry.value = null;
+  filters.value.timeCommitment.value = null;
+}
+
+//This dynamically populates the drop-down and multiselect filters used in the table.
+function getFilters() {
+  filterData.county = new Array();
+  filterData.employer = new Array();
+  filterData.city = new Array();
+  filterData.timeCommitment = new Array();
+  filterData.timeCommitment.push("Full-Time", "Part-Time", "Any");
+
+  jobs.value.forEach((job) => {
+    if (!filterData.county.includes(job.county))
+      filterData.county.push(job.county);
+    if (!filterData.city.includes(job.city)) filterData.city.push(job.city);
+    if (!filterData.employer.includes(job.employer))
+      filterData.employer.push(job.employer);
+  });
+}
+
+function removeJob(SelectedIndex) {
+  if (SelectedIndex > -1) jobs.splice(SelectedIndex, 1);
+}
+
+function saveUpdate(updatedJob, SelectedIndex) {
+  jobs.value[SelectedIndex].employer = updatedJob.employer;
+  jobs.value[SelectedIndex].contact.name = updatedJob.contact.name;
+  jobs.value[SelectedIndex].contact.phone = updatedJob.contact.phone;
+  jobs.value[SelectedIndex].contact.email = updatedJob.contact.email;
+  jobs.value[SelectedIndex].address = updatedJob.address;
+  jobs.value[SelectedIndex].city = updatedJob.city;
+  jobs.value[SelectedIndex].zip = updatedJob.zip;
+  jobs.value[SelectedIndex].county = updatedJob.county;
+  jobs.value[SelectedIndex].shift = updatedJob.shift;
+  jobs.value[SelectedIndex].industry = updatedJob.industry;
+  jobs.value[SelectedIndex].position = updatedJob.position;
+  jobs.value[SelectedIndex].timeCommitment = updatedJob.timeCommitment;
+  jobs.value[SelectedIndex].openingDate = updatedJob.openingDate;
+  jobs.value[SelectedIndex].hourlyWage = updatedJob.hourlyWage;
+  jobs.value[SelectedIndex].notes = updatedJob.notes;
+}
+
+async function loadJobs() {
+  if (props.jobMatches.length < 1) {
+    await fetch("http://localhost:3000/allJobs")
+      .then((response) => response.json())
+      .then((data) => {
+        jobs.value = data;
+      })
+      .then(() => {
+        initFilters();
+        getFilters();
+      });
+  } else {
+    for (let i in props.jobMatches) {
+      jobs.value.push(props.jobMatches[i]);
     }
+    initFilters();
+    getFilters();
+  }
+}
 
-    function onRowUnselect(event) {}
-    return {
-      jobs,
-      filters1,
-      onRowSelect,
-      onRowUnselect,
-      columns,
-      loading,
-      selectedJob,
-      filterData,
-      selectedFilter,
-    };
-  },
-  created() {
-    this.initFilters1();
-    this.getFilters();
-    //Get the data from the backend. Just a stub for now, does nothing!
-    let response = this.getData();
-  },
-  mounted() {},
-  methods: {
-    clearFilter1() {
-      this.initFilters1();
-    },
-    //Sets all filters to default. Can be called to reset all filters.
-    initFilters1() {
-      this.filters1 = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        company: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        city: { value: null, matchMode: FilterMatchMode.IN },
-        zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        county: { value: null, matchMode: FilterMatchMode.IN },
-        industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-      };
-    },
-
-    //This dynamically populates the drop-down and multiselect filters used in the table.
-    getFilters() {
-      this.filterData.county = new Array();
-      this.filterData.city = new Array();
-      this.filterData.company = new Array();
-      this.filterData.hours = new Array();
-
-      this.filterData.hours.push("Full Time", "Part Time");
-
-      for (var i = 0, row; (row = this.jobs[i]); ++i) {
-        if (!this.filterData.county.includes(row.county)) {
-          this.filterData.county.push(row.county);
-        }
-        if (!this.filterData.city.includes(row.city)) {
-          this.filterData.city.push(row.city);
-        }
-        if (!this.filterData.company.includes(row.company)) {
-          this.filterData.company.push(row.company);
-        }
-      }
-    },
-    async getData() {
-      try {
-        return this.jobs;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
+loadJobs();
 </script>
 
 <template>
@@ -187,20 +138,20 @@ export default {
       class="p-datatable-sm datatable-dark"
       @rowSelect="onRowSelect"
       @rowUnselect="onRowUnselect"
-      v-model:selection="this.selectedJob"
+      v-model:selection="selectedJob"
       selectionMode="single"
       stripedRows
-      v-model:filters="filters1"
+      v-model:filters="filters"
       filterDisplay="row"
       rowStyleClass = "#{isDark ? 'dark' : null}"
       :loading="loading"
       :paginator="true"
       :rows="10"
       :globalFilterFields="[
-        'company',
+        'employer',
         'city',
         'industry',
-        'hours',
+        'timeCommitment',
         'zip',
         'county',
       ]"
@@ -212,12 +163,12 @@ export default {
             icon="pi pi-filter-slash"
             label="Clear"
             class="p-button-outlined"
-            @click="clearFilter1()"
+            @click="clearFilter()"
           />
           <span>
             <i class="pi pi-search pr-3" />
             <InputText
-              v-model="filters1['global'].value"
+              v-model="filters['global'].value"
               placeholder="Keyword Search"
             />
           </span>
@@ -228,9 +179,9 @@ export default {
       </template>
       <template #loading> Loading records, please wait... </template>
 
-      <Column field="company" header="Company" style="min-width: 12rem">
+      <Column field="employer" header="Employer" style="min-width: 12rem">
         <template #body="{ data }">
-          {{ data.company }}
+          {{ data.employer }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText
@@ -238,7 +189,7 @@ export default {
             v-model="filterModel.value"
             @input="filterCallback()"
             class="p-column-filter"
-            placeholder="Search by company"
+            placeholder="Search by employer"
           />
         </template>
       </Column>
@@ -258,7 +209,7 @@ export default {
             v-model="filterModel.value"
             @change="filterCallback()"
             :options="filterData.city"
-            :filter="false"
+            :filter="true"
             :showClear="true"
             optionLabel="city"
             placeholder="Any"
@@ -307,7 +258,7 @@ export default {
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <MultiSelect
-            v-model="selectedFilter.county"
+            v-model="filterModel.value"
             @change="filterCallback()"
             :options="filterData.county"
             :filter="false"
@@ -318,9 +269,7 @@ export default {
           >
             <template #value="slotProps">
               <span
-                :class="p - chip"
-                class = "dark:bg-darkGrayAccent"
-                display="chip"
+                :class="'p-dropdown' + slotProps.value"
                 v-if="slotProps.value && slotProps.value.length > 0"
                 >{{ slotProps.value.join(", ") }}</span
               >
@@ -336,19 +285,19 @@ export default {
       </Column>
 
       <Column
-        field="hours"
-        header="Hours"
+        field="timeCommitment"
+        header="TimeCommitment"
         :showFilterMenu="false"
         style="min-width: 12rem"
       >
         <template #body="{ data }">
-          {{ data.hours }}
+          {{ data.timeCommitment }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <Dropdown
             v-model="filterModel.value"
             @change="filterCallback()"
-            :options="filterData.hours"
+            :options="filterData.timeCommitment"
             placeholder="Any"
             style="dropdownlabel"
             :filter="false"
@@ -371,6 +320,17 @@ export default {
           </Dropdown>
         </template>
       </Column>
+
+      <Column field="jobDetails">
+        <template #body="{ data, index }">
+          <JobDetails
+            :data="data"
+            :index="index"
+            :removeJob="removeJob"
+            :saveUpdate="saveUpdate"
+          />
+        </template>
+      </Column>
     </DataTable>
   </div>
 </template>
@@ -379,54 +339,7 @@ export default {
 .p-multiselect {
   max-width: 16rem;
 }
-
 .p-filter-column {
   max-width: 12rem;
-  /* background-color: #2a2a2a; */
 }
-
-/* .p-dropdown-option{
-  background-color: theme(colors.darkGrayAccent);
-}
-
-.dropdownlabel{
-  background-color: theme(colors.accentDark);
-}
-
-.p-dropdown-item{
-  background-color: theme(colors.accentDark)
-} */
-
-/* .datatable-dark th,div{
-  background-color: #2a2a2a;
-  color: #f8fafc;
-} */
-
-/* .datatable-dark tr:hover{
-  background-color: #1e1e1e;
-  color: #f8fafc;
-}
-
-.datatable-dark tr:nth-child(even) {
-  color: #f8fafc;
-  background-color: #1e1e1e;
-}
-
-.datatable-dark tr:nth-child(odd) {
-  color: #f8fafc;
-  background-color: #2a2a2a;
-  
-} */
-
-/* .datatable-light tr:nth-child(even) {
-  color: #1e1e1e;
-  background-color: #f8fafc;
-}
-
-.datatable-light tr:nth-child(odd) {
-  color: #1e1e1e;
-  background-color: #f8fafc;
-} */
-
-
 </style>
