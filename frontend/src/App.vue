@@ -15,8 +15,8 @@ const auth = useAuthenticationStore();
     </div>
   </div>
   <div v-else>
-    <div>
-        <NavBar />
+    <div class="sm:flex">
+      <NavBar />
       <div class="sm:text-align-center h-screen w-full">
         <RouterView />
       </div>

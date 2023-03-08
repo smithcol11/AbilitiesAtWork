@@ -1,14 +1,15 @@
 <script setup>
 import { FilterMatchMode } from "primevue/api";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
 import Dropdown from "primevue/dropdown";
+import MultiSelect from "primevue/multiselect";
+import InputText from "primevue/inputtext";
 import { onMounted, ref, reactive } from "vue";
-
 
 const clients = ref([]);
 const loading = ref(false);
 const selectedClient = null;
-
-
 
 const filters1 = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
