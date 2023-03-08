@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from "vue";
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode, FilterService } from "primevue/api";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Dropdown from "primevue/dropdown";
@@ -8,257 +8,127 @@ import MultiSelect from "primevue/multiselect";
 import InputText from "primevue/inputtext";
 import JobDetails from "./JobDetails.vue";
 
-const loading = ref(false);
+const props = defineProps({
+  jobMatches: {
+    type: Array,
+    default() {
+      return [];
+    },
+  },
+});
 
+//Custom hours filter to handle the 'Any' condition displaying
+//both Full-Time and Part-Time
+const hoursFilter = "hoursFilter";
+FilterService.register(hoursFilter, (value, filter) => {
+  if (filter === "Any" || filter === null) return true;
+  if (filter === value) return true;
+});
+
+const jobs = ref([]);
+const loading = ref(false);
 const selectedJob = null;
 
-// const filterDefaults = {
-//   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-//   company: { value: null, matchMode: FilterMatchMode.CONTAINS },
-//   city: { value: null, matchMode: FilterMatchMode.IN },
-//   zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-//   county: { value: null, matchMode: FilterMatchMode.IN },
-//   industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-//   hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-// };
-
-let filters1 = ref({
+var filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  company: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
   city: { value: null, matchMode: FilterMatchMode.IN },
   zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
   county: { value: null, matchMode: FilterMatchMode.IN },
   industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  hours: { value: null, matchMode: FilterMatchMode.EQUALS },
+  timeCommitment: { value: null, matchMode: hoursFilter },
 });
 
-// const columns = reactive([
-//   { field: "company", header: "Company" },
-//   { field: "city", header: "City" },
-//   { field: "zip", header: "Zip" },
-//   { field: "county", header: "County" },
-//   { field: "hours", header: "Hours" },
-// ]);
-
-const jobs = reactive([
-  {
-    id: 5,
-    company: "ABC Inc.",
-    contactName: "Wilfred Ramsey",
-    contactPhoneNumber: "(671) 486-2663",
-    contactEmail: "wilfred@gmail.com",
-    address: "644 Stonybrook Drive",
-    city: "Portland",
-    zip: "97223",
-    county: "Washington",
-    shift: "Early",
-    industry: "Manufacturing",
-    position: "Package Delivery Driver",
-    hours: "Full Time",
-    datePosted: "12/07/2022",
-    notes:
-      "Routes average 50 hours per week. Overtime shifts available as there are a need." +
-      " We run routes 6 days a week, drivers will be assigned a 5 day work week, Saturdays will be required." +
-      " Routes ranging from 50 -80+ stops per day depending on area." +
-      " Routes ranging from 50 - 300+ miles per day depending on area." +
-      " Home every night. Employee will keep the delivery van at their home in Grand Marais or the surrounding area." +
-      " They will meet with another driver late in the morning to receive their delivery packages for the day. Hours vary as the amount of packages varies day to day.",
-  },
-  {
-    company: "XYZ Co.",
-    contactName: "Regina Hunt",
-    contactPhoneNumber: "(629) 796-1398",
-    contactEmail: "regina@gmail.com",
-    address: "9110 Wentworth St",
-    city: "Beaverton",
-    zip: "97002",
-    county: "Multnomah",
-    shift: "Morning",
-    industry: "Retail",
-    position: "Personal assistant",
-    hours: "Part Time",
-    datePosted: "12/25/2022",
-    notes: "Nothing",
-  },
-  {
-    company: "Might Ent.",
-    contactName: "Dorothy Rice",
-    contactPhoneNumber: "(227) 932-8104",
-    contactEmail: "dorothy@gmail.com",
-    address: "683 SE. Grandrose Drive",
-    city: "Dalles",
-    zip: "99696",
-    county: "Washington",
-    shift: "Afternoon",
-    industry: "Buisness",
-    position: "Accounting",
-    hours: "Part Time",
-    datePosted: "02/07/2022",
-    notes: "Nothing",
-  },
-  {
-    company: "GoodieMax",
-    contactName: "Travis Vasquez",
-    contactPhoneNumber: "(372) 501-1055",
-    contactEmail: "travis@gmail.com",
-    address: "23 South Fulton Dr.",
-    city: "Dalles",
-    zip: "98868",
-    county: "Washington",
-    shift: "Early",
-    industry: "Manufacturing",
-    position: "Guest Experience",
-    hours: "Full Time",
-    datePosted: "09/17/2022",
-    notes: "Nothing",
-  },
-  {
-    company: "TempCo",
-    contactName: "Gilbert Ortiz",
-    contactPhoneNumber: "(439) 282-1448",
-    contactEmail: "gilbert@gmail.com",
-    address: "62 Livingston Court",
-    city: "Portland",
-    zip: "97223",
-    county: "Washington",
-    shift: "Early",
-    industry: "Buisness",
-    position: "Accounting",
-    hours: "Part Time",
-    datePosted: "01/08/2022",
-    notes: "Nothing",
-  },
-  {
-    company: "DiceCity",
-    contactName: "Marjorie Watson",
-    contactPhoneNumber: "(269) 390-9930",
-    contactEmail: "marjorie@gmail.com",
-    address: "771 Studebaker St.",
-    city: "Portland",
-    zip: "97223",
-    county: "Washington",
-    shift: "Evening",
-    industry: "Retail",
-    position: "Retail",
-    hours: "Part Time",
-    datePosted: "06/06/2022",
-    notes: "Nothing",
-  },
-  {
-    company: "BigMeyer",
-    contactName: "Fred Ballard",
-    contactPhoneNumber: "(892) 949-2754",
-    contactEmail: "fred@gmail.com",
-    address: "7491 SW. Plumb Branch Dr.",
-    city: "Portland",
-    zip: "97223",
-    county: "Washington",
-    shift: "Early",
-    industry: "Retail",
-    position: "Cafe",
-    hours: "Full Time",
-    datePosted: "03/03/2022",
-    notes: "Nothing",
-  },
-  {
-    company: "WorstPlace",
-    contactName: "Blanca Pope",
-    contactPhoneNumber: "(507) 690-0787",
-    contactEmail: "blanca@gmail.com",
-    address: "55 Lake Forest Lane",
-    city: "Eugene",
-    zip: "93556",
-    county: "Washington",
-    shift: "Morning",
-    industry: "Buisness",
-    position: "Food",
-    hours: "Full Time",
-    datePosted: "12/07/2022",
-    notes: "Nothing",
-  },
-]);
-
-const filterData = ref([
+const filterData = reactive([
   {
     county: [],
-    company: [],
+    employer: [],
     city: [],
-    hours: [],
+    timeCommitment: [],
   },
 ]);
 
-const selectedFilter = ref([
-  {
-    county: null,
-    city: null,
-  },
-]);
-
-function onRowSelect(event) {}
+function onRowSelect(event) {
+  console.log(event.data.employer);
+}
 
 function onRowUnselect(event) {}
 
-//Sets all filters to default. Can be called to reset all filters.
-function initFilters1() {
-  filters1 = {
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    company: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    city: { value: null, matchMode: FilterMatchMode.IN },
-    zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    county: { value: null, matchMode: FilterMatchMode.IN },
-    industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    hours: { value: null, matchMode: FilterMatchMode.EQUALS },
-  };
+function clearFilter() {
+  initFilters();
 }
 
-function clearFilter1() {
-  initFilters1();
+//Sets all filters to default. Can be called to reset all filters.
+function initFilters() {
+  filters.value.global.value = null;
+  filters.value.employer.value = null;
+  filters.value.city.value = null;
+  filters.value.zip.value = null;
+  filters.value.county.value = null;
+  filters.value.industry.value = null;
+  filters.value.timeCommitment.value = null;
 }
 
 //This dynamically populates the drop-down and multiselect filters used in the table.
 function getFilters() {
   filterData.county = new Array();
+  filterData.employer = new Array();
   filterData.city = new Array();
-  filterData.company = new Array();
-  filterData.hours = new Array();
+  filterData.timeCommitment = new Array();
+  filterData.timeCommitment.push("Full-Time", "Part-Time", "Any");
 
-  filterData.hours.push("Full Time", "Part Time");
-
-  for (var i = 0, row; (row = jobs[i]); ++i) {
-    if (!filterData.county.includes(row.county)) {
-      filterData.county.push(row.county);
-    }
-    if (!filterData.city.includes(row.city)) {
-      filterData.city.push(row.city);
-    }
-    if (!filterData.company.includes(row.company)) {
-      filterData.company.push(row.company);
-    }
-  }
-}
-
-async function requestJobs() {
-  try {
-    return jobs;
-  } catch (error) {
-    console.log(error);
-  }
+  jobs.value.forEach((job) => {
+    if (!filterData.county.includes(job.county))
+      filterData.county.push(job.county);
+    if (!filterData.city.includes(job.city)) filterData.city.push(job.city);
+    if (!filterData.employer.includes(job.employer))
+      filterData.employer.push(job.employer);
+  });
 }
 
 function removeJob(SelectedIndex) {
   if (SelectedIndex > -1) jobs.splice(SelectedIndex, 1);
 }
 
-function saveUpdate(updatedJob, selectedIndex) {
-  for (let key in jobs[selectedIndex]) {
-    jobs[selectedIndex][key] = updatedJob[key];
+function saveUpdate(updatedJob, SelectedIndex) {
+  jobs.value[SelectedIndex].employer = updatedJob.employer;
+  jobs.value[SelectedIndex].contact.name = updatedJob.contact.name;
+  jobs.value[SelectedIndex].contact.phone = updatedJob.contact.phone;
+  jobs.value[SelectedIndex].contact.email = updatedJob.contact.email;
+  jobs.value[SelectedIndex].address = updatedJob.address;
+  jobs.value[SelectedIndex].city = updatedJob.city;
+  jobs.value[SelectedIndex].zip = updatedJob.zip;
+  jobs.value[SelectedIndex].county = updatedJob.county;
+  jobs.value[SelectedIndex].shift = updatedJob.shift;
+  jobs.value[SelectedIndex].industry = updatedJob.industry;
+  jobs.value[SelectedIndex].position = updatedJob.position;
+  jobs.value[SelectedIndex].timeCommitment = updatedJob.timeCommitment;
+  jobs.value[SelectedIndex].openingDate = updatedJob.openingDate;
+  jobs.value[SelectedIndex].hourlyWage = updatedJob.hourlyWage;
+  jobs.value[SelectedIndex].notes = updatedJob.notes;
+}
+
+async function loadJobs() {
+  if (props.jobMatches.length < 1) {
+    await fetch("http://localhost:3000/allJobs")
+      .then((response) => response.json())
+      .then((data) => {
+        jobs.value = data;
+      })
+      .then(() => {
+        initFilters();
+        getFilters();
+      });
+  } else {
+    for (let i in props.jobMatches) {
+      jobs.value.push(props.jobMatches[i]);
+    }
+    initFilters();
+    getFilters();
   }
 }
 
-initFilters1();
-getFilters();
-//Get the data from the backend. Just a stub for now, does nothing!
-requestJobs();
+loadJobs();
 </script>
 
 <template>
@@ -271,16 +141,16 @@ requestJobs();
       @rowUnselect="onRowUnselect"
       v-model:selection="selectedJob"
       selectionMode="single"
-      v-model:filters="filters1"
+      v-model:filters="filters"
       filterDisplay="row"
       :loading="loading"
       :paginator="true"
       :rows="10"
       :globalFilterFields="[
-        'company',
+        'employer',
         'city',
         'industry',
-        'hours',
+        'timeCommitment',
         'zip',
         'county',
       ]"
@@ -292,12 +162,12 @@ requestJobs();
             icon="pi pi-filter-slash"
             label="Clear"
             class="p-button-outlined"
-            @click="clearFilter1()"
+            @click="clearFilter()"
           />
           <span class="">
             <i class="pi pi-search pr-3" />
             <InputText
-              v-model="filters1['global'].value"
+              v-model="filters['global'].value"
               placeholder="Keyword Search"
             />
           </span>
@@ -308,9 +178,9 @@ requestJobs();
       </template>
       <template #loading> Loading records, please wait... </template>
 
-      <Column field="company" header="Company" style="min-width: 12rem">
+      <Column field="employer" header="Employer" style="min-width: 12rem">
         <template #body="{ data }">
-          {{ data.company }}
+          {{ data.employer }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText
@@ -318,7 +188,7 @@ requestJobs();
             v-model="filterModel.value"
             @input="filterCallback()"
             class="p-column-filter"
-            placeholder="Search by company"
+            placeholder="Search by employer"
           />
         </template>
       </Column>
@@ -337,7 +207,7 @@ requestJobs();
             v-model="filterModel.value"
             @change="filterCallback()"
             :options="filterData.city"
-            :filter="false"
+            :filter="true"
             :showClear="true"
             optionLabel="city"
             placeholder="Any"
@@ -386,7 +256,7 @@ requestJobs();
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <MultiSelect
-            v-model="selectedFilter.county"
+            v-model="filterModel.value"
             @change="filterCallback()"
             :options="filterData.county"
             :filter="false"
@@ -397,8 +267,7 @@ requestJobs();
           >
             <template #value="slotProps">
               <span
-                :class="p - chip"
-                display="chip"
+                :class="'p-dropdown' + slotProps.value"
                 v-if="slotProps.value && slotProps.value.length > 0"
                 >{{ slotProps.value.join(", ") }}</span
               >
@@ -414,19 +283,19 @@ requestJobs();
       </Column>
 
       <Column
-        field="hours"
-        header="Hours"
+        field="timeCommitment"
+        header="TimeCommitment"
         :showFilterMenu="false"
         style="min-width: 12rem"
       >
         <template #body="{ data }">
-          {{ data.hours }}
+          {{ data.timeCommitment }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <Dropdown
             v-model="filterModel.value"
             @change="filterCallback()"
-            :options="filterData.hours"
+            :options="filterData.timeCommitment"
             placeholder="Any"
             :filter="false"
             class="p-dropdown-filter"
