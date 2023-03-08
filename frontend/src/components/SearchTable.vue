@@ -108,7 +108,7 @@ function saveUpdate(updatedJob, SelectedIndex) {
 
 async function loadJobs() {
   if (props.jobMatches.length < 1) {
-    await fetch("http://localhost:3000/GetAllJobs")
+    await fetch("http://localhost:3000/allJobs")
       .then((response) => response.json())
       .then((data) => {
         jobs.value = data;
