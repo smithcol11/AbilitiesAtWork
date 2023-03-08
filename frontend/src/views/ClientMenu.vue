@@ -2,7 +2,6 @@
 import ClientAdd from "../components/AddClient.vue";
 import SearchClient from "../components/ClientTable.vue";
 import SearchTable from "../components/SearchTable.vue";
-import Button from "../components/Button.vue";
 import { ref } from "vue";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 

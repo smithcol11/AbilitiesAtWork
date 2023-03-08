@@ -7,15 +7,10 @@ import Label from "../components/Label.vue";
 const auth = useAuthenticationStore();
 let showLogout = ref(false);
 
-
-
-
 function toggleNav() {
   let nav = document.getElementById("nav-bar");
   nav.classList.toggle("hidden");
 }
-
-
 
 function toggleLogout() {
   showLogout.value = !showLogout.value;
@@ -29,9 +24,24 @@ function toggleLogout() {
         class="p-3 border-b-2 hidden sm:block"
         src="../assets/images/logo.png"
       />
-      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/clientMenu"> Client Menu </RouterLink>
-      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/JobMenu"> Job Menu </RouterLink>
-      <RouterLink class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light" to="/match"> Match </RouterLink>
+      <RouterLink
+        class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
+        to="/clientMenu"
+      >
+        Client Menu
+      </RouterLink>
+      <RouterLink
+        class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
+        to="/JobMenu"
+      >
+        Job Menu
+      </RouterLink>
+      <RouterLink
+        class="py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
+        to="/match"
+      >
+        Match
+      </RouterLink>
       <button
         class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light"
         @click="toggleLogout()"
@@ -40,7 +50,10 @@ function toggleLogout() {
       </button>
     </div>
   </nav>
-<button class= "sm:hidden flex w-full justify-center mx-auto border-b border-x shadow-l bg-light" @click="toggleNav()">
+  <button
+    class="sm:hidden flex w-full justify-center mx-auto border-b border-x shadow-l bg-light"
+    @click="toggleNav()"
+  >
     <svg
       class="h-7 w-32 text-dark"
       viewBox="0 0 24 24"

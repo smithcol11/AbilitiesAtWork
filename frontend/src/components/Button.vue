@@ -14,6 +14,7 @@ const props = defineProps({
   },
 });
 </script>
+
 <template>
   <button :type="type" :class="buttonColor">{{ text }}</button>
 </template>

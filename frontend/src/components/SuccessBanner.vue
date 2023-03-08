@@ -10,13 +10,14 @@ const props = defineProps({
   },
 });
 </script>
+
 <template>
   <div class="bg-green-100 rounded-md p-3 flex">
-    <svg
-      class="stroke-2 stroke-current text-green-600 h-8 w-8 mr-2 flex-shrink-0"
-      viewBox="0 0 24 24"
+    <svg 
+      class="stroke-2 stroke-current text-green-600 h-8 w-8 mr-2 flex-shrink-0" 
+      viewBox="0 0 24 24" 
       fill="none"
-      strokeLinecap="round"
+      strokeLinecap="round" 
       strokeLinejoin="round"
     >
       <path d="M0 0h24v24H0z" stroke="none" />
@@ -26,10 +27,7 @@ const props = defineProps({
 
     <div class="text-green-700">
       <div class="font-bold text-xl">{{ props.topText }}</div>
-
-      <div>
-        {{ props.bottomText }}
-      </div>
+      <div>{{ props.bottomText }}</div>
     </div>
   </div>
 </template>
