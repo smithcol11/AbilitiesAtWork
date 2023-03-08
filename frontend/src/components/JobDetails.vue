@@ -1,103 +1,105 @@
-<script>
+<script setup>
+import { ref } from "vue";
+import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 
-export default {
-  props: {
-    data: {
-      type: Object,
-      required: true,
-    },
-    index: {
-      type: Number,
-      required: true,
-    },
-    removeJob: {
-      //from parent(SearchTable.vue)
-      type: Function,
-      default: null,
-    },
-    saveUpdate: {
-      //from parent(SearchTable.vue)
-      type: Function,
-      default: null,
-    },
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
   },
-  data() {
-    return {
-      displayBasic: false,
-      displayDel: false,
-      displayUpdate: false,
+  index: {
+    type: Number,
+    required: true,
+    default: 100,
+  },
+  removeJob: {
+    //from parent(SearchTable.vue)
+    type: Function,
+    default: null,
+  },
+  saveUpdate: {
+    //from parent(SearchTable.vue)
+    type: Function,
+    default: null,
+  },
+});
 
-      updatedJob: {
-        company: "",
-        contactName: "",
-        contactPhoneNumber: "",
-        contactEmail: "",
-        address: "",
-        city: "",
-        zip: "",
-        county: "",
-        shift: "",
-        industry: "",
-        position: "",
-        hours: "",
-        datePosted: "",
-        notes: "",
-      },
-    };
+const displayBasic = ref(false);
+const displayDel = ref(false);
+const displayUpdate = ref(false);
+
+const updatedJob = ref({
+  employer: "",
+  contact: {
+    email: "",
+    name: "",
+    phone: 0,
   },
-  mounted() {},
-  methods: {
-    openDel() {
-      this.displayBasic = false;
-      this.displayDel = true;
-    },
-    closeDel() {
-      this.displayDel = false;
-    },
-    openUpdate() {
-      this.displayBasic = false;
-      this.displayUpdate = true;
-    },
-    closeUpdate() {
-      this.displayUpdate = false;
-    },
-    openBasic() {
-      this.displayBasic = true;
-    },
-    closeBasic() {
-      this.displayBasic = false;
-    },
-    remove() {
-      if (this.index > -1) this.removeJob(this.index);
-      this.displayBasic = false;
-      this.displayDel = false;
-    },
-    save() {
-      if (this.index > -1) {
-        for (let key in this.updatedJob) {
-          if (this.updatedJob[key] ==  "") {
-            //remain the same data if no new input
-            this.updatedJob[key] = this.data[key];
-          }
-        }
-        this.saveUpdate(this.updatedJob, this.index);
+  address: "",
+  city: "",
+  zip: "",
+  county: "",
+  shift: "",
+  industry: "",
+  position: "",
+  hourlyWage: 0,
+  timeCommitment: "",
+  openingDate: "",
+  notes: "",
+});
+
+function openDel() {
+  displayBasic.value = false;
+  displayDel.value = true;
+}
+
+function closeDel() {
+  displayDel.value = false;
+}
+
+function openUpdate() {
+  displayBasic.value = false;
+  displayUpdate.value = true;
+}
+
+function closeUpdate() {
+  displayUpdate.value = false;
+}
+
+function openBasic() {
+  displayBasic.value = true;
+}
+
+function closeBasic() {
+  displayBasic.value = false;
+}
+
+function remove() {
+  if (index > -1) remove(index);
+  displayBasic.value = false;
+  displayDel.value = false;
+}
+
+function save() {
+  if (props.index > -1) {
+    for (let key in updatedJob.value) {
+      if (updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
+        //remain the same data if no new input
+        updatedJob.value[key] = props.data[key];
       }
+    }
+    props.saveUpdate(updatedJob.value, props.index);
+  }
 
-      //reset data
-      for (let key in this.updatedJob) {
-        this.updatedJob[key] = "";
-      }
+  //reset data
+  for (let key in updatedJob) {
+    updatedJob[key] = "";
+  }
 
-      this.displayUpdate = false;
-    },
-  },
-  components: {
-    Dialog,
-    InputText,
-  },
-};
+  displayUpdate.value = false;
+}
 </script>
 
 <template>
@@ -115,19 +117,19 @@ export default {
       <div class="mt-2 px-7 py-3">
         <div class="bg-white text-left italic font-bold text-gray-700">
           <p class="pt-2">
-            Company: <span class="font-normal">{{ data.company }}</span>
+            Company: <span class="font-normal">{{ data.employer }}</span>
           </p>
           <p class="pt-2">
             Contact Name:
-            <span class="font-normal">{{ data.contactName }}</span>
+            <span class="font-normal">{{ data.contact.name }}</span>
           </p>
           <p class="pt-2">
             Contact Phone Number:
-            <span class="font-normal">{{ data.contactPhoneNumber }}</span>
+            <span class="font-normal">{{ data.contact.phone }}</span>
           </p>
           <p class="pt-2">
             Contact Email:
-            <span class="font-normal">{{ data.contactEmail }}</span>
+            <span class="font-normal">{{ data.contact.email }}</span>
           </p>
           <p class="pt-2">
             Address: <span class="font-normal">{{ data.address }}</span>
@@ -151,10 +153,10 @@ export default {
             Shift: <span class="font-normal">{{ data.shift }}</span>
           </p>
           <p class="pt-2">
-            Hours: <span class="font-normal">{{ data.hours }}</span>
+            Hours: <span class="font-normal">{{ data.timeCommitment }}</span>
           </p>
           <p class="pt-2">
-            Date Posted: <span class="font-normal">{{ data.datePosted }}</span>
+            Date Posted: <span class="font-normal">{{ data.openingDate }}</span>
           </p>
           <p class="pt-2">
             Notes: <span class="font-normal">{{ data.notes }}</span>
@@ -193,7 +195,7 @@ export default {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.company"
+                :placeholder="data.employer"
                 v-model="updatedJob.company"
               />
             </div>
@@ -202,7 +204,7 @@ export default {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.contactName"
+                :placeholder="data.contact.name"
                 v-model="updatedJob.contactName"
               />
             </div>
@@ -211,7 +213,7 @@ export default {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.contactPhoneNumber"
+                :placeholder="data.contact.phone"
                 v-model="updatedJob.contactPhoneNumber"
               />
             </div>
@@ -220,7 +222,7 @@ export default {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.contactEmail"
+                :placeholder="data.contact.email"
                 v-model="updatedJob.contactEmail"
               />
             </div>
@@ -292,7 +294,7 @@ export default {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.hours"
+                :placeholder="data.timeCommitment"
                 v-model="updatedJob.hours"
               />
             </div>
@@ -301,7 +303,7 @@ export default {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.datePosted"
+                :placeholder="data.openingDate"
                 v-model="updatedJob.datePosted"
               />
             </div>
