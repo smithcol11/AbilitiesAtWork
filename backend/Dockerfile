@@ -1,6 +1,6 @@
 FROM node:18.14.2
 
-WORKDIR /usr/app
+WORKDIR /usr/src/app
 
 COPY package.json ./
 COPY package-lock.json ./
@@ -9,6 +9,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 8080 3000
+EXPOSE 3000
 
 CMD ["node", "server.js"]
