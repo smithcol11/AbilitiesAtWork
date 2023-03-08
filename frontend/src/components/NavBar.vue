@@ -4,30 +4,94 @@ import { ref, watch, reactive } from "vue";
 import Button from "../components/Button.vue";
 import Label from "../components/Label.vue";
 import {useDark, useToggle} from "@vueuse/core";
+// import PrimeVue from 'primevue/config';
 
 const isDark = reactive(useDark());
 
+// const updateTables = () => {
+//   console.log("Updating tables")
+//   const allRows = document.querySelectorAll(".p-datatable");
+//   if (isDark.value) {
+//     for (let i = 0; i < allRows.length; i++) {
+//       // allTables[i].classList.remove("datatable-light");
+//       allRows[i].classList.add("datatable-dark");
+//     }
+//   } else {
+//     for (let i = 0; i < allRows.length; i++) {
+//       allRows[i].classList.remove("datatable-dark");
+//       // allTables[i].classList.add("datatable-light");
+//     }
+//   }
+// }
+let observer = {};
+let themeName = "";
+let loadedThemes = {};
+const callback = (list) => {
+
+  // Walk through all the DOM mutations. We're looking for the
+  // addition of a STYLE element to the document head.
+  for (const mutation of list) {
+    if (mutation.type === 'childList') {
+
+      // Walk the added nodes
+      mutation.addedNodes.forEach((node) => {
+
+        // See if it's our target
+        if (mutation.target === document.head && node.nodeName === "STYLE") {
+          loadedThemes[themeName] = node
+          // Remove our mutation listener as we're done with it
+          observer.disconnect();
+        }
+      })
+    }
+  }
+}
+const loadTheme = (newName, oldName) => {
+
+  // Make sure we actually got a theme name change
+  if (newName !== oldName) {
+    themeName = newName;
+    // See if we have an already loaded theme. If so, we have to remove it
+    if (loadedThemes[oldName]) {
+      document.head.removeChild(loadedThemes[oldName]);
+    }
+
+    // If we've loaded this theme before, then get it from the cache.
+    if (loadedThemes[newName]) {
+      document.head.appendChild(loadedThemes[newName])
+    } else {
+
+        // Setup the callback so that we catch the style change
+        setupCallback()
+        // Change the theme by importing it.
+        import("../../node_modules/primevue/resources/themes/" + newName + "/theme.css"/* @vite-ignore */);
+    }
+  }
+}
+const setupCallback = () => {
+    const config = { attributes: true, childList: true, subtree: true }
+
+    // Create an observer instance linked to the callback function
+    observer = new MutationObserver(callback)
+
+    // Start observing the target node for configured mutations
+    observer.observe(document.head, config)
+}
+const tearDownCallback = () => {
+    observer.disconnect()
+}
+
 const toggleDark = () => {
   useToggle(isDark)();
-  
-  const allTables = document.querySelectorAll(".p-datatable");
-
-  if (!isDark.value) {
-    for (let i = 0; i < allTables.length; i++) {
-      allTables[i].classList.remove("datatable-dark");
-      allTables[i].classList.add("datatable-light");
-    }
+  if(isDark.value == true){
+    loadTheme("mdc-dark-deeppurple", "saga-blue");
   } else {
-    for (let i = 0; i < allTables.length; i++) {
-      allTables[i].classList.remove("datatable-light");
-      allTables[i].classList.add("datatable-dark");
-    }
+    loadTheme("saga-blue", "mdc-dark-deeppurple");
   }
 }
 
 const auth = useAuthenticationStore();
 let showLogout = ref(false);
-// watch (() => isDark.value, (newvalue) => {console.log(newvalue);});
 
 function toggleNav() {
   let nav = document.getElementById("nav-bar");
@@ -41,7 +105,7 @@ function toggleLogout() {
 
 <template>
   <nav id="nav-bar" class="hidden sm:block transition duration-300">
-    <div class="sm:w-32 sm:h-screen shadow-sm text-center duration-300 bg-light dark:bg-darkGray dark:text-light">
+    <div class="sm:w-32 sm:h-screen shadow-sm text-center duration-300 bg-light text-dark dark:bg-darkGray dark:text-light">
       <img
         class="p-3 border-b-2 hidden sm:block"
         src="../assets/images/logo.png"

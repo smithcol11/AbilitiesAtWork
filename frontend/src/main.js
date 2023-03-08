@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import { createApp, reactive } from "vue";
 import { createPinia } from "pinia";
 import PrimeVue from 'primevue/config';
 import DataTable from 'primevue/datatable';
@@ -6,10 +6,17 @@ import Column from 'primevue/column'
 import Dropdown from 'primevue/dropdown'
 import MultiSelect from 'primevue/multiselect'
 import Chips from 'primevue/chips';
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
+import {useDark} from '@vueuse/core';
 
-import 'primevue/resources/themes/saga-blue/theme.css';
+const isDark = reactive(useDark());
+console.log(isDark);
+if(!isDark.value) {
+    import('primevue/resources/themes/saga-blue/theme.css');
+}
+else {import('primevue/resources/themes/mdc-dark-deeppurple/theme.css')}
+
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';  
 

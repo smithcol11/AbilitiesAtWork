@@ -181,7 +181,7 @@ export default {
 </script>
 
 <template>
-  <div class="card m-5  bg-light dark:bg-darkGrayAccent dark:border-darkGray shadow-lg border">
+  <div class="card m-5  ">
     <DataTable
       :value="jobs"
       class="p-datatable-sm datatable-dark"
@@ -189,6 +189,7 @@ export default {
       @rowUnselect="onRowUnselect"
       v-model:selection="this.selectedJob"
       selectionMode="single"
+      stripedRows
       v-model:filters="filters1"
       filterDisplay="row"
       rowStyleClass = "#{isDark ? 'dark' : null}"
@@ -205,7 +206,7 @@ export default {
       ]"
     >
       <template #header>
-        <div class="flex justify-content-between dark:bg-darkGrayAccent">
+        <div class="flex justify-content-between">
           <button
             type="button"
             icon="pi pi-filter-slash"
@@ -217,7 +218,6 @@ export default {
             <i class="pi pi-search pr-3" />
             <InputText
               v-model="filters1['global'].value"
-              class="dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light dark:border-darkGray"
               placeholder="Keyword Search"
             />
           </span>
@@ -237,7 +237,7 @@ export default {
             type="text"
             v-model="filterModel.value"
             @input="filterCallback()"
-            class="p-column-filter dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light"
+            class="p-column-filter"
             placeholder="Search by company"
           />
         </template>
@@ -246,7 +246,7 @@ export default {
       <Column
         field="city"
         header="City"
-        headerClass= "bg-darkGray"
+        headerStyle= ""
         :showFilterMenu="false"
         style="min-width: 12rem"
       >
@@ -290,7 +290,7 @@ export default {
             type="text"
             v-model="filterModel.value"
             @input="filterCallback()"
-            class="p-column-filter dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light"
+            class="p-column-filter"
             placeholder="Search by zip"
           />
         </template>
@@ -315,7 +315,6 @@ export default {
             label="county"
             placeholder="Any"
             display="chip"
-            class="dark:bg-darkGrayAccent"
           >
             <template #value="slotProps">
               <span
@@ -383,9 +382,10 @@ export default {
 
 .p-filter-column {
   max-width: 12rem;
+  /* background-color: #2a2a2a; */
 }
 
-.p-dropdown-option{
+/* .p-dropdown-option{
   background-color: theme(colors.darkGrayAccent);
 }
 
@@ -395,6 +395,16 @@ export default {
 
 .p-dropdown-item{
   background-color: theme(colors.accentDark)
+} */
+
+/* .datatable-dark th,div{
+  background-color: #2a2a2a;
+  color: #f8fafc;
+} */
+
+/* .datatable-dark tr:hover{
+  background-color: #1e1e1e;
+  color: #f8fafc;
 }
 
 .datatable-dark tr:nth-child(even) {
@@ -405,9 +415,10 @@ export default {
 .datatable-dark tr:nth-child(odd) {
   color: #f8fafc;
   background-color: #2a2a2a;
-}
+  
+} */
 
-.datatable-light tr:nth-child(even) {
+/* .datatable-light tr:nth-child(even) {
   color: #1e1e1e;
   background-color: #f8fafc;
 }
@@ -415,7 +426,7 @@ export default {
 .datatable-light tr:nth-child(odd) {
   color: #1e1e1e;
   background-color: #f8fafc;
-}
+} */
 
 
 </style>
