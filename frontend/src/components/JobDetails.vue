@@ -31,10 +31,12 @@ const displayDel = ref(false);
 const displayUpdate = ref(false);
 
 const updatedJob = ref({
-  company: "",
-  contactName: "",
-  contactPhoneNumber: "",
-  contactEmail: "",
+  employer: "",
+  contact: {
+    email: "",
+    name: "",
+    phone: 0,
+  },
   address: "",
   city: "",
   zip: "",
@@ -42,8 +44,9 @@ const updatedJob = ref({
   shift: "",
   industry: "",
   position: "",
-  hours: "",
-  datePosted: "",
+  hourlyWage: 0,
+  timeCommitment: "",
+  openingDate: "",
   notes: "",
 });
 
@@ -82,12 +85,11 @@ function remove() {
 function save() {
   if (props.index > -1) {
     for (let key in updatedJob.value) {
-      if (updatedJob.value[key] == "") {
+      if (updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
         //remain the same data if no new input
         updatedJob.value[key] = props.data[key];
       }
     }
-
     props.saveUpdate(updatedJob.value, props.index);
   }
 
@@ -98,7 +100,6 @@ function save() {
 
   displayUpdate.value = false;
 }
-
 </script>
 
 <template>
