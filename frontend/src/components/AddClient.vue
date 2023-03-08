@@ -14,14 +14,17 @@ const formOptions = reactive({
   timeCommitmentOptions: [],
 });
 let requestFormOptions = async () => {
-  await fetch("http://localhost:3000/GetJobOptions")
-    .then((res) => res.json())
-    .then((newOptions) => {
-      for (const key in formOptions) {
-        formOptions[key] = newOptions[key];
-      }
-    })
-    .catch((err) => console.log(err));
+  try{ 
+    await fetch("http://localhost:3000/GetJobOptions")
+      .then((res) => res.json())
+      .then((newOptions) => {
+        for (const key in formOptions) {
+          formOptions[key] = newOptions[key];
+        }
+      })
+  } catch(error){
+    console.log(error)
+  }
 };
 onBeforeMount(async () => {
   await requestFormOptions();
@@ -129,15 +132,17 @@ const submitForm = async () => {
 
 // create the post request and send it to the backend
 async function postClient() {
-  return await fetch("http://localhost:3000/addClient", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(toRaw(data)),
-  }).catch((errors) => {
+  try{
+    return await fetch("http://localhost:3000/addClient", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(toRaw(data)),
+    })
+  } catch(errors){
     console.log(errors);
     return null;
-  });
+  };
 }
 </script>
 

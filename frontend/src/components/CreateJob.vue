@@ -115,29 +115,32 @@ function DisplayBanner(bannerType) {
 async function createPOST() {
   console.log("POST request called");
   // will need routing in the backend for this to work
-  await fetch("http://localhost:3000/createJob", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      contactName: formData.contactName,
-      contactPhoneNumber: formData.contactPhoneNumber,
-      contactEmail: formData.contactEmail,
-      businessName: formData.businessName,
-      city: formData.city,
-      zip: formData.zip,
-      industry: formData.industry,
-      position: formData.position,
-      shift: formData.shift,
-      hours: formData.hours,
-      date: formData.date,
-      address: formData.address,
-      county: formData.county,
-      notes: formData.notes,
-    }),
-  })
-    .then((response) => console.log(response))
-    .catch((errors) => console.log(errors));
+  try{
+    await fetch("http://localhost:3000/createJob", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        contactName: formData.contactName,
+        contactPhoneNumber: formData.contactPhoneNumber,
+        contactEmail: formData.contactEmail,
+        businessName: formData.businessName,
+        city: formData.city,
+        zip: formData.zip,
+        industry: formData.industry,
+        position: formData.position,
+        shift: formData.shift,
+        hours: formData.hours,
+        date: formData.date,
+        address: formData.address,
+        county: formData.county,
+        notes: formData.notes,
+      }),
+    })
+      .then((response) => console.log(response))
+  } catch(errors) {
+    console.log(errors);
+  }
 }
 
 function ResetFormValues() {
@@ -158,14 +161,17 @@ function ResetFormValues() {
 }
 
 let requestFormOptions = async () => {
-  await fetch("http://localhost:3000/GetJobOptions")
-    .then((res) => res.json())
-    .then((newOptions) => {
-      for (const key in formOptions) {
-        formOptions[key] = newOptions[key];
-      }
-    })
-    .catch((err) => console.log(err));
+  try{
+    await fetch("http://localhost:3000/GetJobOptions")
+      .then((res) => res.json())
+      .then((newOptions) => {
+        for (const key in formOptions) {
+          formOptions[key] = newOptions[key];
+        }
+      })   
+  } catch(errors) {
+    console.log(errors);
+  }
 };
 
 onBeforeMount(async () => {
