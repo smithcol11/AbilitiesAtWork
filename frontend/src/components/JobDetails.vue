@@ -31,10 +31,12 @@ const displayDel = ref(false);
 const displayUpdate = ref(false);
 
 const updatedJob = ref({
-  company: "",
-  contactName: "",
-  contactPhoneNumber: "",
-  contactEmail: "",
+  employer: "",
+  contact: {
+    email: "",
+    name: "",
+    phone: 0,
+  },
   address: "",
   city: "",
   zip: "",
@@ -42,8 +44,9 @@ const updatedJob = ref({
   shift: "",
   industry: "",
   position: "",
-  hours: "",
-  datePosted: "",
+  hourlyWage: 0,
+  timeCommitment: "",
+  openingDate: "",
   notes: "",
 });
 
@@ -82,12 +85,11 @@ function remove() {
 function save() {
   if (props.index > -1) {
     for (let key in updatedJob.value) {
-      if (updatedJob.value[key] == "") {
+      if (updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
         //remain the same data if no new input
         updatedJob.value[key] = props.data[key];
       }
     }
-
     props.saveUpdate(updatedJob.value, props.index);
   }
 
@@ -98,7 +100,6 @@ function save() {
 
   displayUpdate.value = false;
 }
-
 </script>
 
 <template>
@@ -116,19 +117,19 @@ function save() {
       <div class="mt-2 px-7 py-3">
         <div class="bg-white text-left italic font-bold text-gray-700">
           <p class="pt-2">
-            Company: <span class="font-normal">{{ data.company }}</span>
+            Company: <span class="font-normal">{{ data.employer }}</span>
           </p>
           <p class="pt-2">
             Contact Name:
-            <span class="font-normal">{{ data.contactName }}</span>
+            <span class="font-normal">{{ data.contact.name }}</span>
           </p>
           <p class="pt-2">
             Contact Phone Number:
-            <span class="font-normal">{{ data.contactPhoneNumber }}</span>
+            <span class="font-normal">{{ data.contact.phone }}</span>
           </p>
           <p class="pt-2">
             Contact Email:
-            <span class="font-normal">{{ data.contactEmail }}</span>
+            <span class="font-normal">{{ data.contact.email }}</span>
           </p>
           <p class="pt-2">
             Address: <span class="font-normal">{{ data.address }}</span>
@@ -152,10 +153,10 @@ function save() {
             Shift: <span class="font-normal">{{ data.shift }}</span>
           </p>
           <p class="pt-2">
-            Hours: <span class="font-normal">{{ data.hours }}</span>
+            Hours: <span class="font-normal">{{ data.timeCommitment }}</span>
           </p>
           <p class="pt-2">
-            Date Posted: <span class="font-normal">{{ data.datePosted }}</span>
+            Date Posted: <span class="font-normal">{{ data.openingDate }}</span>
           </p>
           <p class="pt-2">
             Notes: <span class="font-normal">{{ data.notes }}</span>
@@ -194,7 +195,7 @@ function save() {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.company"
+                :placeholder="data.employer"
                 v-model="updatedJob.company"
               />
             </div>
@@ -203,7 +204,7 @@ function save() {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.contactName"
+                :placeholder="data.contact.name"
                 v-model="updatedJob.contactName"
               />
             </div>
@@ -212,7 +213,7 @@ function save() {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.contactPhoneNumber"
+                :placeholder="data.contact.phone"
                 v-model="updatedJob.contactPhoneNumber"
               />
             </div>
@@ -221,7 +222,7 @@ function save() {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.contactEmail"
+                :placeholder="data.contact.email"
                 v-model="updatedJob.contactEmail"
               />
             </div>
@@ -293,7 +294,7 @@ function save() {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.hours"
+                :placeholder="data.timeCommitment"
                 v-model="updatedJob.hours"
               />
             </div>
@@ -302,7 +303,7 @@ function save() {
               <InputText
                 type="text"
                 class="p-inputtext-sm"
-                :placeholder="data.datePosted"
+                :placeholder="data.openingDate"
                 v-model="updatedJob.datePosted"
               />
             </div>
