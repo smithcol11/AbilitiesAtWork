@@ -5,10 +5,10 @@ const JobOptions = require("../schema/jobOptions");
 router.get("/GetJobOptions", async (req, res) => {
   try{
     const option = await JobOptions.find({})
-    if (!option){
+    if (!option || option.length < 1){
       return res.status(400).send({error: 'No job option found when searching'})
     }
-    res.json(option)
+    res.json(option[0]);
   } catch(error){
     res.status(500).send({error: 'Error getting job options'})
   }
