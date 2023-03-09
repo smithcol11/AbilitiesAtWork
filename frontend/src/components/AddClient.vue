@@ -120,8 +120,8 @@ const submitForm = async () => {
 
 function FormatDataLowerCase() {
   data.firstName = data.firstName.toLowerCase();
-  data.middleInitial = data.middleInitial.toLocaleLowerCase();
-  data.lastInitial = data.lastInitial.toLocaleLowerCase();
+  data.middleInitial = data.middleInitial.toLowerCase();
+  data.lastInitial = data.lastInitial.toLowerCase();
 }
 
 // create the post request and send it to the backend

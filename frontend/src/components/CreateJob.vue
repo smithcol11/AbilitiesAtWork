@@ -70,13 +70,18 @@ const rules = computed(() => {
   };
 });
 
+function FormatDataLowerCase() {
+  formData.businessName = formData.businessName.toLowerCase();
+  formData.contactName = formData.contactName.toLowerCase();
+  formData.contactEmail = formData.contactEmail.toLowerCase();
+}
 //pass the data and rules the data must follow
 const v$ = useVuelidate(rules, formData);
 
 const SubmitForm = async () => {
   banner.displaySuccess = false;
   banner.displayFailed = false;
-
+  FormatDataLowerCase();
   //check that all required fields have valid input
   const result = await v$.value.$validate();
   if (result) {
@@ -121,7 +126,7 @@ async function addJob() {
 
 function ResetFormValues() {
   for (let key in formData) {
-    formData[key] = ""
+    formData[key] = "";
   }
 }
 
