@@ -1,14 +1,12 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import Button from './components/Button.vue';
+import ErrorBanner from "./components/ErrorBanner.vue";
+import DropDown from './components/DropDown.vue';
+import Label from './components/Label.vue';
 import PrimeVue from 'primevue/config';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column'
-import Dropdown from 'primevue/dropdown'
-import MultiSelect from 'primevue/multiselect'
-import Chips from 'primevue/chips';
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-//import ConfirmationService from 'primevue/confirmationservice';
+import SuccessBanner from "./components/SuccessBanner.vue";
+import TextBox from './components/Label.vue';
 
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -22,15 +20,11 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.use(PrimeVue);
-//app.use(ConfirmationService);
-
-app.component('DataTable', DataTable);
-app.component('Column', Column);
-app.component('Dropdown', Dropdown);
-app.component('MultiSelect', MultiSelect)
-app.component('Chips', Chips)
-app.component('Button', Button)
-app.component('InputText', InputText)
-
+app.component('Button', Button);
+app.component('DropDown', DropDown);
+app.component('ErrorBanner', ErrorBanner);
+app.component('Label', Label);
+app.component('SuccessBanner', SuccessBanner);
+app.component('TextBox', TextBox);
 
 app.mount("#app");

@@ -1,3 +1,9 @@
+<script setup>
+const props = defineProps({
+  client: Object,
+});
+</script>
+
 <template>
   <div class="font-bold pb-2"> Matches for {{ client.firstName }} {{ client.middleInitial }}. {{ client.lastInitial }}. </div>
   <div class="text-sm">
@@ -12,11 +18,3 @@
     </div>
   </div> 
 </template>
-
-<script>
-export default {
-  props: {
-    client: Object,
-  }
-};
-</script>

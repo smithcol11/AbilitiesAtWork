@@ -27,6 +27,7 @@ const props = defineProps({
   },
 });
 </script>
+
 <template>
   <input
     :type="type"
