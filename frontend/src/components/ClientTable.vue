@@ -114,17 +114,24 @@ function customFilterCallback() {
   console.log(filters1);
 }
 
-function removeClient(SelectedIndex) {
-  console.log(clients.value)
-  if (SelectedIndex > -1) clients.value.splice(SelectedIndex, 1);
+function removeClient(selectedClient) {
+  for(let i=0;i<clients.value.length;i++){
+    if(clients.value[i] == selectedClient)
+      clients.value.splice(i, 1);
+  }
 }
 
-function saveUpdate(updatedClient, SelectedIndex) {
-  clients.value[SelectedIndex].firstName = updatedClient.firstName;
-  clients.value[SelectedIndex].middleInitial = updatedClient.middleInitial;
-  clients.value[SelectedIndex].lastInitial = updatedClient.lastInitial;
-  clients.value[SelectedIndex].industry = updatedClient.industry;
-  clients.value[SelectedIndex].hours = updatedClient.hours;
+function saveUpdate(updatedClient, selectedClient) {
+  for(let i=0;i<clients.value.length;i++){
+    if(clients.value[i] == selectedClient){
+      clients.value[i].firstName = updatedClient.firstName;
+      clients.value[i].middleInitial = updatedClient.middleInitial;
+      clients.value[i].lastInitial = updatedClient.lastInitial;
+      clients.value[i].industry = updatedClient.industry;
+      clients.value[i].hours = updatedClient.hours;
+    }
+  }
+  
 }
 </script>
 
@@ -298,10 +305,10 @@ function saveUpdate(updatedClient, SelectedIndex) {
       <Column field="EditClient"
         v-if="isAdmin == true"
       >
-        <template #body="{ data, index }">
+        <template #body="slotProps">
           <EditClient
-            :data="data"
-            :index="index"
+            :data="slotProps.data"
+            :index="slotProps.index"
             :removeClient="removeClient"
             :saveUpdate="saveUpdate"
           />

@@ -53,8 +53,8 @@ function closeUpdate() {
 
 
 function remove() {
-    //console.log(props.index)
-  if (props.index > -1) props.removeClient(props.index);
+  console.log(props.data)
+  if (props.index > -1) props.removeClient(props.data);
   displayUpdate.value = false;
   displayDel.value = false;
 }
@@ -67,7 +67,7 @@ function save() {
         updatedClient.value[key] = props.data[key];
       }
     }
-    props.saveUpdate(updatedClient.value, props.index);
+    props.saveUpdate(updatedClient.value, props.data);
   }
 
   displayUpdate.value = false;
