@@ -105,6 +105,7 @@ const v$ = useVuelidate(rules, data);
 const submitForm = async () => {
   banner.displaySuccess = false;
   banner.displayFailed = false;
+  FormatDataLowerCase();
   // check that the data matches requirements
   if (await v$.value.$validate()) {
     // if an error prevents saving the client, warn the user
@@ -116,6 +117,13 @@ const submitForm = async () => {
     DisplayBanner("failed");
   }
 };
+
+function FormatDataLowerCase() {
+  data.firstName = data.firstName.toLowerCase();
+  data.middleInitial = data.middleInitial.toLocaleLowerCase();
+  data.lastInitial = data.lastInitial.toLocaleLowerCase();
+}
+
 // create the post request and send it to the backend
 async function postClient() {
   return await fetch("http://localhost:3000/addClient", {
@@ -137,53 +145,83 @@ async function postClient() {
         <Transition>
           <div role="alert">
             <div v-if="banner.displaySuccess == true">
-              <SuccessBanner class="mb-4" topText="Job has been successfully created"
-                bottomText="Job was added to the available jobs! "></SuccessBanner>
+              <SuccessBanner
+                class="mb-4"
+                topText="Job has been successfully created"
+                bottomText="Job was added to the available jobs! "
+              ></SuccessBanner>
             </div>
             <div v-if="banner.displayFailed == true">
-              <ErrorBanner class="mb-4" topText="ERROR: Invalid data field!"
-                bottomText="One or more data fields is missing or incorrect!"></ErrorBanner>
+              <ErrorBanner
+                class="mb-4"
+                topText="ERROR: Invalid data field!"
+                bottomText="One or more data fields is missing or incorrect!"
+              ></ErrorBanner>
             </div>
           </div>
         </Transition>
         <div class="grid grid-cols-2 gap-4 place-content-around">
           <div class="basis-1/5">
             <Label text="First Name"></Label>
-            <TextBox type="text" placeholder="Enter First Name" v-model="data.firstName" />
+            <TextBox
+              type="text"
+              placeholder="Enter First Name"
+              v-model="data.firstName"
+            />
             <p class="text-red-700" v-if="v$.firstName.$error">
               {{ v$.firstName.$errors[0].$message }}
             </p>
           </div>
           <div class="basis-1/5">
             <Label text="Middle Initial"></Label>
-            <TextBox type="text" placeholder="Enter Middle Initial" v-model="data.middleInitial" maxLength="1" />
+            <TextBox
+              type="text"
+              placeholder="Enter Middle Initial"
+              v-model="data.middleInitial"
+              maxLength="1"
+            />
             <p class="text-red-700" v-if="v$.middleInitial.$error">
               {{ v$.middleInitial.$errors[0].$message }}
             </p>
           </div>
           <div class="basis-1/5">
             <Label text="Last Initial"></Label>
-            <TextBox type="text" placeholder="Enter Last Initial" v-model="data.lastInitial" maxLength="1" />
+            <TextBox
+              type="text"
+              placeholder="Enter Last Initial"
+              v-model="data.lastInitial"
+              maxLength="1"
+            />
             <p class="text-red-700" v-if="v$.lastInitial.$error">
               {{ v$.lastInitial.$errors[0].$message }}
             </p>
           </div>
           <div class="basis-1/5">
             <Label text="Industry"></Label>
-            <DropDown v-model="data.industry" :options="formOptions.industries" placeholder="Select Industry" />
+            <DropDown
+              v-model="data.industry"
+              :options="formOptions.industries"
+              placeholder="Select Industry"
+            />
             <p class="text-red-700" v-if="v$.industry.$error">
               {{ v$.industry.$errors[0].$message }}
             </p>
           </div>
           <div class="basis-1/5">
             <Label text="Hours"></Label>
-            <DropDown v-model="data.hours" :options="formOptions.timeCommitmentOptions" placeholder="Select Hours" />
+            <DropDown
+              v-model="data.hours"
+              :options="formOptions.timeCommitmentOptions"
+              placeholder="Select Hours"
+            />
             <p class="text-red-700" v-if="v$.hours.$error">
               {{ v$.hours.$errors[0].$message }}
             </p>
           </div>
         </div>
-        <div class="md:flex flex-wrap grid-cols-2 gap-2 place-content-center py-4">
+        <div
+          class="md:flex flex-wrap grid-cols-2 gap-2 place-content-center py-4"
+        >
           <Button text="Add Client" @click="submitForm()"></Button>
           <Button text="Reset form" @click="resetForm()"></Button>
         </div>
