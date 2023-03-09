@@ -3,9 +3,13 @@ import { FilterMatchMode } from "primevue/api";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Dropdown from "primevue/dropdown";
-import MultiSelect from "primevue/multiselect";
 import InputText from "primevue/inputtext";
 import { onMounted, ref, reactive } from "vue";
+import EditClient from "./EditClient.vue";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
+
+const auth = useAuthenticationStore(); 
+const isAdmin = auth.isAuthAdmin
 
 const clients = ref([]);
 const loading = ref(false);
@@ -52,6 +56,7 @@ function onRowSelect(event) {
   console.log(event.data.firstName);
   console.log(event.data.middleInitial);
   console.log(event.data.lastInitial);
+  //console.log(typeof(event.data.industry));
 }
 
 function onRowUnselect(event) {}
@@ -107,6 +112,19 @@ onMounted(async () => {
 
 function customFilterCallback() {
   console.log(filters1);
+}
+
+function removeClient(SelectedIndex) {
+  console.log(clients.value)
+  if (SelectedIndex > -1) clients.value.splice(SelectedIndex, 1);
+}
+
+function saveUpdate(updatedClient, SelectedIndex) {
+  clients.value[SelectedIndex].firstName = updatedClient.firstName;
+  clients.value[SelectedIndex].middleInitial = updatedClient.middleInitial;
+  clients.value[SelectedIndex].lastInitial = updatedClient.lastInitial;
+  clients.value[SelectedIndex].industry = updatedClient.industry;
+  clients.value[SelectedIndex].hours = updatedClient.hours;
 }
 </script>
 
@@ -212,7 +230,7 @@ function customFilterCallback() {
         style="min-width: 12rem"
       >
         <template #body="{ data }">
-          {{ data.industry.join(", ") }}
+          {{ String(data.industry) }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <Dropdown
@@ -276,6 +294,20 @@ function customFilterCallback() {
           </Dropdown>
         </template>
       </Column>
+
+      <Column field="EditClient"
+        v-if="isAdmin == true"
+      >
+        <template #body="{ data, index }">
+          <EditClient
+            :data="data"
+            :index="index"
+            :removeClient="removeClient"
+            :saveUpdate="saveUpdate"
+          />
+        </template>
+      </Column>
+
     </DataTable>
   </div>
 </template>
