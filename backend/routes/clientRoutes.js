@@ -62,11 +62,14 @@ router.delete("/deleteClient", async (req, res) => {
 });
 
 router.get("/GetAllClients", (req, res) => {
-  Client.find({})
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((err) => console.log(err));
+  try {
+    Client.find({})
+      .then((data) => {
+        res.json(data);
+      })
+  } catch(error){
+    console.log(err)
+  }
 });
 
 module.exports = router;
