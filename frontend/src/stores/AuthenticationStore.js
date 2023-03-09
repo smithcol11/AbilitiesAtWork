@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 import router from "../router";
 
+
 export const useAuthenticationStore = defineStore("authorization", () => {
   const isAuthUser = ref(false);
   const isAuthAdmin = ref(false);

@@ -3,7 +3,7 @@ import { reactive, toRaw, computed, onBeforeMount } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, maxLength, helpers } from "@vuelidate/validators";
 import TextBox from "./TextBox.vue";
-
+import Label from "./Label.vue";
 const formOptions = reactive({
   industries: [],
   timeCommitmentOptions: [],
@@ -26,7 +26,6 @@ let requestFormOptions = async () => {
 onBeforeMount(async () => {
   await requestFormOptions();
 });
-
 const banner = reactive({
   displaySuccess: {
     type: Boolean,
@@ -46,7 +45,6 @@ const banner = reactive({
     default: 4,
   },
 });
-
 const data = reactive({
   firstName: "",
   middleInitial: "",
@@ -90,14 +88,11 @@ const resetForm = () => {
     data[field] = "";
   }
 };
-
 function DisplayBanner(bannerType) {
   if (bannerType == "success") banner.displaySuccess = true;
   else banner.displayFailed = true;
-
   clearInterval(banner.timer);
   banner.timeRemaining = banner.duration;
-
   //create a timer to display banner
   banner.timer = setInterval(() => {
     banner.timeRemaining--;
@@ -108,14 +103,11 @@ function DisplayBanner(bannerType) {
     }
   }, 1000);
 }
-
 // use the rules the data must follow
 const v$ = useVuelidate(rules, data);
-
 const submitForm = async () => {
   banner.displaySuccess = false;
   banner.displayFailed = false;
-
   // check that the data matches requirements
   if (await v$.value.$validate()) {
     // if an error prevents saving the client, warn the user
@@ -127,7 +119,6 @@ const submitForm = async () => {
     DisplayBanner("failed");
   }
 };
-
 // create the post request and send it to the backend
 async function postClient() {
   try{
