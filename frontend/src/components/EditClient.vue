@@ -107,6 +107,7 @@ function save() {
                 <InputText
                     type="text"
                     class="p-inputtext-sm"
+                    maxlength = "1"
                     :placeholder="data.middleInitial"
                     v-model="updatedClient.middleInitial"
                 />
@@ -116,6 +117,8 @@ function save() {
                 <InputText
                     type="text"
                     class="p-inputtext-sm"
+                    maxlength = "1"
+                    onkeyup="value=value.replace(/[^a-zA-Z]/g,'')"
                     :placeholder="data.lastInitial"
                     v-model="updatedClient.lastInitial"
                 />
