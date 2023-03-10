@@ -139,8 +139,28 @@ let requestFormOptions = async () => {
       }
     })
     .catch((err) => console.log(err));
+  FormatIndustries(formOptions);
+  FormatPositions(formOptions);
 };
+function FormatIndustries(data) {
+  formOptions.industries = formOptions.industries.map((industry) =>
+    industry
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+  );
+}
 
+function FormatPositions(data) {
+  formOptions.positions = formOptions.positions.map((position) =>
+    position
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+  );
+}
 onBeforeMount(async () => {
   await requestFormOptions();
 });
