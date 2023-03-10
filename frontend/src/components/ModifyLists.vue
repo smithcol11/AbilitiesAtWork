@@ -99,6 +99,8 @@ function onSubmit() {
   choice.value = "";
   change.value = "";
   sendChanges();
+  getListContents("Positions");
+  getListContents("industries");
 }
 
 async function getListContents(listName) {
@@ -112,10 +114,32 @@ async function getListContents(listName) {
     })
     .catch((err) => console.log(err));
   if (listName === "Positions") {
+    FormatPositions(formOptions);
     listItems.value = formOptions.positions;
   } else {
+    FormatIndustries(formOptions);
     listItems.value = formOptions.industries;
   }
+}
+
+function FormatIndustries(data) {
+  formOptions.industries = formOptions.industries.map((industry) =>
+    industry
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+  );
+}
+
+function FormatPositions(data) {
+  formOptions.positions = formOptions.positions.map((position) =>
+    position
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+  );
 }
 
 async function sendChanges() {
