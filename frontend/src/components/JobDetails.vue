@@ -12,7 +12,7 @@ const props = defineProps({
   index: {
     type: Number,
     required: true,
-    default: 100,
+    //default: 100,
   },
   removeJob: {
     //from parent(SearchTable.vue)
@@ -77,7 +77,7 @@ function closeBasic() {
 }
 
 function remove() {
-  if (index > -1) remove(index);
+  if (props.index > -1) props.removeJob(props.data);
   displayBasic.value = false;
   displayDel.value = false;
 }
@@ -85,17 +85,19 @@ function remove() {
 function save() {
   if (props.index > -1) {
     for (let key in updatedJob.value) {
-      if (updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
-        //remain the same data if no new input
+      //remain the same data if no new input
+      if(updatedJob.value[key] == "" 
+      || updatedJob.value[key] == 0
+      || updatedJob.value[key].name == ""
+      || updatedJob.value[key].email == ""
+      || updatedJob.value[key].phone == 0) {
+
         updatedJob.value[key] = props.data[key];
       }
+      
+      
     }
-    props.saveUpdate(updatedJob.value, props.index);
-  }
-
-  //reset data
-  for (let key in updatedJob) {
-    updatedJob[key] = "";
+    props.saveUpdate(updatedJob.value, props.data);
   }
 
   displayUpdate.value = false;
@@ -196,7 +198,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.employer"
-                v-model="updatedJob.company"
+                v-model="updatedJob.employer"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -205,7 +207,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.contact.name"
-                v-model="updatedJob.contactName"
+                v-model="updatedJob.contact.name"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -214,7 +216,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.contact.phone"
-                v-model="updatedJob.contactPhoneNumber"
+                v-model="updatedJob.contact.phone"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -223,7 +225,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.contact.email"
-                v-model="updatedJob.contactEmail"
+                v-model="updatedJob.contact.email"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -295,7 +297,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.timeCommitment"
-                v-model="updatedJob.hours"
+                v-model="updatedJob.timeCommitment"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -304,7 +306,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.openingDate"
-                v-model="updatedJob.datePosted"
+                v-model="updatedJob.openingDate"
               />
             </div>
             <div class="pt-2 basis-1/5">

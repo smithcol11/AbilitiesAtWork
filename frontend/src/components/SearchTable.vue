@@ -86,26 +86,38 @@ function getFilters() {
   });
 }
 
-function removeJob(SelectedIndex) {
-  if (SelectedIndex > -1) jobs.splice(SelectedIndex, 1);
+
+
+function removeJob(selectedJob) {
+  for(let i=0;i<jobs.value.length;i++){
+    if(jobs.value[i] == selectedJob)
+      jobs.value.splice(i, 1);
+  }
 }
 
-function saveUpdate(updatedJob, SelectedIndex) {
-  jobs.value[SelectedIndex].employer = updatedJob.employer;
-  jobs.value[SelectedIndex].contact.name = updatedJob.contact.name;
-  jobs.value[SelectedIndex].contact.phone = updatedJob.contact.phone;
-  jobs.value[SelectedIndex].contact.email = updatedJob.contact.email;
-  jobs.value[SelectedIndex].address = updatedJob.address;
-  jobs.value[SelectedIndex].city = updatedJob.city;
-  jobs.value[SelectedIndex].zip = updatedJob.zip;
-  jobs.value[SelectedIndex].county = updatedJob.county;
-  jobs.value[SelectedIndex].shift = updatedJob.shift;
-  jobs.value[SelectedIndex].industry = updatedJob.industry;
-  jobs.value[SelectedIndex].position = updatedJob.position;
-  jobs.value[SelectedIndex].timeCommitment = updatedJob.timeCommitment;
-  jobs.value[SelectedIndex].openingDate = updatedJob.openingDate;
-  jobs.value[SelectedIndex].hourlyWage = updatedJob.hourlyWage;
-  jobs.value[SelectedIndex].notes = updatedJob.notes;
+function saveUpdate(updatedJob, selectedJob) {
+  //console.log(selectedJob);
+
+
+  for(let i=0;i<jobs.value.length;i++){
+    if(jobs.value[i] == selectedJob){
+      jobs.value[i].employer = updatedJob.employer;
+      jobs.value[i].contact.name = updatedJob.contact.name;
+      jobs.value[i].contact.phone = updatedJob.contact.phone;
+      jobs.value[i].contact.email = updatedJob.contact.email;
+      jobs.value[i].address = updatedJob.address;
+      jobs.value[i].city = updatedJob.city;
+      jobs.value[i].zip = updatedJob.zip;
+      jobs.value[i].county = updatedJob.county;
+      jobs.value[i].shift = updatedJob.shift;
+      jobs.value[i].industry = updatedJob.industry;
+      jobs.value[i].position = updatedJob.position;
+      jobs.value[i].timeCommitment = updatedJob.timeCommitment;
+      jobs.value[i].openingDate = updatedJob.openingDate;
+      jobs.value[i].hourlyWage = updatedJob.hourlyWage;
+      jobs.value[i].notes = updatedJob.notes;
+    }
+  }
 }
 
 async function loadJobs() {
