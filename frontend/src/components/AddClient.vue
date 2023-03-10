@@ -22,6 +22,7 @@ let requestFormOptions = async () => {
 
 onBeforeMount(async () => {
   await requestFormOptions();
+  FormatFormIndustries(formOptions);
 });
 const banner = reactive({
   displaySuccess: {
@@ -117,6 +118,16 @@ const submitForm = async () => {
     DisplayBanner("failed");
   }
 };
+
+function FormatFormIndustries(data) {
+  formOptions.industries = formOptions.industries.map((industry) =>
+    industry
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+  );
+}
 
 function FormatDataLowerCase() {
   data.firstName = data.firstName.toLowerCase();
