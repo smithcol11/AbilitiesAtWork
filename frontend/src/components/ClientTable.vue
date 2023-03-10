@@ -103,8 +103,20 @@ onMounted(async () => {
   initFilters1();
   await requestClients();
   getFilters();
+  FormatDisplayData();
 });
 
+function FormatDisplayData() {
+  clients.value.forEach((client) => {
+    client.firstName = client.firstName
+      .toLowerCase()
+      .split(" ")
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(" ");
+    client.middleInitial = client.middleInitial.toUpperCase();
+    client.lastInitial = client.lastInitial.toUpperCase();
+  });
+}
 function customFilterCallback() {
   console.log(filters1);
 }
