@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
@@ -83,6 +83,12 @@ function getFilters() {
     if (!filterData.city.includes(job.city)) filterData.city.push(job.city);
     if (!filterData.employer.includes(job.employer))
       filterData.employer.push(job.employer);
+
+    job.employer = job.employer
+      .toLowerCase()
+      .split(" ")
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(" ");
   });
 }
 
@@ -128,9 +134,10 @@ async function loadJobs() {
   }
 }
 
-loadJobs();
+onMounted(async () => {
+  loadJobs();
+});
 </script>
-
 <template>
   <div class="card m-5 bg-light shadow-lg border">
     <DataTable
