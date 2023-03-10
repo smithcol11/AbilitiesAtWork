@@ -115,6 +115,13 @@ function FormatDisplayData() {
       .join(" ");
     client.middleInitial = client.middleInitial.toUpperCase();
     client.lastInitial = client.lastInitial.toUpperCase();
+    client.industry = client.industry.map((industry) =>
+      industry
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+        .join(" ")
+    );
   });
 }
 function customFilterCallback() {
