@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, toRaw } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
@@ -88,16 +88,23 @@ function getFilters() {
 
 
 
-function removeJob(selectedJob) {
+async function removeJob(selectedJob) {
   for(let i=0;i<jobs.value.length;i++){
-    if(jobs.value[i] == selectedJob)
+    if(jobs.value[i] == selectedJob){
       jobs.value.splice(i, 1);
+      await fetch("http://localhost:3000/deleteJob", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(toRaw(selectedJob)),
+      })
+      .then((response) => console.log(response))
+      .catch((errors) => console.log(errors));
+    }
   }
 }
 
 function saveUpdate(updatedJob, selectedJob) {
-  //console.log(selectedJob);
-
 
   for(let i=0;i<jobs.value.length;i++){
     if(jobs.value[i] == selectedJob){
@@ -126,6 +133,7 @@ async function loadJobs() {
       .then((response) => response.json())
       .then((data) => {
         jobs.value = data;
+        //console.log(data[0])
       })
       .then(() => {
         initFilters();
