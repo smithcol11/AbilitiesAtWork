@@ -1,4 +1,5 @@
 const express = require("express");
+const job = require("../schema/job");
 const router = express.Router();
 const Job = require("../schema/job");
 module.exports = router;
@@ -96,6 +97,7 @@ router.patch("/editJob", async (req, res) => {
 // delete a job
 router.delete("/deleteJob", async (req, res) => {
   try {
+    console.log(req.body._id)
     await Job.findByIdAndDelete(req.body._id);
     res.json({ message: "Deleted Job" });
   } catch (error) {
