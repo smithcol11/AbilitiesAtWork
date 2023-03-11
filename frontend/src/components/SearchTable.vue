@@ -104,7 +104,7 @@ async function removeJob(selectedJob) {
   }
 }
 
-function saveUpdate(updatedJob, selectedJob) {
+async function saveUpdate(updatedJob, selectedJob) {
 
   for(let i=0;i<jobs.value.length;i++){
     if(jobs.value[i] == selectedJob){
@@ -123,6 +123,17 @@ function saveUpdate(updatedJob, selectedJob) {
       jobs.value[i].openingDate = updatedJob.openingDate;
       jobs.value[i].hourlyWage = updatedJob.hourlyWage;
       jobs.value[i].notes = updatedJob.notes;
+      
+      //console.log(jobs.value[i]);
+
+      await fetch("http://localhost:3000/editJob", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(toRaw(jobs.value[i])),
+      })
+      .then((response) => console.log(response))
+      .catch((errors) => console.log(errors));
     }
   }
 }
@@ -149,6 +160,32 @@ async function loadJobs() {
 }
 
 loadJobs();
+
+////////////
+
+const formOptions = reactive({
+  counties: [],
+  cities: [],
+  zips: [],
+  positions: [],
+  industries: [],
+  shiftOptions: [],
+  timeCommitmentOptions: [],
+});
+
+let requestFormOptions = async () => {
+  await fetch("http://localhost:3000/GetJobOptions")
+    .then((res) => res.json())
+    .then((newOptions) => {
+      for (const key in formOptions) {
+        formOptions[key] = newOptions[key];
+      }
+    })
+    .catch((err) => console.log(err));
+  //console.log(formOptions);
+};
+
+requestFormOptions();
 </script>
 
 <template>
@@ -343,6 +380,7 @@ loadJobs();
           <JobDetails
             :data="data"
             :index="index"
+            :formOptions="formOptions"
             :removeJob="removeJob"
             :saveUpdate="saveUpdate"
           />
