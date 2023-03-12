@@ -96,35 +96,36 @@ const submitForm = async () => {
 };
 
 async function matchClient() {
-  allMatchedJobs.value = [];
-  await fetch("http://localhost:3000/getMatch", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      firstName: clientInfo.firstName,
-      middleInitial: clientInfo.middleInitial,
-      lastInitial: clientInfo.lastInitial,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.error == "No Client Found") {
-        bannerText.value = "No client exists for given name.";
-        DisplayBanner("error");
-      } else if (data.length < 1) {
-        bannerText.value = "No matches for given client.";
-        DisplayBanner("error");
-      } else {
-        allMatchedJobs.value = data;
-        bannerText.value = "Check table below for matches.";
-        DisplayBanner("success");
-      }
+  try {
+    allMatchedJobs.value = [];
+    await fetch("http://localhost:3000/getMatch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        firstName: clientInfo.firstName,
+        middleInitial: clientInfo.middleInitial,
+        lastInitial: clientInfo.lastInitial,
+      }),
     })
-    .catch((errors) => {
-      console.log(errors);
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error == "No Client Found") {
+          bannerText.value = "No client exists for given name.";
+          DisplayBanner("error");
+        } else if (data.length < 1) {
+          bannerText.value = "No matches for given client.";
+          DisplayBanner("error");
+        } else {
+          allMatchedJobs.value = data;
+          bannerText.value = "Check table below for matches.";
+          DisplayBanner("success");
+        }
+      })
+  } catch (error) {
+      console.log(error);
       DisplayBanner("error");
-    });
+  };
 }
 </script>
 

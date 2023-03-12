@@ -29,52 +29,65 @@ router.use(
   })
 );
 
-router.post("/verifyJWT", (req, res) => {
-  if (req.cookies.token) {
-    let result = jwt.verify(req.cookies.token, process.env.SESSION_SECRET);
-    if (result == "admin") {
-      res.json({ auth: true, admin: true });
-    } else if (result) {
-      res.json({ auth: true, admin: false });
-    } else res.json({ auth: false, admin: false });
-  } else {
-    res.status(400).json({ message: 'Token cookie not received', error });
+router.post("/verifyJWT", async (req, res) => {
+  try{
+    if (req.cookies.token) {
+      const result = await jwt.verify(req.cookies.token, process.env.SESSION_SECRET);
+      if (result == "admin") {
+        res.json({ auth: true, admin: true });
+      } else if (result) {
+        res.json({ auth: true, admin: false });
+      } else res.json({ auth: false, admin: false });
+    } 
+  } catch(error){
+      res.status(400).send({error: 'Token cookie not received'});
   }
 });
 
-router.post("/registerUser", (req, res) => {
-  User.register(
-    new User({ username: req.body.username, active: false }),
-    req.body.password,
-    (err, result) => {
-      if (err) res.redirect(err);
-      if (result) res.redirect("/login");
-      else res.json("failure");
-    }
-  );
+router.post("/registerUser", async (req, res) => {
+  try{
+    await User.register(
+      new User({ username: req.body.username, active: false }),
+      req.body.password,
+      (err, result) => {
+        if (err) res.redirect(err);
+        if (result) res.redirect("/login");
+        else res.json("failure");
+      }
+    );
+  } catch(error){
+    res.status(400).send({error: 'Error registering user'})
+  }
 });
 
-router.post("/loginUser", (req, res) => {
-  const userAuth = User.authenticate();
-  userAuth(req.body.username, req.body.password, (err, result) => {
-    if (err) res.json(err);
-    else if (result) {
-      let token = jwt.sign(req.body.username, process.env.SESSION_SECRET);
+router.post("/loginUser", async (req, res) => {
+  try{
+    await User.authenticate()(req.body.username, req.body.password, (err, result) => {
+      if (err) res.json(err);
+      else if (result) {
+        let token = jwt.sign(req.body.username, process.env.SESSION_SECRET);
 
-      res.cookie("token", token, { sameSite: "none", secure: "false" });
+        res.cookie("token", token, { sameSite: "none", secure: "false" });
 
-      res.json({ auth: true, admin: false });
-    } else {
-      res.json({ auth: false, admin: false });
-    }
-  });
+        res.json({ auth: true, admin: false });
+      } else {
+        res.json({ auth: false, admin: false });
+      }
+    });
+  } catch(error){
+    res.status(400).send({error: 'Error login user'})
+  }
 });
 
-router.post("/logout", (req, res) => {
-  req.logout(function (err) {
-    if (err) res.json(err);
-    else res.redirect("/login");
-  });
+router.post("/logout", async (req, res) => {
+  try{
+    req.logout(function (err) {
+      if (err) res.json(err);
+      else res.redirect("/login");
+    });
+  } catch(error){
+    res.status(400).send({error: 'Error logout user'})
+  }
 });
 
 module.exports = router;

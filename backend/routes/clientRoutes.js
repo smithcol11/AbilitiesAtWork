@@ -5,16 +5,20 @@ const router = express.Router();
 const Client = require("../schema/client");
 
 router.post("/addClient", async (req, res) => {
-  await Client.insertMany({
-    firstName: req.body.firstName,
-    middleInitial: req.body.middleInitial,
-    lastInitial: req.body.lastInitial,
-    hours: req.body.hours,
-    industry: req.body.industry,
-    enteredBy: "FIX ME",
-    updatedBy: "FIX ME",
-  });
-  res.status(201).send();
+  try {
+    await Client.insertMany({
+      firstName: req.body.firstName,
+      middleInitial: req.body.middleInitial,
+      lastInitial: req.body.lastInitial,
+      hours: req.body.hours,
+      industry: req.body.industry,
+      enteredBy: "FIX ME",
+      updatedBy: "FIX ME",
+    });
+    res.status(201).send();
+  } catch (error){
+    res.status(500).send({error: "Error adding client"})
+  }
 });
 
 router.put("/editClient", async (req, res) => {
@@ -28,6 +32,7 @@ router.put("/editClient", async (req, res) => {
       req.body,
       { new: true }
     );
+    
     if (!client) {
       return res.status(404).send({ error: "Client not found when updating" });
     }
@@ -40,11 +45,12 @@ router.put("/editClient", async (req, res) => {
 
 router.delete("/deleteClient", async (req, res) => {
   try {
-    client = await Client.deleteOne({
+    const client = await Client.deleteOne({
       firstName: req.body.firstName,
       middleInitial: req.body.middleInitial,
       lastInitial: req.body.lastInitial,
     });
+
     if (!client) {
       return res.status(404).send({ error: "Client not found when deleting" });
     }
@@ -56,11 +62,14 @@ router.delete("/deleteClient", async (req, res) => {
 });
 
 router.get("/GetAllClients", (req, res) => {
-  Client.find({})
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((err) => console.log(err));
+  try {
+    Client.find({})
+      .then((data) => {
+        res.json(data);
+      })
+  } catch(error){
+    console.log(err)
+  }
 });
 
 module.exports = router;

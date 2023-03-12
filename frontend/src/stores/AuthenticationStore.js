@@ -16,44 +16,52 @@ export const useAuthenticationStore = defineStore("authorization", () => {
   }
 
   async function AdminLogin(password) {
-    await fetch("http://localhost:3000/loginAdmin", {
-      method: "POST",
-      body: JSON.stringify({
-        username: username.value,
-        password: password,
-      }),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.auth) {
-          isAuthAdmin.value = true;
-          router.push("/");
-        }
-      });
+    try {
+      await fetch("http://localhost:3000/loginAdmin", {
+        method: "POST",
+        body: JSON.stringify({
+          username: username.value,
+          password: password,
+        }),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.auth) {
+            isAuthAdmin.value = true;
+            router.push("/");
+          }
+        });
+    } catch(error){
+      console.log(error)
+    }
     return isAuthAdmin.value;
   }
 
   async function UserLogin() {
-    localStorage.setItem("firstName", firstName.value);
-    localStorage.setItem("lastName", lastName.value);
-    await fetch("http://localhost:3000/loginUser", {
-      method: "POST",
-      body: JSON.stringify({
-        username: firstName.value,
-        password: lastName.value,
-      }),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.auth) {
-          isAuthUser.value = true;
-          router.push("/");
-        }
-      });
+    try{
+      localStorage.setItem("firstName", firstName.value);
+      localStorage.setItem("lastName", lastName.value);
+      await fetch("http://localhost:3000/loginUser", {
+        method: "POST",
+        body: JSON.stringify({
+          username: firstName.value,
+          password: lastName.value,
+        }),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.auth) {
+            isAuthUser.value = true;
+            router.push("/");
+          }
+        });
+    } catch(error){
+      console.log(error)
+    }
     return isAuthUser.value;
   }
 
@@ -69,24 +77,29 @@ export const useAuthenticationStore = defineStore("authorization", () => {
     if (!cookieIsPresent("token")) {
       return false;
     }
-
-    return await fetch("http://localhost:3000/verifyJWT", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.admin) {
-          isAuthAdmin.value = true;
-          return true;
-        } else if (data.auth) {
-          isAuthUser.value = true;
-          return true;
-        } else {
-          return false;
-        }
-      });
+    
+    try{
+      return await fetch("http://localhost:3000/verifyJWT", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.admin) {
+            isAuthAdmin.value = true;
+            return true;
+          } else if (data.auth) {
+            isAuthUser.value = true;
+            return true;
+          } else {
+            return false;
+          }
+        });
+    } catch(error){
+      console.log(error)
+      return null;
+    }
   }
 
   function Logout() {
