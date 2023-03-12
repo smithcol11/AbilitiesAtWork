@@ -3,27 +3,29 @@ import { reactive, ref, toRaw, computed, onBeforeMount } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, maxLength, helpers } from "@vuelidate/validators";
 import TextBox from "./TextBox.vue";
-
+import Label from "./Label.vue";
 const formOptions = reactive({
   industries: [],
   timeCommitmentOptions: [],
 });
 
 let requestFormOptions = async () => {
-  await fetch("http://localhost:3000/GetJobOptions")
-    .then((res) => res.json())
-    .then((newOptions) => {
-      for (const key in formOptions) {
-        formOptions[key] = newOptions[key];
-      }
-    })
-    .catch((err) => console.log(err));
+  try {
+    await fetch("http://localhost:3000/GetJobOptions")
+      .then((res) => res.json())
+      .then((newOptions) => {
+        for (const key in formOptions) {
+          formOptions[key] = newOptions[key];
+        }
+      });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 onBeforeMount(async () => {
   await requestFormOptions();
 });
-
 const banner = reactive({
   displaySuccess: {
     type: Boolean,
@@ -87,14 +89,11 @@ const resetForm = () => {
   v$.value.$reset();
   data.value = Object.create(defaultData);
 };
-
 function DisplayBanner(bannerType) {
   if (bannerType == "success") banner.displaySuccess = true;
   else banner.displayFailed = true;
-
   clearInterval(banner.timer);
   banner.timeRemaining = banner.duration;
-
   //create a timer to display banner
   banner.timer = setInterval(() => {
     banner.timeRemaining--;
@@ -105,14 +104,11 @@ function DisplayBanner(bannerType) {
     }
   }, 1000);
 }
-
 // use the rules the data must follow
 const v$ = useVuelidate(rules, data);
-
 const submitForm = async () => {
   banner.displaySuccess = false;
   banner.displayFailed = false;
-
   // check that the data matches requirements
   if (await v$.value.$validate()) {
     // if an error prevents saving the client, warn the user
@@ -124,18 +120,19 @@ const submitForm = async () => {
     DisplayBanner("failed");
   }
 };
-
 // create the post request and send it to the backend
 async function postClient() {
-  return await fetch("http://localhost:3000/addClient", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(toRaw(data.value)),
-  }).catch((errors) => {
+  try {
+    return await fetch("http://localhost:3000/addClient", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(toRaw(data.value)),
+    });
+  } catch (errors) {
     console.log(errors);
     return null;
-  });
+  }
 }
 </script>
 
@@ -148,8 +145,8 @@ async function postClient() {
             <div v-if="banner.displaySuccess == true">
               <SuccessBanner
                 class="mb-4"
-                topText="Job has been successfully created"
-                bottomText="Job was added to the available jobs! "
+                topText="Client has been successfully created"
+                bottomText="Client was added to the list! "
               ></SuccessBanner>
             </div>
             <div v-if="banner.displayFailed == true">
