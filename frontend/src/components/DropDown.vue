@@ -8,6 +8,10 @@ const props = defineProps({
     type: String,
     default: "Place holder text",
   },
+  mode: {
+    type: String,
+    default: "single" // single, multiple, tags
+  }
 });
 </script>
 
@@ -15,8 +19,11 @@ const props = defineProps({
   <multiselect
     v-bind="$attrs"
     class="vueform-multiselect"
+    :mode="mode"
     :options="options"
-    :clear-on-select="true"
+    :close-on-select="mode == 'single'"
+    :clear-on-select="mode == 'single'"
+    :hide-selected="false"
     :preserve-search="true"
     :searchable="true"
     :placeholder="placeholder"
