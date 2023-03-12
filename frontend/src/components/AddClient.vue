@@ -10,14 +10,17 @@ const formOptions = reactive({
 });
 
 let requestFormOptions = async () => {
-  await fetch("http://localhost:3000/GetJobOptions")
-    .then((res) => res.json())
-    .then((newOptions) => {
-      for (const key in formOptions) {
-        formOptions[key] = newOptions[key];
-      }
-    })
-    .catch((err) => console.log(err));
+  try {
+    await fetch("http://localhost:3000/GetJobOptions")
+      .then((res) => res.json())
+      .then((newOptions) => {
+        for (const key in formOptions) {
+          formOptions[key] = newOptions[key];
+        }
+      });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 onBeforeMount(async () => {
@@ -137,15 +140,17 @@ function FormatDataLowerCase() {
 
 // create the post request and send it to the backend
 async function postClient() {
-  return await fetch("http://localhost:3000/addClient", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(toRaw(data)),
-  }).catch((errors) => {
+  try {
+    return await fetch("http://localhost:3000/addClient", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(toRaw(data)),
+    });
+  } catch (errors) {
     console.log(errors);
     return null;
-  });
+  }
 }
 </script>
 
@@ -158,8 +163,8 @@ async function postClient() {
             <div v-if="banner.displaySuccess == true">
               <SuccessBanner
                 class="mb-4"
-                topText="Job has been successfully created"
-                bottomText="Job was added to the available jobs! "
+                topText="Client has been successfully created"
+                bottomText="Client was added to the list! "
               ></SuccessBanner>
             </div>
             <div v-if="banner.displayFailed == true">

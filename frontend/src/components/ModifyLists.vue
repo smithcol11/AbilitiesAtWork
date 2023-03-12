@@ -104,15 +104,18 @@ function onSubmit() {
 }
 
 async function getListContents(listName) {
-  await fetch("http://localhost:3000/GetJobOptions")
-    .then((res) => res.json())
+  try{
+    await fetch("http://localhost:3000/GetJobOptions")
+      .then((res) => res.json())
 
-    .then((newOptions) => {
-      for (const key in formOptions) {
-        formOptions[key] = newOptions[key];
-      }
-    })
-    .catch((err) => console.log(err));
+      .then((newOptions) => {
+        for (const key in formOptions) {
+          formOptions[key] = newOptions[key];
+        }
+      })
+  } catch(error){
+    console.log(error)
+  }
   if (listName === "Positions") {
     FormatPositions(formOptions);
     listItems.value = formOptions.positions;
@@ -143,14 +146,17 @@ function FormatPositions(data) {
 }
 
 async function sendChanges() {
-  await fetch("http://localhost:3000/jobOptions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(toRaw(formOptions)),
-  })
-    .then((response) => console.log(response))
-    .catch((errors) => console.log(errors));
+  try{
+    await fetch("http://localhost:3000/updateJobOptions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(toRaw(formOptions)),
+    })
+      .then((response) => console.log(response))
+  } catch(error){
+    console.log(error)
+  }
 }
 </script>
 

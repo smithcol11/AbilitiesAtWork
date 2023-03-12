@@ -115,22 +115,26 @@ function saveUpdate(updatedJob, SelectedIndex) {
 }
 
 async function loadJobs() {
-  if (props.jobMatches.length < 1) {
-    await fetch("http://localhost:3000/allJobs")
-      .then((response) => response.json())
-      .then((data) => {
-        jobs.value = data;
-      })
-      .then(() => {
-        initFilters();
-        getFilters();
-      });
-  } else {
-    for (let i in props.jobMatches) {
-      jobs.value.push(props.jobMatches[i]);
+  try{
+    if (props.jobMatches.length < 1) {
+      await fetch("http://localhost:3000/allJobs")
+        .then((response) => response.json())
+        .then((data) => {
+          jobs.value = data;
+        })
+        .then(() => {
+          initFilters();
+          getFilters();
+        });
+    } else {
+      for (let i in props.jobMatches) {
+        jobs.value.push(props.jobMatches[i]);
+      }
+      initFilters();
+      getFilters();
     }
-    initFilters();
-    getFilters();
+  } catch(error){
+    console.log(error)
   }
 }
 

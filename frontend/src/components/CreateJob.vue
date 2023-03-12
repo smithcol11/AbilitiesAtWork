@@ -114,14 +114,17 @@ function DisplayBanner(bannerType) {
 
 async function addJob() {
   console.log("POST request called");
-  await fetch("http://localhost:3000/addJob", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(toRaw(formData)),
-  })
-    .then((response) => console.log(response))
-    .catch((errors) => console.log(errors));
+
+  try {
+    await fetch("http://localhost:3000/addJob", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(toRaw(formData)),
+    }).then((response) => console.log(response));
+  } catch (errors) {
+    console.log(errors);
+  }
 }
 
 function ResetFormValues() {
@@ -131,16 +134,17 @@ function ResetFormValues() {
 }
 
 let requestFormOptions = async () => {
-  await fetch("http://localhost:3000/GetJobOptions")
-    .then((res) => res.json())
-    .then((newOptions) => {
-      for (const key in formOptions) {
-        formOptions[key] = newOptions[key];
-      }
-    })
-    .catch((err) => console.log(err));
-  FormatIndustries(formOptions);
-  FormatPositions(formOptions);
+  try {
+    await fetch("http://localhost:3000/GetJobOptions")
+      .then((res) => res.json())
+      .then((newOptions) => {
+        for (const key in formOptions) {
+          formOptions[key] = newOptions[key];
+        }
+      });
+  } catch (errors) {
+    console.log(errors);
+  }
 };
 function FormatIndustries(data) {
   formOptions.industries = formOptions.industries.map((industry) =>
