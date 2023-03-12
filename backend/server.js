@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const uri = process.env.ATLAS_URI;
 const connection = mongoose.connection;
+const path = require("path");
 
 mongoose
   .connect(uri, {
@@ -24,7 +25,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:8080",
+    origin: ["http://localhost:8080", "http://localhost:3000"],
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
     credentials: true,
   })
@@ -51,6 +52,11 @@ app.use(require("./routes/matchClient.js"));
 
 const server = app.listen(port, () => {
   console.log(`AAW app listening on port ${port}`);
+});
+
+app.use(express.static("dist"));
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 module.exports = app;
