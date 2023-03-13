@@ -33,8 +33,30 @@ router.post("/addJob", async (req, res) => {
 // Gell all jobs
 router.get("/allJobs", async (req, res) => {
   try {
-    await Job.find({}).then((data) => {
-      res.json(data);
+    Job.find({}).then((data) => {
+      const capitalizedData = data.map((job) => {
+        return {
+          ...job._doc,
+          employer: job.employer
+            .split(" ")
+            .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+            .join(" "),
+          address: job.address
+            .split(" ")
+            .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+            .join(" "),
+
+          contact: {
+            ...job.contact,
+            name: job.contact.name
+              .split(" ")
+              .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+              .join(" "),
+          },
+        };
+      });
+
+      res.json(capitalizedData);
     });
   } catch (error) {
     res.status(500).json({ message: error });
