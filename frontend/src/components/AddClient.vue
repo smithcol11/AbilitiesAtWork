@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, toRaw, computed, onBeforeMount } from "vue";
+import { reactive, ref, toRaw, computed, onBeforeMount } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, maxLength, helpers } from "@vuelidate/validators";
 import TextBox from "./TextBox.vue";
@@ -46,13 +46,16 @@ const banner = reactive({
     default: 4,
   },
 });
-const data = reactive({
+
+const defaultData = {
   firstName: "",
   middleInitial: "",
   lastInitial: "",
   industry: [],
   hours: "",
-});
+}
+
+const data = ref(Object.create(defaultData));
 
 const rules = computed(() => {
   return {
@@ -74,7 +77,7 @@ const rules = computed(() => {
       ),
     },
     industry: {
-      required: helpers.withMessage("Please enter an industry.", required),
+      required: helpers.withMessage("At least 1 industry required.", required),
     },
     hours: {
       required: helpers.withMessage("Please enter hours.", required),
@@ -85,9 +88,7 @@ const rules = computed(() => {
 // reset form values to default or empty values
 const resetForm = () => {
   v$.value.$reset();
-  for (const field in data) {
-    data[field] = "";
-  }
+  data.value = Object.create(defaultData);
 };
 function DisplayBanner(bannerType) {
   if (bannerType == "success") banner.displaySuccess = true;
@@ -145,7 +146,7 @@ async function postClient() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify(toRaw(data)),
+      body: JSON.stringify(toRaw(data.value)),
     });
   } catch (errors) {
     console.log(errors);
@@ -213,11 +214,12 @@ async function postClient() {
             </p>
           </div>
           <div class="basis-1/5">
-            <Label text="Industry"></Label>
+            <Label text="Industries"></Label>
             <DropDown
               v-model="data.industry"
               :options="formOptions.industries"
-              placeholder="Select Industry"
+              mode="multiple"
+              placeholder="Select Industries"
             />
             <p class="text-red-700" v-if="v$.industry.$error">
               {{ v$.industry.$errors[0].$message }}

@@ -256,7 +256,7 @@ function saveUpdate(updatedClient, selectedClient) {
         style="min-width: 12rem"
       >
         <template #body="{ data }">
-          {{ String(data.industry) }}
+          {{ data.industry.join(", ") }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <Dropdown
