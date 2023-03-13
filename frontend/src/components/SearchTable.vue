@@ -288,7 +288,7 @@ loadJobs();
 
       <Column
         field="timeCommitment"
-        header="TimeCommitment"
+        header="Time Commitment"
         :showFilterMenu="false"
         style="min-width: 12rem"
       >
