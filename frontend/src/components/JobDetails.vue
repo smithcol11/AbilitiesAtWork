@@ -3,6 +3,9 @@ import { ref } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
+import { reactive, computed } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 const props = defineProps({
   data: {
@@ -25,6 +28,77 @@ const props = defineProps({
     default: null,
   },
 });
+
+const success = ref(false)
+const visible = ref(false)
+
+const banner = reactive({
+  displaySuccess: {
+    type: Boolean,
+    default: false,
+  },
+  displayFailed: {
+    type: Boolean,
+    default: false,
+  },
+  duration: 4,
+  timeRemaining: {
+    type: Number,
+    default: 4,
+  },
+  timer: {
+    type: Number,
+    default: 4,
+  },
+});
+
+function DisplayBanner(bannerType) {
+  if (bannerType == "success") banner.displaySuccess = true;
+  else banner.displayFailed = true;
+
+  clearInterval(banner.timer);
+  banner.timeRemaining = banner.duration;
+
+  //create a timer to display banner
+  banner.timer = setInterval(() => {
+    banner.timeRemaining--;
+    if (banner.timeRemaining <= 0) {
+      clearInterval(banner.timer);
+      banner.displaySuccess = false;
+      banner.displayFailed = false;
+    }
+  }, 1000);
+}
+
+
+// display success banner if post succeeded
+const displaySuccess = () => {
+  banner.success = true;
+  setTimeout(() => {
+    banner.success = false;
+  }, 3000);
+};
+
+// display error banner if post failed
+const displayError = () => {
+  banner.failure = true;
+  setTimeout(() => {
+    banner.failure = false;
+  }, 3000);
+};
+
+// use the rules the data must follow
+//const v$ = useVuelidate(rules, null);
+
+const submitForm = async () => {
+  // check that the data matches requirements
+  const result = await v$.value.$validate();
+  if (result) {
+    displaySuccess();
+  } else {
+    displayError();
+  }
+};
 
 const displayBasic = ref(false);
 const displayDel = ref(false);
@@ -99,20 +173,27 @@ function save() {
   }
 
   displayUpdate.value = false;
+  //const result = await v$.value.$validate();
+  DisplayBanner("success");
 }
 </script>
 
 <template>
-  <Button
-    label="More Info"
-    class="p-button-outlined p-button-secondary"
-    @click="openBasic()"
-  />
-  <Dialog
-    header="More Information:"
-    v-model:visible="displayBasic"
-    :style="{ width: '550px' }"
-  >
+  <Transition>
+    <div role="alert">
+      <div v-if="banner.displaySuccess == true">
+        <successBanner topText="Job Details Updated" :bottomText="bannerText" />
+      </div>
+      <!-- <div v-if="banner.displayFailed == true">
+          <errorBanner
+            topText="ERROR: No client matches found!"
+            :bottomText="bannerText"
+          />
+        </div> -->
+    </div>
+  </Transition>
+  <Button label="More Info" class="p-button-outlined p-button-secondary" @click="openBasic()" />
+  <Dialog header="More Information:" v-model:visible="displayBasic" :style="{ width: '550px' }">
     <div class="mt-3 text-center">
       <div class="mt-2 px-7 py-3">
         <div class="bg-white text-left italic font-bold text-gray-700">
@@ -165,195 +246,90 @@ function save() {
       </div>
     </div>
     <template #footer>
-      <Button
-        label="Update"
-        icon="pi pi-refresh"
-        @click="openUpdate()"
-        class="p-button-text p-button-secondary"
-      />
-      <Button
-        label="Delete"
-        icon="pi pi-times"
-        @click="openDel()"
-        class="p-button-text p-button-secondary"
-      />
+      <Button label="Update" icon="pi pi-refresh" @click="openUpdate()" class="p-button-text p-button-secondary" />
+      <Button label="Delete" icon="pi pi-times" @click="openDel()" class="p-button-text p-button-secondary" />
     </template>
   </Dialog>
-  <Dialog
-    header="Update"
-    v-model:visible="displayUpdate"
-    :style="{ width: '550px' }"
-  >
+  <Dialog header="Update" v-model:visible="displayUpdate" :style="{ width: '550px' }">
     <form action="">
       <div class="mt-3 text-center">
         <div class="mt-2 px-7 py-3">
-          <div
-            class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6"
-          >
+          <div class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6">
             <div class="pt-2 basis-1/5">
               Company:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.employer"
-                v-model="updatedJob.company"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.employer" v-model="updatedJob.company" />
             </div>
             <div class="pt-2 basis-1/5">
               Contact Name:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.contact.name"
-                v-model="updatedJob.contactName"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.contact.name"
+                v-model="updatedJob.contactName" />
             </div>
             <div class="pt-2 basis-1/5">
               Contact Phone Number:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.contact.phone"
-                v-model="updatedJob.contactPhoneNumber"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.contact.phone"
+                v-model="updatedJob.contactPhoneNumber" />
             </div>
             <div class="pt-2 basis-1/5">
               Contact Email:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.contact.email"
-                v-model="updatedJob.contactEmail"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.contact.email"
+                v-model="updatedJob.contactEmail" />
             </div>
             <div class="pt-2 basis-1/5">
               Address:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.address"
-                v-model="updatedJob.address"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.address" v-model="updatedJob.address" />
             </div>
             <div class="pt-2 basis-1/5">
               City:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.city"
-                v-model="updatedJob.city"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.city" v-model="updatedJob.city" />
             </div>
             <div class="pt-2 basis-1/5">
               Zip:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.zip"
-                v-model="updatedJob.zip"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.zip" v-model="updatedJob.zip" />
             </div>
             <div class="pt-2 basis-1/5">
               County:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.county"
-                v-model="updatedJob.county"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.county" v-model="updatedJob.county" />
             </div>
             <div class="pt-2 basis-1/5">
               Shift:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.shift"
-                v-model="updatedJob.shift"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.shift" v-model="updatedJob.shift" />
             </div>
             <div class="pt-2 basis-1/5">
               Industry:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.industry"
-                v-model="updatedJob.industry"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.industry" v-model="updatedJob.industry" />
             </div>
             <div class="pt-2 basis-1/5">
               Position:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.position"
-                v-model="updatedJob.position"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.position" v-model="updatedJob.position" />
             </div>
             <div class="pt-2 basis-1/5">
               Hours:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.timeCommitment"
-                v-model="updatedJob.hours"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.timeCommitment"
+                v-model="updatedJob.hours" />
             </div>
             <div class="pt-2 basis-1/5">
               Date Posted:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.openingDate"
-                v-model="updatedJob.datePosted"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.openingDate"
+                v-model="updatedJob.datePosted" />
             </div>
             <div class="pt-2 basis-1/5">
               Notes:
-              <InputText
-                type="text"
-                class="p-inputtext-sm"
-                :placeholder="data.notes"
-                v-model="updatedJob.notes"
-              />
+              <InputText type="text" class="p-inputtext-sm" :placeholder="data.notes" v-model="updatedJob.notes" />
             </div>
           </div>
         </div>
       </div>
       <div class="mt-3 text-right">
-        <Button
-          label="Confirm"
-          icon="pi pi-check"
-          @click="save()"
-          class="p-button-text p-button-secondary"
-        />
-        <Button
-          label="Cancel"
-          icon="pi pi-times"
-          @click="closeUpdate()"
-          class="p-button-text p-button-secondary"
-        />
+        <Button label="Confirm" icon="pi pi-check" @click="save()" class="p-button-text p-button-secondary" />
+        <Button label="Cancel" icon="pi pi-times" @click="closeUpdate()" class="p-button-text p-button-secondary" />
       </div>
     </form>
   </Dialog>
-  <Dialog
-    header="Do you want to delete this job?"
-    v-model:visible="displayDel"
-    :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-    :style="{ width: '25vw' }"
-  >
+  <Dialog header="Do you want to delete this job?" v-model:visible="displayDel"
+    :breakpoints="{ '960px': '75vw', '640px': '90vw' }" :style="{ width: '25vw' }">
     <div class="mt-3 text-right">
-      <Button
-        label="Yes"
-        icon="pi pi-check"
-        @click="remove()"
-        class="p-button-text p-button-secondary"
-      />
-      <Button
-        label="No"
-        icon="pi pi-times"
-        @click="closeDel()"
-        class="p-button-text p-button-secondary"
-      />
+      <Button label="Yes" icon="pi pi-check" @click="remove()" class="p-button-text p-button-secondary" />
+      <Button label="No" icon="pi pi-times" @click="closeDel()" class="p-button-text p-button-secondary" />
     </div>
   </Dialog>
 </template>
