@@ -198,7 +198,7 @@ function saveUpdate(updatedClient, selectedClient) {
           />
         </template>
       </Column>
-      <Column
+      <!-- <Column
         field="middleInitial"
         header="Middle Initial"
         style="min-width: 5rem"
@@ -229,7 +229,7 @@ function saveUpdate(updatedClient, selectedClient) {
             placeholder="Search by Last Initial"
           />
         </template>
-      </Column>
+      </Column> -->
       <Column
         field="industry"
         header="Industry"
