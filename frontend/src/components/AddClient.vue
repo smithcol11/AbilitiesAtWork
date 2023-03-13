@@ -25,7 +25,6 @@ let requestFormOptions = async () => {
 
 onBeforeMount(async () => {
   await requestFormOptions();
-  FormatFormIndustries(formOptions);
 });
 const banner = reactive({
   displaySuccess: {
@@ -53,7 +52,7 @@ const defaultData = {
   lastInitial: "",
   industry: [],
   hours: "",
-}
+};
 
 const data = ref(Object.create(defaultData));
 
@@ -110,7 +109,6 @@ const v$ = useVuelidate(rules, data);
 const submitForm = async () => {
   banner.displaySuccess = false;
   banner.displayFailed = false;
-  FormatDataLowerCase();
   // check that the data matches requirements
   if (await v$.value.$validate()) {
     // if an error prevents saving the client, warn the user
@@ -122,22 +120,6 @@ const submitForm = async () => {
     DisplayBanner("failed");
   }
 };
-
-function FormatFormIndustries(data) {
-  formOptions.industries = formOptions.industries.map((industry) =>
-    industry
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  );
-}
-
-function FormatDataLowerCase() {
-  data.firstName = data.firstName.toLowerCase();
-  data.middleInitial = data.middleInitial.toLowerCase();
-  data.lastInitial = data.lastInitial.toLowerCase();
-}
 
 // create the post request and send it to the backend
 async function postClient() {

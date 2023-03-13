@@ -2,22 +2,17 @@
 import { reactive, ref, toRaw } from "vue";
 import DropDown from "./DropDown.vue";
 import Label from "./Label.vue";
-
 const listItems = ref([]);
 const listType = ref("");
 const chosen = ref(false);
-
 const toEdit = ref(false);
 const toRemove = ref(false);
 const toAdd = ref(false);
 const toInput = ref(false);
 const submitReady = ref(false);
-
 const choice = ref("");
 const change = ref("");
-
 const matchText = (element) => element === choice.value;
-
 function resetOptions() {
   submitReady.value = false;
   choice.value = "";
@@ -27,7 +22,6 @@ function resetOptions() {
   toAdd.value = false;
   change.value = "";
 }
-
 const formOptions = reactive({
   _id: "",
   counties: [],
@@ -38,7 +32,6 @@ const formOptions = reactive({
   shiftOptions: [],
   timeCommitmentOptions: [],
 });
-
 function chooseList(e) {
   if (e) {
     resetOptions();
@@ -47,33 +40,27 @@ function chooseList(e) {
     chosen.value = true;
   }
 }
-
 function startAdd() {
   resetOptions();
   toAdd.value = true;
   toInput.value = true;
   submitReady.value = true;
 }
-
 function startRemove() {
   resetOptions();
   toRemove.value = true;
 }
-
 function startEdit() {
   resetOptions();
   toEdit.value = true;
 }
-
 function openInput(e) {
   if (toRemove.value == false) {
     toInput.value = true;
   }
-
   choice.value = e;
   submitReady.value = true;
 }
-
 function onSubmit() {
   let selectedList = null;
   if (listType.value === "Positions") {
@@ -84,78 +71,48 @@ function onSubmit() {
     // No list selected; modify nothing.
     return;
   }
-
   let matchIndex = selectedList.findIndex(matchText);
   if (toAdd.value && matchIndex < 0) {
-    selectedList.push(choice.value.toLowerCase());
+    selectedList.push(choice.value);
     selectedList.sort();
   } else if (toRemove.value && matchIndex >= 0) {
     selectedList.splice(matchIndex, 1);
   } else if (toEdit.value && matchIndex >= 0) {
-    selectedList[matchIndex] = change.value.toLowerCase();
+    selectedList[matchIndex] = change.value;
     selectedList.sort();
   }
-
   choice.value = "";
   change.value = "";
   sendChanges();
-  getListContents("Positions");
-  getListContents("industries");
 }
-
 async function getListContents(listName) {
-  try{
+  try {
     await fetch("http://localhost:3000/GetJobOptions")
       .then((res) => res.json())
-
       .then((newOptions) => {
         for (const key in formOptions) {
           formOptions[key] = newOptions[key];
         }
-      })
-  } catch(error){
-    console.log(error)
+      });
+  } catch (error) {
+    console.log(error);
   }
   if (listName === "Positions") {
-    FormatPositions(formOptions);
     listItems.value = formOptions.positions;
   } else {
-    FormatIndustries(formOptions);
     listItems.value = formOptions.industries;
   }
 }
-
-function FormatIndustries(data) {
-  formOptions.industries = formOptions.industries.map((industry) =>
-    industry
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  );
-}
-
-function FormatPositions(data) {
-  formOptions.positions = formOptions.positions.map((position) =>
-    position
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  );
-}
-
 async function sendChanges() {
-  try{
+  try {
     await fetch("http://localhost:3000/updateJobOptions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(toRaw(formOptions)),
-    })
-      .then((response) => console.log(response))
-  } catch(error){
-    console.log(error)
+    }).then((response) => console.log(response));
+  } catch (error) {
+    console.log(error);
   }
 }
 </script>

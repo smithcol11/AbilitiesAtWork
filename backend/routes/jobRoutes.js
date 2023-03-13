@@ -7,19 +7,19 @@ module.exports = router;
 router.post("/addJob", async (req, res) => {
   await Job.insertMany({
     contact: {
-      email: req.body.contactEmail,
-      name: req.body.contactName,
+      email: req.body.contactEmail.toLowerCase(),
+      name: req.body.contactName.toLowerCase(),
       phone: req.body.contactPhoneNumber,
     },
-    employer: req.body.businessName,
-    industry: req.body.industry,
-    position: req.body.position,
+    employer: req.body.businessName.toLowerCase(),
+    industry: req.body.industry.toLowerCase(),
+    position: req.body.position.toLowerCase(),
     shift: req.body.shift,
     timeCommitment: req.body.hours,
     city: req.body.city,
     zip: req.body.zip,
     openingDate: req.body.date,
-    address: req.body.address,
+    address: req.body.address.toLowerCase(),
     county: req.body.county,
     notes: req.body.notes,
     hourlyWage: 0,
@@ -66,18 +66,21 @@ router.patch("/editJob", async (req, res) => {
   res.job = job;
 
   if (req.body.contact) {
-    if (req.body.contact.email) res.job.contact.email = req.body.contact.email;
-    if (req.body.contact.name) res.job.contact.name = req.body.contact.name;
-    if (req.body.contact.phone) res.job.contact.phone = req.body.contact.phone;
+    if (req.body.contact.email)
+      res.job.contact.email = req.body.contact.email.toLowerCase();
+    if (req.body.contact.name)
+      res.job.contact.name = req.body.contact.name.toLowerCase();
+    if (req.body.contact.phone)
+      res.job.contact.phone = req.body.contact.phone.toLowerCase();
   }
-  if (req.body.employer) res.job.employer = req.body.employer;
-  if (req.body.industry) res.job.industry = req.body.industry;
+  if (req.body.employer) res.job.employer = req.body.employer.toLowerCase();
+  if (req.body.industry) res.job.industry = req.body.industry.toLowerCase();
   if (req.body.shift) res.job.shift = req.body.shift;
   if (req.body.timeCommitment) res.job.timeCommitment = req.body.timeCommitment;
   if (req.body.city) res.job.city = req.body.city;
   if (req.body.zip) res.job.zip = req.body.zip;
   if (req.body.openingDate) res.job.openingDate = req.body.openingDate;
-  if (req.body.address) res.job.address = req.body.address;
+  if (req.body.address) res.job.address = req.body.address.toLowerCase();
   if (req.body.county) res.job.county = req.body.county;
   if (req.body.notes) res.job.notes = req.body.notes;
   if (req.body.hourlyWage) res.job.hourlyWage = req.body.hourlyWage;

@@ -83,12 +83,6 @@ function getFilters() {
     if (!filterData.city.includes(job.city)) filterData.city.push(job.city);
     if (!filterData.employer.includes(job.employer))
       filterData.employer.push(job.employer);
-
-    job.employer = job.employer
-      .toLowerCase()
-      .split(" ")
-      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-      .join(" ");
   });
 }
 
@@ -115,7 +109,7 @@ function saveUpdate(updatedJob, SelectedIndex) {
 }
 
 async function loadJobs() {
-  try{
+  try {
     if (props.jobMatches.length < 1) {
       await fetch("http://localhost:3000/allJobs")
         .then((response) => response.json())
@@ -133,8 +127,8 @@ async function loadJobs() {
       initFilters();
       getFilters();
     }
-  } catch(error){
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
 }
 
