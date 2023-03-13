@@ -78,7 +78,7 @@ function save() {
 <template>
     <Button
         label="Edit"
-        icon="pi pi-refresh"
+        icon="pi pi-pencil"
         @click="openUpdate()"
         class="p-button-text p-button-secondary"
     />
