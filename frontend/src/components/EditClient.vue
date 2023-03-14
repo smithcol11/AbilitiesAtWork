@@ -3,6 +3,8 @@ import { ref } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
+import Dropdown from "primevue/dropdown";
+
 
 const props = defineProps({
     data: {
@@ -23,8 +25,20 @@ const props = defineProps({
     },
 });
 
+const hoursOptions = new Array(
+  "Full-Time",
+  "Part-Time",
+  "Any"
+);
+
 const displayDel = ref(false);
 const displayUpdate = ref(false);
+
+var initialClient = ({
+    firstName: "",
+    middleInitial: "",
+    lastInitial: "",
+})
 
 const updatedClient = ref({
     firstName: "",
@@ -43,7 +57,12 @@ function closeDel() {
   displayUpdate.value = false;
 }
 
+//Set displayUpdate to true and grab the props.data value
+//of the client before edits are made:
 function openUpdate() {
+  initialClient.firstName = props.data.firstName;
+  initialClient.middleInitial = props.data.middleInitial;
+  initialClient.lastInitial = props.data.lastInitial;
   displayUpdate.value = true;
 }
 
@@ -52,14 +71,23 @@ function closeUpdate() {
 }
 
 
-function remove() {
-  console.log(props.data)
+async function remove() {
   if (props.index > -1) props.removeClient(props.data);
+  try {
+    await fetch("http://localhost:3000/deleteClient", {
+    method: "DELETE",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(props.data),
+
+  });
+} catch (error) {
+  console.log(error);
+}
   displayUpdate.value = false;
   displayDel.value = false;
 }
 
-function save() {
+async function save() {
   if (props.index > -1) {
     for (let key in updatedClient.value) {
       if (updatedClient.value[key] == "" || updatedClient.value[key] == 0) {
@@ -68,6 +96,19 @@ function save() {
       }
     }
     props.saveUpdate(updatedClient.value, props.data);
+
+    try {
+      await fetch("http://localhost:3000/editClient", {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        initialData: initialClient, 
+        data: props.data 
+      })
+  });
+} catch (error) {
+  console.log(error);
+}
   }
 
   displayUpdate.value = false;
@@ -134,11 +175,12 @@ function save() {
             </div>
             <div class="pt-2 basis-1/5">
                 Hours:
-                <InputText
-                    type="text"
-                    class="p-inputtext-sm"
-                    :placeholder="data.hours"
-                    v-model="updatedClient.hours"
+                <Dropdown
+                  v-model="updatedClient.hours"
+                  :options="hoursOptions"
+                  :placeholder="data.hours"
+                  :filter="false"
+                  class="p-dropdown-filter"
                 />
             </div>
           </div>

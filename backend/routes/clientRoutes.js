@@ -23,13 +23,15 @@ router.post("/addClient", async (req, res) => {
 
 router.put("/editClient", async (req, res) => {
   try {
+    console.log("Testc: ", req.body)
+    //print("Test")
     const client = await Client.updateOne(
       {
-        firstName: req.body.firstName,
-        middleInitial: req.body.middleInitial,
-        lastInitial: req.body.lastInitial,
+        firstName: req.body.initialData.firstName,
+        middleInitial: req.body.initialData.middleInitial,
+        lastInitial: req.body.initialData.lastInitial,
       },
-      req.body,
+      req.body.data,
       { new: true }
     );
     
