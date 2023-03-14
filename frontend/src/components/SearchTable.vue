@@ -109,7 +109,7 @@ function saveUpdate(updatedJob, SelectedIndex) {
 }
 
 async function loadJobs() {
-  try{
+  try {
     if (props.jobMatches.length < 1) {
       await fetch("http://localhost:3000/allJobs")
         .then((response) => response.json())
@@ -127,12 +127,45 @@ async function loadJobs() {
       initFilters();
       getFilters();
     }
-  } catch(error){
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
 }
 
 loadJobs();
+
+const columnValues = [
+  {
+    field: "employer",
+    header: "Employer",
+    filterMode: "text",
+    filterPlaceholder: "Search by employer"
+  },
+  {
+    field: "city",
+    header: "City",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  {
+    field: "zip",
+    header: "Zip",
+    filterMode: "text",
+    filterPlaceholder: "Search by zip"
+  },
+  {
+    field: "county",
+    header: "County",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  {
+    field: "timeCommitment",
+    header: "Time Commitment",
+    filterMode: "dropdown",
+    filterPlaceholder: "Any"
+  },
+];
 </script>
 
 <template>
@@ -182,7 +215,76 @@ loadJobs();
       </template>
       <template #loading> Loading records, please wait... </template>
 
-      <Column field="employer" header="Employer" style="min-width: 12rem">
+      <Column
+        v-for="column in columnValues"
+        :field="column.field"
+        :header="column.header"
+        :showFilterMenu="column.filterMode === 'text'"
+        style="min-width: 12rem"
+      >
+        <template #body="{ data }">
+          {{ data[column.field] }}
+        </template>
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText
+            v-if="column.filterMode === 'text'"
+            type="text"
+            v-model="filterModel.value"
+            @input="filterCallback()"
+            class="p-column-filter"
+            :placeholder="column.filterPlaceholder"
+          />
+          <Dropdown
+            v-if="column.filterMode === 'dropdown'"
+            v-model="filterModel.value"
+            @change="filterCallback()"
+            :options="filterData[column.field]"
+            :placeholder="column.filterPlaceholder"
+            class="p-dropdown-filter"
+            :showClear="true"
+          >
+            <template #value="slotProps">
+              <span
+                :class="'p-dropdown-value' + slotProps.value"
+                v-if="slotProps.value"
+                >{{ slotProps.value }}</span
+              >
+              <span v-else>{{ slotProps.placeholder }}</span>
+            </template>
+            <template #option="slotProps">
+              <span :class="'p-dropdown-option' + slotProps.option">{{
+                slotProps.option
+              }}</span>
+            </template>
+          </Dropdown>
+          <MultiSelect
+            v-if="column.filterMode === 'multiselect'"
+            v-model="filterModel.value"
+            @change="filterCallback()"
+            :options="filterData[column.field]"
+            :showClear="true"
+            :placeholder="column.filterPlaceholder"
+            optionLabel="city"
+            class="p-column-filter"
+          >
+            <template #value="slotProps">
+              <span
+                :class="'p-dropdown' + slotProps.value"
+                v-if="slotProps.value && slotProps.value.length > 0"
+                >{{ slotProps.value.join(", ") }}</span
+              >
+              <span v-else>{{ slotProps.placeholder }}</span>
+            </template>
+            <template #option="slotProps">
+              <span :class="'p-dropdown' + slotProps.option">{{
+                slotProps.option
+              }}</span>
+            </template>
+          </MultiSelect>
+        </template>
+      </Column>
+
+      <!-- <Column field="employer" header="Employer" style="min-width: 12rem">
         <template #body="{ data }">
           {{ data.employer }}
         </template>
@@ -195,7 +297,7 @@ loadJobs();
             placeholder="Search by employer"
           />
         </template>
-      </Column>
+      </Column> 
 
       <Column
         field="city"
@@ -263,7 +365,6 @@ loadJobs();
             v-model="filterModel.value"
             @change="filterCallback()"
             :options="filterData.county"
-            :filter="false"
             optionLabel="county"
             label="county"
             placeholder="Any"
@@ -320,7 +421,7 @@ loadJobs();
             </template>
           </Dropdown>
         </template>
-      </Column>
+      </Column> -->
 
       <Column field="jobDetails">
         <template #body="{ data, index }">
