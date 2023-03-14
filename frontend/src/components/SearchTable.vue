@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, toRaw } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
@@ -29,24 +29,77 @@ const jobs = ref([]);
 const loading = ref(false);
 const selectedJob = null;
 
+const displayedColumns = ["employer", "position", "shift"];
+
+const columns = reactive({
+  "employer" : {
+    header: "Employer",
+    filterMode: "text",
+    filterPlaceholder: "Search by employer"
+  },
+  "position" : {
+    header: "Position",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  "shift" : {
+    header: "Shift",
+    filterMode: "dropdown",
+    filterOptions: ["Early", "Morning", "Afternoon", "Evening"],
+    filterPlaceholder: "Any"
+  },
+  "timeCommitment" : {
+    header: "Time Commitment",
+    filterMode: "dropdown",
+    filterOptions: ["Full-Time", "Part-Time", "Any"],
+    filterPlaceholder: "Any"
+  },
+  "city" : {
+    header: "City",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  "zip" : {
+    header: "Zip",
+    filterMode: "text",
+    filterPlaceholder: "Search by zip"
+  },
+  "county" : {
+    header: "County",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  "industry" : {
+    header: "Industry",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+})
+
 var filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
   city: { value: null, matchMode: FilterMatchMode.IN },
   zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
   county: { value: null, matchMode: FilterMatchMode.IN },
-  industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  industry: { value: null, matchMode: FilterMatchMode.IN },
+  position: { value: null, matchMode: FilterMatchMode.IN },
+  shift: { value: null, matchMode: FilterMatchMode.IS },
   timeCommitment: { value: null, matchMode: hoursFilter },
+  'contact.name': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'contact.phone': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'contact.email': { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
-const filterData = reactive([
-  {
-    county: [],
-    employer: [],
-    city: [],
-    timeCommitment: [],
-  },
-]);
+// const filterData = reactive({
+//   county: [],
+//   city: [],
+//   employer: [],
+//   industry: [],
+//   position: [],
+//   shift: [],
+//   timeCommitment: [],
+// });
 
 function onRowSelect(event) {
   console.log(event.data.employer);
@@ -66,24 +119,24 @@ function initFilters() {
   filters.value.zip.value = null;
   filters.value.county.value = null;
   filters.value.industry.value = null;
+  filters.value.position.value = null;
+  filters.value.shift.value = null;
   filters.value.timeCommitment.value = null;
+  filters.value['contact.name'].value = null;
+  filters.value['contact.phone'].value = null;
+  filters.value['contact.email'].value = null;
 }
 
 //This dynamically populates the drop-down and multiselect filters used in the table.
 function getFilters() {
-  filterData.county = new Array();
-  filterData.employer = new Array();
-  filterData.city = new Array();
-  filterData.timeCommitment = new Array();
-  filterData.timeCommitment.push("Full-Time", "Part-Time", "Any");
-
-  jobs.value.forEach((job) => {
-    if (!filterData.county.includes(job.county))
-      filterData.county.push(job.county);
-    if (!filterData.city.includes(job.city)) filterData.city.push(job.city);
-    if (!filterData.employer.includes(job.employer))
-      filterData.employer.push(job.employer);
-  });
+  for (const [field] of Object.entries(toRaw(columns))) {
+    if (columns[field].filterOptions == null) {
+        // Extract field from all jobs
+        const current = Array.from(jobs.value, job => toRaw(job)[field]);
+        // Remove duplicates
+        columns[field].filterOptions = Array.from(new Set(current));
+    }
+  }
 }
 
 function removeJob(SelectedIndex) {
@@ -113,9 +166,7 @@ async function loadJobs() {
     if (props.jobMatches.length < 1) {
       await fetch("http://localhost:3000/allJobs")
         .then((response) => response.json())
-        .then((data) => {
-          jobs.value = data;
-        })
+        .then((data) => {jobs.value = data})
         .then(() => {
           initFilters();
           getFilters();
@@ -133,39 +184,6 @@ async function loadJobs() {
 }
 
 loadJobs();
-
-const columnValues = [
-  {
-    field: "employer",
-    header: "Employer",
-    filterMode: "text",
-    filterPlaceholder: "Search by employer"
-  },
-  {
-    field: "city",
-    header: "City",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-  {
-    field: "zip",
-    header: "Zip",
-    filterMode: "text",
-    filterPlaceholder: "Search by zip"
-  },
-  {
-    field: "county",
-    header: "County",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-  {
-    field: "timeCommitment",
-    header: "Time Commitment",
-    filterMode: "dropdown",
-    filterPlaceholder: "Any"
-  },
-];
 </script>
 
 <template>
@@ -216,18 +234,18 @@ const columnValues = [
       <template #loading> Loading records, please wait... </template>
 
       <Column
-        v-for="column in columnValues"
-        :field="column.field"
-        :header="column.header"
-        :showFilterMenu="column.filterMode === 'text'"
+        v-for="column in displayedColumns"
+        :field="column"
+        :header="columns[column].header"
+        :showFilterMenu="columns[column].filterMode === 'text'"
         style="min-width: 12rem"
       >
         <template #body="{ data }">
-          {{ data[column.field] }}
+          {{ data[column] }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText
-            v-if="column.filterMode === 'text'"
+            v-if="columns[column].filterMode === 'text'"
             type="text"
             v-model="filterModel.value"
             @input="filterCallback()"
@@ -235,11 +253,11 @@ const columnValues = [
             :placeholder="column.filterPlaceholder"
           />
           <Dropdown
-            v-if="column.filterMode === 'dropdown'"
+            v-if="columns[column].filterMode === 'dropdown'"
             v-model="filterModel.value"
             @change="filterCallback()"
-            :options="filterData[column.field]"
-            :placeholder="column.filterPlaceholder"
+            :options="columns[column].filterOptions"
+            :placeholder="columns[column].filterPlaceholder"
             class="p-dropdown-filter"
             :showClear="true"
           >
@@ -258,12 +276,12 @@ const columnValues = [
             </template>
           </Dropdown>
           <MultiSelect
-            v-if="column.filterMode === 'multiselect'"
+            v-if="columns[column].filterMode === 'multiselect'"
             v-model="filterModel.value"
             @change="filterCallback()"
-            :options="filterData[column.field]"
+            :options="columns[column].filterOptions"
             :showClear="true"
-            :placeholder="column.filterPlaceholder"
+            :placeholder="columns[column].filterPlaceholder"
             optionLabel="city"
             class="p-column-filter"
           >
