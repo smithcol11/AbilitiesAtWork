@@ -161,8 +161,6 @@ async function loadJobs() {
 
 loadJobs();
 
-////////////
-
 const formOptions = reactive({
   counties: [],
   cities: [],
