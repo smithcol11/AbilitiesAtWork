@@ -18,6 +18,89 @@ const change = ref("");
 
 const matchText = (element) => element === choice.value;
 
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
+  index: {
+    type: Number,
+    required: true,
+    default: 100,
+  },
+  removeJob: {
+    //from parent(SearchTable.vue)
+    type: Function,
+    default: null,
+  },
+  saveUpdate: {
+    //from parent(SearchTable.vue)
+    type: Function,
+    default: null,
+  },
+});
+
+const success = ref(false)
+const visible = ref(false)
+
+const banner = reactive({
+  displaySuccess: {
+    type: Boolean,
+    default: false,
+  },
+  displayFailed: {
+    type: Boolean,
+    default: false,
+  },
+  duration: 4,
+  timeRemaining: {
+    type: Number,
+    default: 4,
+  },
+  timer: {
+    type: Number,
+    default: 4,
+  },
+});
+
+function DisplayBanner(bannerType) {
+  if (bannerType == "success") banner.displaySuccess = true;
+  else banner.displayFailed = true;
+
+  clearInterval(banner.timer);
+  banner.timeRemaining = banner.duration;
+
+  //create a timer to display banner
+  banner.timer = setInterval(() => {
+    banner.timeRemaining--;
+    if (banner.timeRemaining <= 0) {
+      clearInterval(banner.timer);
+      banner.displaySuccess = false;
+      banner.displayFailed = false;
+    }
+  }, 1000);
+}
+
+
+// display success banner if post succeeded
+const displaySuccess = () => {
+  banner.success = true;
+  setTimeout(() => {
+    banner.success = false;
+  }, 3000);
+};
+
+// display error banner if post failed
+const displayError = () => {
+  banner.failure = true;
+  setTimeout(() => {
+    banner.failure = false;
+  }, 3000);
+};
+
+// use the rules the data must follow
+//const v$ = useVuelidate(rules, null);
+
 function resetOptions() {
   submitReady.value = false;
   choice.value = "";
@@ -102,7 +185,7 @@ function onSubmit() {
 }
 
 async function getListContents(listName) {
-  try{
+  try {
     await fetch("http://localhost:3000/GetJobOptions")
       .then((res) => res.json())
 
@@ -111,7 +194,7 @@ async function getListContents(listName) {
           formOptions[key] = newOptions[key];
         }
       })
-  } catch(error){
+  } catch (error) {
     console.log(error)
   }
   if (listName === "Positions") {
@@ -122,118 +205,80 @@ async function getListContents(listName) {
 }
 
 async function sendChanges() {
-  try{
+  try {
     await fetch("http://localhost:3000/updateJobOptions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(toRaw(formOptions)),
     })
-      .then((response) => console.log(response))
-  } catch(error){
+      .then((response) => {
+        console.log(response);
+        DisplayBanner("success");
+      });
+  } catch (error) {
     console.log(error)
+    DisplayBanner("error");
   }
 }
 </script>
 
 <template>
-  <div
-    class="flex flex-col items-center justify-center shadow-lg border bg-light m-3 pb-3"
-  >
+  <div class="flex flex-col items-center justify-center shadow-lg border bg-light m-3 pb-3">
+    <Transition>
+      <div role="alert">
+        <div v-if="banner.displaySuccess == true">
+          <successBanner topText="List Modified" :bottomText="bannerText" />
+        </div>
+        <div v-if="banner.displayFailed == true">
+          <errorBanner topText="ERROR: List Was Not Modified" :bottomText="bannerText" />
+        </div>
+      </div>
+    </Transition>
     <div class="w-3/4 p-5">
       <Label position="left" text="Which List?" class="py-3" />
-      <DropDown
-        class="w-full"
-        v-on:change="chooseList($event)"
-        :options="['Industries', 'Positions']"
-        placeholder=""
-      />
+      <DropDown class="w-full" v-on:change="chooseList($event)" :options="['Industries', 'Positions']" placeholder="" />
     </div>
     <div v-if="chosen" class="w-3/4 p-5">
       <Label position="left" text="What would you like to do?" />
       <div class="grid grid-cols-3">
-        <button
-          @click="startAdd()"
-          type="button"
-          class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-3 m-5 rounded"
-        >
+        <button @click="startAdd()" type="button"
+          class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-3 m-5 rounded">
           Add
         </button>
-        <button
-          @click="startRemove()"
-          type="button"
-          class="bg-red-600 hover:bg-red-900 text-white font-bold py-2 m-5 rounded"
-        >
+        <button @click="startRemove()" type="button"
+          class="bg-red-600 hover:bg-red-900 text-white font-bold py-2 m-5 rounded">
           Remove
         </button>
-        <button
-          @click="startEdit()"
-          type="button"
-          class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded"
-        >
+        <button @click="startEdit()" type="button"
+          class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded">
           Edit
         </button>
       </div>
 
       <div v-if="toAdd">
         <div v-if="toInput">
-          <Label
-            position="left"
-            text="What would you like to add?"
-            class="py-3"
-          />
-          <input
-            class="rounded bg-white pl-2 pt-2 pb-2 border w-full"
-            v-model="choice"
-            :placeholder="choice"
-          />
+          <Label position="left" text="What would you like to add?" class="py-3" />
+          <input class="rounded bg-white pl-2 pt-2 pb-2 border w-full" v-model="choice" :placeholder="choice" />
         </div>
       </div>
 
       <div v-if="toRemove">
-        <Label
-          position="left"
-          text="What would you like to remove?"
-          class="py-3"
-        />
-        <DropDown
-          class="w-full"
-          v-on:change="openInput($event)"
-          v-model="choice"
-          :options="listItems"
-          placeholder=""
-        />
+        <Label position="left" text="What would you like to remove?" class="py-3" />
+        <DropDown class="w-full" v-on:change="openInput($event)" v-model="choice" :options="listItems" placeholder="" />
       </div>
 
       <div v-if="toEdit">
-        <Label
-          position="left"
-          text="What would you like to edit?"
-          class="py-3"
-        />
-        <DropDown
-          class="w-full"
-          v-on:change="openInput($event)"
-          v-model="choice"
-          :options="listItems"
-          placeholder=""
-        />
+        <Label position="left" text="What would you like to edit?" class="py-3" />
+        <DropDown class="w-full" v-on:change="openInput($event)" v-model="choice" :options="listItems" placeholder="" />
         <div v-if="toInput">
           <Label position="left" text="Make changes here." class="pb-3 pt-6" />
-          <input
-            class="rounded bg-white pl-2 pt-2 pb-2 border w-full"
-            v-model="change"
-            :placeholder="choice"
-          />
+          <input class="rounded bg-white pl-2 pt-2 pb-2 border w-full" v-model="change" :placeholder="choice" />
         </div>
       </div>
 
-      <button
-        v-if="submitReady"
-        @click="onSubmit()"
-        type="button"
-        class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mx-5 mt-5 rounded"
-      >
+      <button v-if="submitReady" @click="onSubmit()" type="button"
+        class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mx-5 mt-5 rounded">
         Submit
       </button>
     </div>
