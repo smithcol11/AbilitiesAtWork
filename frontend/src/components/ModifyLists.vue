@@ -18,28 +18,6 @@ const change = ref("");
 
 const matchText = (element) => element === choice.value;
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true,
-  },
-  index: {
-    type: Number,
-    required: true,
-    default: 100,
-  },
-  removeJob: {
-    //from parent(SearchTable.vue)
-    type: Function,
-    default: null,
-  },
-  saveUpdate: {
-    //from parent(SearchTable.vue)
-    type: Function,
-    default: null,
-  },
-});
-
 const success = ref(false)
 const visible = ref(false)
 
