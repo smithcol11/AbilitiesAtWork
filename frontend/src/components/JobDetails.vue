@@ -108,7 +108,12 @@ function save() {
     }
     props.saveUpdate(updatedJob.value, props.data);
   }
+  
   displayUpdate.value = false;
+  
+  for (let key in updatedJob.value) {
+    updatedJob.value[key] = "";
+  }
 }
 </script>
 
