@@ -4,8 +4,9 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import TextBox from "./TextBox.vue";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
-
+const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
 const props = defineProps({
   data: {
     type: Object,
@@ -56,7 +57,6 @@ const updatedJob = ref({
   notes: "",
 });
 
-
 function openDel() {
   displayBasic.value = false;
   displayDel.value = true;
@@ -93,32 +93,33 @@ function save() {
   if (props.index > -1) {
     for (let key in updatedJob.value) {
       //remain the same data if no new input
-      if(updatedJob.value[key].name == ""){
+      if (updatedJob.value[key].name == "") {
         updatedJob.value[key].name = props.data[key].name;
       }
-      if(updatedJob.value[key].email == ""){
+      if (updatedJob.value[key].email == "") {
         updatedJob.value[key].email = props.data[key].email;
       }
-      if(updatedJob.value[key].phone == ""){
+      if (updatedJob.value[key].phone == "") {
         updatedJob.value[key].phone = props.data[key].phone;
       }
-      if(updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
+      if (updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
         updatedJob.value[key] = props.data[key];
       }
     }
     props.saveUpdate(updatedJob.value, props.data);
   }
-  
+
   displayUpdate.value = false;
-  
+
   updatedJob.value["contact"].name = "";
   updatedJob.value["contact"].email = "";
   updatedJob.value["contact"].phone = "";
   for (let key in updatedJob.value) {
-    if(key != "contact")
-      updatedJob.value[key] = "";
+    if (key != "contact") updatedJob.value[key] = "";
   }
 }
+
+const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
 </script>
 
 <template>
@@ -175,7 +176,10 @@ function save() {
             Hours: <span class="font-normal">{{ data.timeCommitment }}</span>
           </p>
           <p class="pt-2">
-            Date Posted: <span class="font-normal">{{ data.openingDate.substr(0,10) }}</span>
+            Date Posted:
+            <span class="font-normal">{{
+              data.openingDate.substr(0, 10)
+            }}</span>
           </p>
           <p class="pt-2">
             Notes: <span class="font-normal">{{ data.notes }}</span>
@@ -191,6 +195,7 @@ function save() {
         class="p-button-text p-button-secondary"
       />
       <Button
+        v-if="isAdmin() == true"
         label="Delete"
         icon="pi pi-times"
         @click="openDel()"
