@@ -5,47 +5,44 @@ import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
 
-
 const props = defineProps({
-    data: {
-        type: Object,
-        required: true,
-    },
-    index: {
-        type: Number,
-        required: true,
-    },
-    removeClient: {
-        type: Function,
-        default: null,
-    },
-    saveUpdate: {
-        type: Function,
-        default: null,
-    },
+  data: {
+    type: Object,
+    required: true,
+  },
+  index: {
+    type: Number,
+    required: true,
+  },
+  formOptions: {
+    type: Object,
+    required: true,
+  },
+  removeClient: {
+    type: Function,
+    default: null,
+  },
+  saveUpdate: {
+    type: Function,
+    default: null,
+  },
 });
-
-const hoursOptions = new Array(
-  "Full-Time",
-  "Part-Time",
-  "Any"
-);
 
 const displayDel = ref(false);
 const displayUpdate = ref(false);
 
-var initialClient = ({
-    firstName: "",
-    middleInitial: "",
-    lastInitial: "",
-})
+var initialClient = {
+  firstName: "",
+  middleInitial: "",
+  lastInitial: "",
+};
 
 const updatedClient = ref({
-    firstName: "",
-    middleInitial: "",
-    lastInitial: "",
-    industry: "",
-    hours: "",
+  firstName: "",
+  middleInitial: "",
+  lastInitial: "",
+  industry: [],
+  hours: "",
 });
 
 function openDel() {
@@ -70,19 +67,17 @@ function closeUpdate() {
   displayUpdate.value = false;
 }
 
-
 async function remove() {
   if (props.index > -1) props.removeClient(props.data);
   try {
     await fetch("http://localhost:3000/deleteClient", {
-    method: "DELETE",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(props.data),
-
-  });
-} catch (error) {
-  console.log(error);
-}
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(props.data),
+    });
+  } catch (error) {
+    console.log(error);
+  }
   displayUpdate.value = false;
   displayDel.value = false;
 }
@@ -90,7 +85,9 @@ async function remove() {
 async function save() {
   if (props.index > -1) {
     for (let key in updatedClient.value) {
-      if (updatedClient.value[key] == "" || updatedClient.value[key] == 0) {
+      if (key == "industry" && updatedClient.value[key].length == 0)
+        updatedClient.value[key] = props.data[key];
+      else if (updatedClient.value[key] == "") {
         //remain the same data if no new input
         updatedClient.value[key] = props.data[key];
       }
@@ -99,35 +96,34 @@ async function save() {
 
     try {
       await fetch("http://localhost:3000/editClient", {
-      method: "PUT",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        initialData: initialClient, 
-        data: props.data 
-      })
-  });
-} catch (error) {
-  console.log(error);
-}
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          initialData: initialClient,
+          data: props.data,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   displayUpdate.value = false;
 }
 </script>
 
-
 <template>
-    <Button
-        label="Edit"
-        icon="pi pi-refresh"
-        @click="openUpdate()"
-        class="p-button-text p-button-secondary"
-    />
-    <Dialog
+  <Button
+    label="Edit"
+    icon="pi pi-refresh"
+    @click="openUpdate()"
+    class="p-button-text p-button-secondary"
+  />
+  <Dialog
     header="Update"
     v-model:visible="displayUpdate"
     :style="{ width: '550px' }"
-    >
+  >
     <form action="">
       <div class="mt-3 text-center">
         <div class="mt-2 px-7 py-3">
@@ -135,69 +131,71 @@ async function save() {
             class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6"
           >
             <div class="pt-2 basis-1/5">
-                First Name:
-                <InputText
-                    type="text"
-                    class="p-inputtext-sm"
-                    :placeholder="data.firstName"
-                    v-model="updatedClient.firstName"
-                />
+              First Name:
+              <InputText
+                type="text"
+                class="p-inputtext-sm"
+                :placeholder="data.firstName"
+                v-model="updatedClient.firstName"
+              />
             </div>
             <div class="pt-2 basis-1/5">
-                Middle Initial:
-                <InputText
-                    type="text"
-                    class="p-inputtext-sm"
-                    maxlength = "1"
-                    :placeholder="data.middleInitial"
-                    v-model="updatedClient.middleInitial"
-                />
+              Middle Initial:
+              <InputText
+                type="text"
+                class="p-inputtext-sm"
+                maxlength="1"
+                :placeholder="data.middleInitial"
+                v-model="updatedClient.middleInitial"
+              />
             </div>
             <div class="pt-2 basis-1/5">
-                Last Initial:
-                <InputText
-                    type="text"
-                    class="p-inputtext-sm"
-                    maxlength = "1"
-                    onkeyup="value=value.replace(/[^a-zA-Z]/g,'')"
-                    :placeholder="data.lastInitial"
-                    v-model="updatedClient.lastInitial"
-                />
+              Last Initial:
+              <InputText
+                type="text"
+                class="p-inputtext-sm"
+                maxlength="1"
+                onkeyup="value=value.replace(/[^a-zA-Z]/g,'')"
+                :placeholder="data.lastInitial"
+                v-model="updatedClient.lastInitial"
+              />
             </div>
             <div class="pt-2 basis-1/5">
-                Industry:
-                <InputText
-                    type="text"
-                    class="p-inputtext-sm"
-                    :placeholder="data.industry"
-                    v-model="updatedClient.industry"
-                />
+              Industry:
+              <DropDown
+                type="text"
+                mode="multiple"
+                class="p-inputtext-sm font-normal"
+                :placeholder="data.industry.join(',')"
+                :options="props.formOptions.industries"
+                v-model="updatedClient.industry"
+              />
             </div>
             <div class="pt-2 basis-1/5">
-                Hours:
-                <Dropdown
-                  v-model="updatedClient.hours"
-                  :options="hoursOptions"
-                  :placeholder="data.hours"
-                  :filter="false"
-                  class="p-dropdown-filter"
-                />
+              Hours:
+              <DropDown
+                type="text"
+                class="p-inputtext-sm font-normal"
+                :placeholder="data.hours"
+                :options="props.formOptions.timeCommitmentOptions"
+                v-model="updatedClient.timeCommitment"
+              />
             </div>
           </div>
         </div>
       </div>
       <div class="mt-3 text-right">
         <Button
-            label="Confirm"
-            icon="pi pi-check"
-            @click="save()"
-            class="p-button-text p-button-secondary"
+          label="Confirm"
+          icon="pi pi-check"
+          @click="save()"
+          class="p-button-text p-button-secondary"
         />
         <Button
-            label="Delete"
-            icon="pi pi-times"
-            @click="openDel()"
-            class="p-button-text p-button-secondary"
+          label="Delete"
+          icon="pi pi-times"
+          @click="openDel()"
+          class="p-button-text p-button-secondary"
         />
       </div>
     </form>
