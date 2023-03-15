@@ -4,6 +4,7 @@ import { ref, watch, reactive } from "vue";
 import Button from "../components/Button.vue";
 import Label from "../components/Label.vue";
 
+
 import {useDark, useToggle} from "@vueuse/core";
 
 const isDark = reactive(useDark());
@@ -74,6 +75,7 @@ const toggleDark = () => {
     loadTheme("saga-blue", "mdc-dark-deeppurple");
   }
 }
+
 
 const auth = useAuthenticationStore();
 let showLogout = ref(false);

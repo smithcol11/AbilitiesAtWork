@@ -2,7 +2,6 @@
 import SearchTable from "../components/SearchTable.vue";
 import { ref } from "vue";
 import CreateJob from "../components/CreateJob.vue";
-import Button from "../components/Button.vue";
 import ModifyLists from "../components/ModifyLists.vue";
 
 const currentView = ref("Search");
@@ -29,17 +28,17 @@ function toggleView(view) {
   }
 }
 </script>
+
 <template>
   <div class="text-center">
     <div class="flex justify-center gap-10 my-5">
-      <Button @click="toggleView('Add')" id="addJob" text="Add Job"> </Button>
+      <Button @click="toggleView('Add')" id="addJob" text="Add Job"/>
       <Button
         class="accentLight-button"
         @click="toggleView('Search')"
         id="searchJob"
         text="Search Jobs"
-      >
-      </Button>
+      />
       <Button
         @click="toggleView('Modify')"
         id="modifyList"
@@ -59,5 +58,3 @@ function toggleView(view) {
     </form>
   </div>
 </template>
-
-<style></style>

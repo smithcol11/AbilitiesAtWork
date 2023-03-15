@@ -23,7 +23,6 @@ if(!isDark.value) {
 }
 else {import('primevue/resources/themes/mdc-dark-deeppurple/theme.css')}
 
-
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';  
 

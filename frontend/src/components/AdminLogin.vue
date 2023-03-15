@@ -1,17 +1,14 @@
 <script setup>
 import { useAuthenticationStore } from "../stores/AuthenticationStore";
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 import TextBox from "./TextBox.vue";
-import Button from "./Button.vue";
-import errorBanner from "./ErrorBanner.vue";
-import Label from "./Label.vue";
+
 const auth = useAuthenticationStore();
 const adminData = reactive({
   adminUser: "",
   adminPassword: "",
 });
-//const adminUser = reactive("");
-//const adminPassword = reactive("");
+
 const banner = reactive({
   display: {
     type: Boolean,
@@ -52,6 +49,7 @@ function ResetValues() {
   (adminData.adminUser = ""), (adminData.adminPassword = "");
 }
 </script>
+
 <template>
   <div id="Admin Login">
     <Label class="dark:text-light" text="Administrator Login"></Label>
@@ -110,10 +108,10 @@ function ResetValues() {
     <Transition>
       <div role="alert" class="mt-5">
         <div v-if="banner.display == true">
-          <errorBanner
+          <ErrorBanner
             topText="ERROR: Invalid data field!"
             bottomText="One or more data fields is missing or incorrect!"
-          ></errorBanner>
+          />
         </div>
       </div>
     </Transition>

@@ -1,7 +1,7 @@
 <script setup>
 import ClientAdd from "../components/AddClient.vue";
+import SearchClient from "../components/ClientTable.vue";
 import SearchTable from "../components/SearchTable.vue";
-import Button from "../components/Button.vue";
 import { ref } from "vue";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
@@ -44,7 +44,7 @@ const authorizeAddClient = () => auth.validateJWT() && auth.isAuthAdmin;
     </div>
     <div>
       <div v-if="currentView === 'Search'">
-        <SearchTable />
+        <SearchClient />
       </div>
       <div v-else-if="currentView === 'Add'" class="mx-auto max-w-lg">
         <ClientAdd />

@@ -152,32 +152,28 @@ async function sendChanges() {
     <div v-if="chosen" class="w-3/4 p-5">
       <Label position="left" text="What would you like to do?" />
       <div class="grid grid-cols-3">
-        <button @click="startAdd()" type="button"
-          class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-3 m-5 rounded">
+        <button
+          @click="startAdd()"
+          type="button"
+          class="bg-green-500 hover:bg-green-800 text-white font-bold py-2 px-3 m-5 rounded"
+        >
           Add
         </button>
-        <button @click="startRemove()" type="button"
-          class="bg-red-600 hover:bg-red-900 text-white font-bold py-2 m-5 rounded">
+        <button
+          @click="startRemove()"
+          type="button"
+          class="bg-red-600 hover:bg-red-900 text-white font-bold py-2 m-5 rounded"
+        >
           Remove
         </button>
-        <button @click="startEdit()" type="button"
-          class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded">
+        <button
+          @click="startEdit()"
+          type="button"
+          class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded"
+        >
           Edit
         </button>
       </div>
-
-      <div v-if="toEdit">
-        <label class="block text-left px-1 p-3 dark:text-light">What would you like to edit?</label>
-        <select @change="openInput($event)" class="rounded bg-white dark:bg-darkGrayAccent dark:border-darkGray dark:text-light pl-2 pt-1 pb-2 border w-full" name="listType"
-          id="list" v-model="choice" required>
-          <option v-for="items in listItems" class="block w-full dark:text-light"> {{ items }}</option>
-        </select>
-        <div v-if="toInput">
-          <label v-if="toEdit" class="block text-left px-1 p-3 dark:text-light">Make changes here.</label>
-          <input class="rounded bg-white pl-2 pt-1 pb-2 border w-full dark:bg-darkGrayAccent dark:border-darkGray dark:focus:bg-darkGray dark:text-light" v-model="change" :placeholder="choice">
-        </div>
-      </div>
-
       <div v-if="toAdd">
         <div v-if="toInput">
           <Label
@@ -208,11 +204,37 @@ async function sendChanges() {
         />
       </div>
 
-      <button v-if="submitReady" @click="onSubmit()" type="button"
-        class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 m-5 rounded">
+      <div v-if="toEdit">
+        <Label
+          position="left"
+          text="What would you like to edit?"
+          class="py-3"
+        />
+        <DropDown
+          class="w-full dark:bg-darkGrayAccent dark:border-darkGray dark:text-light"
+          v-on:change="openInput($event)"
+          v-model="choice"
+          :options="listItems"
+          placeholder=""
+        />
+        <div v-if="toInput">
+          <Label position="left" text="Make changes here." class="pb-3 pt-6 dark:text-light" />
+          <input
+            class="rounded bg-white pl-2 pt-2 pb-2 border w-full dark:bg-darkGrayAccent dark:border-darkGray dark:focus:bg-darkGray dark:text-light"
+            v-model="change"
+            :placeholder="choice"
+          />
+        </div>
+      </div>
+
+      <button
+        v-if="submitReady"
+        @click="onSubmit()"
+        type="button"
+        class="bg-accentLight hover:bg-accentDark text-white font-bold py-2 px-4 mx-5 mt-5 rounded"
+      >
         Submit
       </button>
     </div>
-
   </div>
 </template>

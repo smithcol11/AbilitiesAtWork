@@ -5,6 +5,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: "/",
+      name: "home",
+      redirect:"/clientMenu",
+    },
+    {
       path: "/clientMenu",
       name: "clientMenu",
       component: () => import("../views/ClientMenu.vue"),
