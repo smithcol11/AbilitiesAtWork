@@ -86,7 +86,6 @@ async function remove() {
 }
 
 function resetForm() {
-  console.log("RESET");
   updatedClient.value = structuredClone(defaultClient);
 }
 
