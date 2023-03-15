@@ -76,7 +76,7 @@ const columns = reactive({
   },
 })
 
-var filters = ref({
+const filterDefaults = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
   city: { value: null, matchMode: FilterMatchMode.IN },
@@ -89,42 +89,13 @@ var filters = ref({
   'contact.name': { value: null, matchMode: FilterMatchMode.CONTAINS },
   'contact.phone': { value: null, matchMode: FilterMatchMode.CONTAINS },
   'contact.email': { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
+};
 
-// const filterData = reactive({
-//   county: [],
-//   city: [],
-//   employer: [],
-//   industry: [],
-//   position: [],
-//   shift: [],
-//   timeCommitment: [],
-// });
-
-function onRowSelect(event) {
-  console.log(event.data.employer);
-}
-
-function onRowUnselect(event) {}
-
-function clearFilter() {
-  initFilters();
-}
+let filters = ref(structuredClone(filterDefaults));
 
 //Sets all filters to default. Can be called to reset all filters.
-function initFilters() {
-  filters.value.global.value = null;
-  filters.value.employer.value = null;
-  filters.value.city.value = null;
-  filters.value.zip.value = null;
-  filters.value.county.value = null;
-  filters.value.industry.value = null;
-  filters.value.position.value = null;
-  filters.value.shift.value = null;
-  filters.value.timeCommitment.value = null;
-  filters.value['contact.name'].value = null;
-  filters.value['contact.phone'].value = null;
-  filters.value['contact.email'].value = null;
+function clearFilters() {
+  filters = structuredClone(filterDefaults);
 }
 
 //This dynamically populates the drop-down and multiselect filters used in the table.
@@ -144,21 +115,7 @@ function removeJob(SelectedIndex) {
 }
 
 function saveUpdate(updatedJob, SelectedIndex) {
-  jobs.value[SelectedIndex].employer = updatedJob.employer;
-  jobs.value[SelectedIndex].contact.name = updatedJob.contact.name;
-  jobs.value[SelectedIndex].contact.phone = updatedJob.contact.phone;
-  jobs.value[SelectedIndex].contact.email = updatedJob.contact.email;
-  jobs.value[SelectedIndex].address = updatedJob.address;
-  jobs.value[SelectedIndex].city = updatedJob.city;
-  jobs.value[SelectedIndex].zip = updatedJob.zip;
-  jobs.value[SelectedIndex].county = updatedJob.county;
-  jobs.value[SelectedIndex].shift = updatedJob.shift;
-  jobs.value[SelectedIndex].industry = updatedJob.industry;
-  jobs.value[SelectedIndex].position = updatedJob.position;
-  jobs.value[SelectedIndex].timeCommitment = updatedJob.timeCommitment;
-  jobs.value[SelectedIndex].openingDate = updatedJob.openingDate;
-  jobs.value[SelectedIndex].hourlyWage = updatedJob.hourlyWage;
-  jobs.value[SelectedIndex].notes = updatedJob.notes;
+  jobs.value[SelectedIndex] = structuredClone(toRaw(updatedJob));
 }
 
 async function loadJobs() {
@@ -168,14 +125,14 @@ async function loadJobs() {
         .then((response) => response.json())
         .then((data) => {jobs.value = data})
         .then(() => {
-          initFilters();
+          clearFilters();
           getFilters();
         });
     } else {
       for (let i in props.jobMatches) {
         jobs.value.push(props.jobMatches[i]);
       }
-      initFilters();
+      clearFilters();
       getFilters();
     }
   } catch (error) {
@@ -192,8 +149,6 @@ loadJobs();
       :value="jobs"
       class="p-datatable-sm"
       stripedRows
-      @rowSelect="onRowSelect"
-      @rowUnselect="onRowUnselect"
       v-model:selection="selectedJob"
       selectionMode="single"
       v-model:filters="filters"
@@ -217,7 +172,7 @@ loadJobs();
             icon="pi pi-filter-slash"
             label="Clear"
             class="p-button-outlined"
-            @click="clearFilter()"
+            @click="clearFilters()"
           />
           <span class="">
             <i class="pi pi-search pr-3" />

@@ -54,7 +54,7 @@ const defaultData = {
   hours: "",
 }
 
-const data = ref(Object.create(defaultData));
+const data = ref(structuredClone(defaultData));
 
 const rules = computed(() => {
   return {
@@ -87,7 +87,7 @@ const rules = computed(() => {
 // reset form values to default or empty values
 const resetForm = () => {
   v$.value.$reset();
-  data.value = Object.create(defaultData);
+  data.value = structuredClone(defaultData);
 };
 function DisplayBanner(bannerType) {
   if (bannerType == "success") banner.displaySuccess = true;

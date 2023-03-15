@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, toRaw } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
@@ -30,12 +30,12 @@ const displayBasic = ref(false);
 const displayDel = ref(false);
 const displayUpdate = ref(false);
 
-const updatedJob = ref({
+const emptyJob = {
   employer: "",
   contact: {
     email: "",
     name: "",
-    phone: 0,
+    phone: null,
   },
   address: "",
   city: "",
@@ -44,11 +44,13 @@ const updatedJob = ref({
   shift: "",
   industry: "",
   position: "",
-  hourlyWage: 0,
+  hourlyWage: null,
   timeCommitment: "",
   openingDate: "",
   notes: "",
-});
+};
+
+const updatedJob = ref(structuredClone(emptyJob));
 
 function openDel() {
   displayBasic.value = false;
@@ -82,21 +84,24 @@ function remove() {
   displayDel.value = false;
 }
 
+function copyEmptyProps(target, source) {
+  for (let key in target) {
+    if (["", 0, null].includes(target[key])) {
+      target[key] = source[key];
+    } else if (target[key] instanceof Object) {
+      copyEmptyProps(target[key], source[key]);
+    }
+  }
+}
+
 function save() {
   if (props.index > -1) {
-    for (let key in updatedJob.value) {
-      if (updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
-        //remain the same data if no new input
-        updatedJob.value[key] = props.data[key];
-      }
-    }
+    copyEmptyProps(updatedJob.value, toRaw(props.data));
     props.saveUpdate(updatedJob.value, props.index);
   }
 
   //reset data
-  for (let key in updatedJob) {
-    updatedJob[key] = "";
-  }
+  updatedJob.value = structuredClone(emptyJob); 
 
   displayUpdate.value = false;
 }
@@ -196,7 +201,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.employer"
-                v-model="updatedJob.company"
+                v-model="updatedJob.employer"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -205,7 +210,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.contact.name"
-                v-model="updatedJob.contactName"
+                v-model="updatedJob.contact.name"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -214,7 +219,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.contact.phone"
-                v-model="updatedJob.contactPhoneNumber"
+                v-model="updatedJob.contact.phone"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -223,7 +228,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.contact.email"
-                v-model="updatedJob.contactEmail"
+                v-model="updatedJob.contact.email"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -295,7 +300,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.timeCommitment"
-                v-model="updatedJob.hours"
+                v-model="updatedJob.timeCommitment"
               />
             </div>
             <div class="pt-2 basis-1/5">
@@ -304,7 +309,7 @@ function save() {
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.openingDate"
-                v-model="updatedJob.datePosted"
+                v-model="updatedJob.openingDate"
               />
             </div>
             <div class="pt-2 basis-1/5">
