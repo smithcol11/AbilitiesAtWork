@@ -77,17 +77,17 @@ const columns = reactive({
     filterMode: "text",
     filterPlaceholder: "Search by name"
   },
-  "contact.phone" : {
-    cellContent: data => data.contact.phone,
-    header: "Contact Phone",
-    filterMode: "text",
-    filterPlaceholder: "Search by phone"
-  },
   "contact.email" : {
     cellContent: data => data.contact.email,
     header: "Contact Email",
     filterMode: "text",
     filterPlaceholder: "Search by email"
+  },
+  "contact.phone" : {
+    cellContent: data => data.contact.phone,
+    header: "Contact Phone",
+    filterMode: "text",
+    filterPlaceholder: "Search by phone"
   },
 });
 
@@ -182,14 +182,7 @@ loadJobs();
       :loading="loading"
       :paginator="true"
       :rows="10"
-      :globalFilterFields="[
-        'employer',
-        'city',
-        'industry',
-        'timeCommitment',
-        'zip',
-        'county',
-      ]"
+      :globalFilterFields="displayedFields"
     >
       <template #header>
         <div class="flex justify-content-between">
@@ -197,14 +190,21 @@ loadJobs();
             type="button"
             icon="pi pi-filter-slash"
             label="Clear"
-            class="p-button-outlined"
+            class="p-button-outlined grow-0"
             @click="clearFilters()"
           />
-          <span class="">
+          <span class="grow-0">
             <i class="pi pi-search pr-3" />
             <InputText
-              v-model="filters['global'].value"
+              v-model="filters.global.value"
               placeholder="Keyword Search"
+            />
+          </span>
+          <div class="grow bg-lime-500" />
+          <span class="grow-0">
+            <InputText
+              v-model="filters.global.value"
+              placeholder="PLACEHOLDER"
             />
           </span>
         </div>
