@@ -37,13 +37,15 @@ var initialClient = {
   lastInitial: "",
 };
 
-const updatedClient = ref({
+const defaultClient = {
   firstName: "",
   middleInitial: "",
   lastInitial: "",
   industry: [],
   hours: "",
-});
+};
+
+const updatedClient = ref(structuredClone(defaultClient));
 
 function openDel() {
   displayDel.value = true;
@@ -80,6 +82,12 @@ async function remove() {
   }
   displayUpdate.value = false;
   displayDel.value = false;
+  resetForm();
+}
+
+function resetForm() {
+  console.log("RESET");
+  updatedClient.value = structuredClone(defaultClient);
 }
 
 async function save() {
@@ -109,6 +117,7 @@ async function save() {
   }
 
   displayUpdate.value = false;
+  resetForm();
 }
 </script>
 
@@ -122,6 +131,7 @@ async function save() {
   <Dialog
     header="Update"
     v-model:visible="displayUpdate"
+    @update:visible="resetForm()"
     :style="{ width: '550px' }"
   >
     <form action="">
