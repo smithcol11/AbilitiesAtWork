@@ -3,26 +3,11 @@ import { useAuthenticationStore } from "../stores/AuthenticationStore";
 import { ref, watch, reactive } from "vue";
 import Button from "../components/Button.vue";
 import Label from "../components/Label.vue";
+
 import {useDark, useToggle} from "@vueuse/core";
-// import PrimeVue from 'primevue/config';
 
 const isDark = reactive(useDark());
 
-// const updateTables = () => {
-//   console.log("Updating tables")
-//   const allRows = document.querySelectorAll(".p-datatable");
-//   if (isDark.value) {
-//     for (let i = 0; i < allRows.length; i++) {
-//       // allTables[i].classList.remove("datatable-light");
-//       allRows[i].classList.add("datatable-dark");
-//     }
-//   } else {
-//     for (let i = 0; i < allRows.length; i++) {
-//       allRows[i].classList.remove("datatable-dark");
-//       // allTables[i].classList.add("datatable-light");
-//     }
-//   }
-// }
 let observer = {};
 let themeName = "";
 let loadedThemes = {};
@@ -116,7 +101,7 @@ function toggleLogout() {
       <button 
       class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light dark:hover:bg-darkGrayAccent dark:text-light"
       @click="toggleDark()">
-      Dark Mode: {{ isDark }}
+      Dark Mode: {{ isDark ? 'On' : 'Off' }}
       </button>
       <button
         class="w-full py-2 border-b-2 sm:py-3 text-center flex justify-center hover:bg-accentDark hover:text-light dark:hover:bg-darkGrayAccent dark:text-light"
@@ -126,7 +111,10 @@ function toggleLogout() {
       </button>
     </div>
   </nav>
-  <Button class="nav-button" @click="toggleNav()">
+  <button
+    class="sm:hidden nav-button flex mx-auto border-b border-x shadow-l bg-light"
+    @click="toggleNav()"
+  >
     <svg
       class="h-7 w-32 text-dark"
       viewBox="0 0 24 24"
@@ -140,7 +128,7 @@ function toggleLogout() {
       <line x1="3" y1="6" x2="21" y2="6" />
       <line x1="3" y1="18" x2="21" y2="18" />
     </svg>
-  </Button>
+  </button>
   <div
     v-if="showLogout"
     class="absolute top-0 w-screen h-screen bg-opacity-50 dark:bg-darkGrayAccent dark:bg-opacity-50 mx-auto text-center z-10"
