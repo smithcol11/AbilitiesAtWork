@@ -111,8 +111,12 @@ function save() {
   
   displayUpdate.value = false;
   
+  updatedJob.value["contact"].name = "";
+  updatedJob.value["contact"].email = "";
+  updatedJob.value["contact"].phone = "";
   for (let key in updatedJob.value) {
-    updatedJob.value[key] = "";
+    if(key != "contact")
+      updatedJob.value[key] = "";
   }
 }
 </script>
