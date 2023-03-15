@@ -17,6 +17,80 @@ const props = defineProps({
   },
 });
 
+// Select table columns. Only fields listed here will have columns.
+const displayedFields = ["employer", "contact.email", "city", "shift", "timeCommitment"];
+
+const columns = reactive({
+  "employer" : {
+    cellContent: data => data.employer,
+    header: "Employer",
+    filterMode: "text",
+    filterPlaceholder: "Search by employer"
+  },
+  "position" : {
+    cellContent: data => data.position,
+    header: "Position",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  "shift" : {
+    cellContent: data => data.shift,
+    header: "Shift",
+    filterMode: "dropdown",
+    filterOptions: ["Early", "Morning", "Afternoon", "Evening"],
+    filterPlaceholder: "Any"
+  },
+  "timeCommitment" : {
+    cellContent: data => data.timeCommitment,
+    header: "Time Commitment",
+    filterMode: "dropdown",
+    filterOptions: ["Full-Time", "Part-Time", "Any"],
+    filterPlaceholder: "Any"
+  },
+  "city" : {
+    cellContent: data => data.city,
+    header: "City",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  "zip" : {
+    cellContent: data => data.zip,
+    header: "Zip",
+    filterMode: "text",
+    filterPlaceholder: "Search by zip"
+  },
+  "county" : {
+    cellContent: data => data.county,
+    header: "County",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  "industry" : {
+    cellContent: data => data.industry,
+    header: "Industry",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any"
+  },
+  "contact.name" : {
+    cellContent: data => data.contact.name,
+    header: "Contact Name",
+    filterMode: "text",
+    filterPlaceholder: "Search by name"
+  },
+  "contact.phone" : {
+    cellContent: data => data.contact.phone,
+    header: "Contact Phone",
+    filterMode: "text",
+    filterPlaceholder: "Search by phone"
+  },
+  "contact.email" : {
+    cellContent: data => data.contact.email,
+    header: "Contact Email",
+    filterMode: "text",
+    filterPlaceholder: "Search by email"
+  },
+});
+
 //Custom hours filter to handle the 'Any' condition displaying
 //both Full-Time and Part-Time
 const hoursFilter = "hoursFilter";
@@ -24,57 +98,6 @@ FilterService.register(hoursFilter, (value, filter) => {
   if (filter === "Any" || filter === null) return true;
   if (filter === value) return true;
 });
-
-const jobs = ref([]);
-const loading = ref(false);
-const selectedJob = null;
-
-const displayedColumns = ["employer", "position", "shift"];
-
-const columns = reactive({
-  "employer" : {
-    header: "Employer",
-    filterMode: "text",
-    filterPlaceholder: "Search by employer"
-  },
-  "position" : {
-    header: "Position",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-  "shift" : {
-    header: "Shift",
-    filterMode: "dropdown",
-    filterOptions: ["Early", "Morning", "Afternoon", "Evening"],
-    filterPlaceholder: "Any"
-  },
-  "timeCommitment" : {
-    header: "Time Commitment",
-    filterMode: "dropdown",
-    filterOptions: ["Full-Time", "Part-Time", "Any"],
-    filterPlaceholder: "Any"
-  },
-  "city" : {
-    header: "City",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-  "zip" : {
-    header: "Zip",
-    filterMode: "text",
-    filterPlaceholder: "Search by zip"
-  },
-  "county" : {
-    header: "County",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-  "industry" : {
-    header: "Industry",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-})
 
 const filterDefaults = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -91,11 +114,14 @@ const filterDefaults = {
   'contact.email': { value: null, matchMode: FilterMatchMode.CONTAINS },
 };
 
-let filters = ref(structuredClone(filterDefaults));
+const filters = ref(structuredClone(filterDefaults));
+const jobs = ref([]);
+const loading = ref(false);
+const selectedJob = null;
 
 //Sets all filters to default. Can be called to reset all filters.
 function clearFilters() {
-  filters = structuredClone(filterDefaults);
+  filters.value = structuredClone(filterDefaults);
 }
 
 //This dynamically populates the drop-down and multiselect filters used in the table.
@@ -189,30 +215,30 @@ loadJobs();
       <template #loading> Loading records, please wait... </template>
 
       <Column
-        v-for="column in displayedColumns"
-        :field="column"
-        :header="columns[column].header"
-        :showFilterMenu="columns[column].filterMode === 'text'"
+        v-for="field in displayedFields"
+        :filterField="field"
+        :header="columns[field].header"
+        :showFilterMenu="columns[field].filterMode === 'text'"
         style="min-width: 12rem"
       >
         <template #body="{ data }">
-          {{ data[column] }}
+          {{ columns[field].cellContent(data) }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText
-            v-if="columns[column].filterMode === 'text'"
+            v-if="columns[field].filterMode === 'text'"
             type="text"
             v-model="filterModel.value"
             @input="filterCallback()"
             class="p-column-filter"
-            :placeholder="column.filterPlaceholder"
+            :placeholder="columns[field].filterPlaceholder"
           />
           <Dropdown
-            v-if="columns[column].filterMode === 'dropdown'"
+            v-if="columns[field].filterMode === 'dropdown'"
             v-model="filterModel.value"
             @change="filterCallback()"
-            :options="columns[column].filterOptions"
-            :placeholder="columns[column].filterPlaceholder"
+            :options="columns[field].filterOptions"
+            :placeholder="columns[field].filterPlaceholder"
             class="p-dropdown-filter"
             :showClear="true"
           >
@@ -231,12 +257,12 @@ loadJobs();
             </template>
           </Dropdown>
           <MultiSelect
-            v-if="columns[column].filterMode === 'multiselect'"
+            v-if="columns[field].filterMode === 'multiselect'"
             v-model="filterModel.value"
             @change="filterCallback()"
-            :options="columns[column].filterOptions"
+            :options="columns[field].filterOptions"
             :showClear="true"
-            :placeholder="columns[column].filterPlaceholder"
+            :placeholder="columns[field].filterPlaceholder"
             optionLabel="city"
             class="p-column-filter"
           >
