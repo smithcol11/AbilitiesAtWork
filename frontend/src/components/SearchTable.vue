@@ -1,12 +1,13 @@
 <script setup>
 import { ref, reactive, toRaw } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Dropdown from "primevue/dropdown";
-import MultiSelect from "primevue/multiselect";
 import InputText from "primevue/inputtext";
 import JobDetails from "./JobDetails.vue";
+import MultiSelect from "primevue/multiselect";
 
 const props = defineProps({
   jobMatches: {
@@ -18,76 +19,82 @@ const props = defineProps({
 });
 
 // Select table columns. Only fields listed here will have columns.
-const displayedFields = ["employer", "contact.email", "city", "shift", "timeCommitment"];
+const displayedFields = ref([
+  "employer",
+  "city",
+  "industry",
+  "position",
+  "timeCommitment",
+]);
 
 const columns = reactive({
-  "employer" : {
-    cellContent: data => data.employer,
+  employer: {
+    cellContent: (data) => data.employer,
     header: "Employer",
     filterMode: "text",
-    filterPlaceholder: "Search by employer"
+    filterPlaceholder: "Search by employer",
   },
-  "position" : {
-    cellContent: data => data.position,
+  position: {
+    cellContent: (data) => data.position,
     header: "Position",
     filterMode: "multiselect",
-    filterPlaceholder: "Any"
+    filterPlaceholder: "Any",
   },
-  "shift" : {
-    cellContent: data => data.shift,
+  industry: {
+    cellContent: (data) => data.industry,
+    header: "Industry",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any",
+  },
+  city: {
+    cellContent: (data) => data.city,
+    header: "City",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any",
+  },
+  zip: {
+    cellContent: (data) => data.zip,
+    header: "Zip",
+    filterMode: "text",
+    filterPlaceholder: "Search by zip",
+  },
+  county: {
+    cellContent: (data) => data.county,
+    header: "County",
+    filterMode: "multiselect",
+    filterPlaceholder: "Any",
+  },
+  shift: {
+    cellContent: (data) => data.shift,
     header: "Shift",
     filterMode: "dropdown",
     filterOptions: ["Early", "Morning", "Afternoon", "Evening"],
-    filterPlaceholder: "Any"
+    filterPlaceholder: "Any",
   },
-  "timeCommitment" : {
-    cellContent: data => data.timeCommitment,
+  timeCommitment: {
+    cellContent: (data) => data.timeCommitment,
     header: "Time Commitment",
     filterMode: "dropdown",
     filterOptions: ["Full-Time", "Part-Time", "Any"],
-    filterPlaceholder: "Any"
+    filterPlaceholder: "Any",
   },
-  "city" : {
-    cellContent: data => data.city,
-    header: "City",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-  "zip" : {
-    cellContent: data => data.zip,
-    header: "Zip",
-    filterMode: "text",
-    filterPlaceholder: "Search by zip"
-  },
-  "county" : {
-    cellContent: data => data.county,
-    header: "County",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-  "industry" : {
-    cellContent: data => data.industry,
-    header: "Industry",
-    filterMode: "multiselect",
-    filterPlaceholder: "Any"
-  },
-  "contact.name" : {
-    cellContent: data => data.contact.name,
+  "contact.name": {
+    cellContent: (data) => data.contact.name,
     header: "Contact Name",
     filterMode: "text",
-    filterPlaceholder: "Search by name"
+    filterPlaceholder: "Search by name",
   },
-  "contact.email" : {
-    cellContent: data => data.contact.email,
+  "contact.email": {
+    cellContent: (data) => data.contact.email,
     header: "Contact Email",
     filterMode: "text",
-    filterPlaceholder: "Search by email"
+    filterPlaceholder: "Search by email",
   },
-  "contact.phone" : {
-    cellContent: data => data.contact.phone,
+  "contact.phone": {
+    cellContent: (data) => data.contact.phone,
     header: "Contact Phone",
     filterMode: "text",
-    filterPlaceholder: "Search by phone"
+    filterPlaceholder: "Search by phone",
   },
 });
 
@@ -102,19 +109,20 @@ FilterService.register(hoursFilter, (value, filter) => {
 const filterDefaults = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  position: { value: null, matchMode: FilterMatchMode.IN },
+  industry: { value: null, matchMode: FilterMatchMode.IN },
   city: { value: null, matchMode: FilterMatchMode.IN },
   zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
   county: { value: null, matchMode: FilterMatchMode.IN },
-  industry: { value: null, matchMode: FilterMatchMode.IN },
-  position: { value: null, matchMode: FilterMatchMode.IN },
   shift: { value: null, matchMode: FilterMatchMode.IS },
   timeCommitment: { value: null, matchMode: hoursFilter },
-  'contact.name': { value: null, matchMode: FilterMatchMode.CONTAINS },
-  'contact.phone': { value: null, matchMode: FilterMatchMode.CONTAINS },
-  'contact.email': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  "contact.name": { value: null, matchMode: FilterMatchMode.CONTAINS },
+  "contact.phone": { value: null, matchMode: FilterMatchMode.CONTAINS },
+  "contact.email": { value: null, matchMode: FilterMatchMode.CONTAINS },
 };
 
 const filters = ref(structuredClone(filterDefaults));
+const auth = useAuthenticationStore();
 const jobs = ref([]);
 const loading = ref(false);
 const selectedJob = null;
@@ -128,13 +136,18 @@ function clearFilters() {
 function getFilters() {
   for (const [field] of Object.entries(toRaw(columns))) {
     if (columns[field].filterOptions == null) {
-        // Extract field from all jobs
-        const current = Array.from(jobs.value, job => toRaw(job)[field]);
-        // Remove duplicates
-        columns[field].filterOptions = Array.from(new Set(current));
+      // Extract field from all jobs
+      const current = Array.from(jobs.value, (job) => toRaw(job)[field]);
+      // Remove duplicates
+      columns[field].filterOptions = Array.from(new Set(current));
     }
   }
 }
+
+//authorize action by validating the JWT and checking the isAdmin value after validation
+function canUserChangeColumns() {
+  return auth.validateJWT() && auth.isAuthAdmin;
+} 
 
 function removeJob(SelectedIndex) {
   if (SelectedIndex > -1) jobs.splice(SelectedIndex, 1);
@@ -149,7 +162,9 @@ async function loadJobs() {
     if (props.jobMatches.length < 1) {
       await fetch("http://localhost:3000/allJobs")
         .then((response) => response.json())
-        .then((data) => {jobs.value = data})
+        .then((data) => {
+          jobs.value = data;
+        })
         .then(() => {
           clearFilters();
           getFilters();
@@ -200,13 +215,19 @@ loadJobs();
               placeholder="Keyword Search"
             />
           </span>
-          <div class="grow bg-lime-500" />
-          <span class="grow-0">
-            <InputText
-              v-model="filters.global.value"
-              placeholder="PLACEHOLDER"
-            />
-          </span>
+          <div class="grow" />
+          <MultiSelect
+            v-if="canUserChangeColumns()"
+            class="grow-0"
+            v-model="displayedFields"
+            placeholder="Choose Columns"
+            :options="Object.keys(columns)"
+            :showClear="true"
+          >
+            <template #value="slotProps">
+              {{ slotProps.placeholder }}
+            </template>
+          </MultiSelect>
         </div>
       </template>
       <template #empty>
@@ -246,8 +267,8 @@ loadJobs();
               <span
                 :class="'p-dropdown-value' + slotProps.value"
                 v-if="slotProps.value"
-                >{{ slotProps.value }}</span
-              >
+                >{{ slotProps.value }}
+              </span>
               <span v-else>{{ slotProps.placeholder }}</span>
             </template>
             <template #option="slotProps">
@@ -270,8 +291,8 @@ loadJobs();
               <span
                 :class="'p-dropdown' + slotProps.value"
                 v-if="slotProps.value && slotProps.value.length > 0"
-                >{{ slotProps.value.join(", ") }}</span
-              >
+                >{{ slotProps.value.join(", ") }}
+              </span>
               <span v-else>{{ slotProps.placeholder }}</span>
             </template>
             <template #option="slotProps">
