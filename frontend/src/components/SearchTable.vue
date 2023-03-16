@@ -150,13 +150,14 @@ function canUserChangeColumns() {
 }
 
 async function removeJob(SelectedIndex) {
-  if (SelectedIndex > -1) jobs.splice(SelectedIndex, 1);
+  let removedJob = jobs.value[SelectedIndex];
+  if (SelectedIndex > -1) jobs.value.splice(SelectedIndex, 1);
 
   await fetch("http://localhost:3000/deleteJob", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify(jobs.value[SelectedIndex]),
+    body: JSON.stringify(removedJob),
   })
     .then((response) => console.log(response))
     .catch((errors) => console.log(errors));

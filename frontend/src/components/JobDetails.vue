@@ -2,7 +2,6 @@
 import { ref, toRaw } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
 import TextBox from "./TextBox.vue";
 
 
@@ -86,7 +85,7 @@ function closeBasic() {
 }
 
 function remove() {
-  if (props.index > -1) props.removeJob(props.data);
+  if (props.index > -1) props.removeJob(props.index);
   displayBasic.value = false;
   displayDel.value = false;
 }

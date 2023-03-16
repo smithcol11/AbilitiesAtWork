@@ -99,9 +99,6 @@ router.patch("/editJob", async (req, res) => {
 
 // delete a job
 router.delete("/deleteJob", async (req, res) => {
-  console.log("req body:");
-  console.log(req.body);
-
   try {
     await Job.findByIdAndDelete(req.body._id);
     res.json({ message: "Deleted Job" });
