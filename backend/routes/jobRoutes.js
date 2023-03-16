@@ -1,4 +1,5 @@
 const express = require("express");
+const job = require("../schema/job");
 const router = express.Router();
 const Job = require("../schema/job");
 module.exports = router;
@@ -54,6 +55,7 @@ router.get("/job", async (req, res) => {
 
 // update a job
 router.patch("/editJob", async (req, res) => {
+  console.log(req.body);
   let job;
   try {
     job = await Job.findById(req.body._id);
@@ -84,6 +86,8 @@ router.patch("/editJob", async (req, res) => {
   if (req.body.enteredBy) res.job.enteredBy = req.body.enteredBy;
   if (req.body.updatedBy) res.job.updatedBy = req.body.updatedBy;
   if (req.body.benefits) res.job.benefits = req.body.benefits;
+  if (req.body.benefits) res.job.position = req.body.position;
+
 
   try {
     const updatedJob = await res.job.save();
@@ -95,6 +99,9 @@ router.patch("/editJob", async (req, res) => {
 
 // delete a job
 router.delete("/deleteJob", async (req, res) => {
+  console.log("req body:");
+  console.log(req.body);
+
   try {
     await Job.findByIdAndDelete(req.body._id);
     res.json({ message: "Deleted Job" });

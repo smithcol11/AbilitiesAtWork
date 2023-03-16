@@ -147,14 +147,32 @@ function getFilters() {
 //authorize action by validating the JWT and checking the isAdmin value after validation
 function canUserChangeColumns() {
   return auth.validateJWT() && auth.isAuthAdmin;
-} 
-
-function removeJob(SelectedIndex) {
-  if (SelectedIndex > -1) jobs.splice(SelectedIndex, 1);
 }
 
-function saveUpdate(updatedJob, SelectedIndex) {
-  jobs.value[SelectedIndex] = structuredClone(toRaw(updatedJob));
+async function removeJob(SelectedIndex) {
+  if (SelectedIndex > -1) jobs.splice(SelectedIndex, 1);
+
+  await fetch("http://localhost:3000/deleteJob", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(jobs.value[SelectedIndex]),
+  })
+    .then((response) => console.log(response))
+    .catch((errors) => console.log(errors));
+}
+
+async function saveUpdate(updatedJob, SelectedIndex) {
+  Object.assign(jobs.value[SelectedIndex], structuredClone(toRaw(updatedJob)));
+
+  await fetch("http://localhost:3000/editJob", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(toRaw(jobs.value[SelectedIndex])),
+  })
+    .then((response) => console.log(response))
+    .catch((errors) => console.log(errors));
 }
 
 async function loadJobs() {
@@ -164,6 +182,7 @@ async function loadJobs() {
         .then((response) => response.json())
         .then((data) => {
           jobs.value = data;
+          //console.log(data[0])
         })
         .then(() => {
           clearFilters();
@@ -182,6 +201,30 @@ async function loadJobs() {
 }
 
 loadJobs();
+
+const formOptions = reactive({
+  counties: [],
+  cities: [],
+  zips: [],
+  positions: [],
+  industries: [],
+  shiftOptions: [],
+  timeCommitmentOptions: [],
+});
+
+let requestFormOptions = async () => {
+  await fetch("http://localhost:3000/GetJobOptions")
+    .then((res) => res.json())
+    .then((newOptions) => {
+      for (const key in formOptions) {
+        formOptions[key] = newOptions[key];
+      }
+    })
+    .catch((err) => console.log(err));
+  //console.log(formOptions);
+};
+
+requestFormOptions();
 </script>
 
 <template>
@@ -200,7 +243,9 @@ loadJobs();
       :globalFilterFields="displayedFields"
     >
       <template #header>
-        <div class="flex flex-wrap-reverse flex-row-reverse justify-content-between">
+        <div
+          class="flex flex-wrap-reverse flex-row-reverse justify-content-between"
+        >
           <MultiSelect
             v-if="canUserChangeColumns()"
             class="grow-0 shrink-0"
@@ -309,6 +354,7 @@ loadJobs();
           <JobDetails
             :data="data"
             :index="index"
+            :formOptions="formOptions"
             :removeJob="removeJob"
             :saveUpdate="saveUpdate"
           />
