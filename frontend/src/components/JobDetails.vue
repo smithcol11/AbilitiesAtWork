@@ -3,8 +3,9 @@ import { ref, toRaw } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import TextBox from "./TextBox.vue";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
-
+const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
 const props = defineProps({
   data: {
     type: Object,
@@ -56,7 +57,6 @@ const emptyJob = {
 };
 
 const updatedJob = ref(structuredClone(emptyJob));
-
 
 function openDel() {
   displayBasic.value = false;
@@ -111,6 +111,8 @@ function save() {
 
   displayUpdate.value = false;
 }
+
+const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
 </script>
 
 <template>
@@ -167,7 +169,10 @@ function save() {
             Hours: <span class="font-normal">{{ data.timeCommitment }}</span>
           </p>
           <p class="pt-2">
-            Date Posted: <span class="font-normal">{{ data.openingDate.substr(0,10) }}</span>
+            Date Posted:
+            <span class="font-normal">{{
+              data.openingDate.substr(0, 10)
+            }}</span>
           </p>
           <p class="pt-2">
             Notes: <span class="font-normal">{{ data.notes }}</span>
@@ -183,6 +188,7 @@ function save() {
         class="p-button-text p-button-secondary"
       />
       <Button
+        v-if="isAdmin() == true"
         label="Delete"
         icon="pi pi-times"
         @click="openDel()"
