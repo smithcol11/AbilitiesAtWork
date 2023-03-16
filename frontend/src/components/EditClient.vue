@@ -4,6 +4,7 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
+import TextBox from "./TextBox.vue";
 
 const props = defineProps({
   data: {
@@ -118,6 +119,12 @@ async function save() {
   displayUpdate.value = false;
   resetForm();
 }
+
+function acceptAlphaKeys(keyEvent) {
+  if(/[^a-zA-Z]/.test(keyEvent.key)) {
+    keyEvent.preventDefault();
+  }
+}
 </script>
 
 <template>
@@ -141,7 +148,7 @@ async function save() {
           >
             <div class="pt-2 basis-1/5">
               First Name:
-              <InputText
+              <TextBox 
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.firstName"
@@ -150,22 +157,23 @@ async function save() {
             </div>
             <div class="pt-2 basis-1/5">
               Middle Initial:
-              <InputText
+              <TextBox 
                 type="text"
                 class="p-inputtext-sm"
                 maxlength="1"
                 :placeholder="data.middleInitial"
+                v-on:keypress="acceptAlphaKeys($event)"
                 v-model="updatedClient.middleInitial"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Last Initial:
-              <InputText
+              <TextBox 
                 type="text"
                 class="p-inputtext-sm"
                 maxlength="1"
-                onkeyup="value=value.replace(/[^a-zA-Z]/g,'')"
                 :placeholder="data.lastInitial"
+                v-on:keypress="acceptAlphaKeys($event)"
                 v-model="updatedClient.lastInitial"
               />
             </div>
