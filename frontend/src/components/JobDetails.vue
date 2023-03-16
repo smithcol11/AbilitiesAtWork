@@ -4,6 +4,10 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import TextBox from "./TextBox.vue";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
+
+
+const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
 
 const props = defineProps({
   data: {
@@ -116,6 +120,8 @@ function save() {
     if (key != "contact") updatedJob.value[key] = "";
   }
 }
+
+const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
 </script>
 
 <template>
@@ -191,6 +197,7 @@ function save() {
         class="p-button-text p-button-secondary"
       />
       <Button
+        v-if="isAdmin() == true"
         label="Delete"
         icon="pi pi-times"
         @click="openDel()"
