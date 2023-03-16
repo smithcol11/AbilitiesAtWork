@@ -200,25 +200,10 @@ loadJobs();
       :globalFilterFields="displayedFields"
     >
       <template #header>
-        <div class="flex justify-content-between">
-          <button
-            type="button"
-            icon="pi pi-filter-slash"
-            label="Clear"
-            class="p-button-outlined grow-0"
-            @click="clearFilters()"
-          />
-          <span class="grow-0">
-            <i class="pi pi-search pr-3" />
-            <InputText
-              v-model="filters.global.value"
-              placeholder="Keyword Search"
-            />
-          </span>
-          <div class="grow" />
+        <div class="flex flex-wrap-reverse flex-row-reverse justify-content-between">
           <MultiSelect
             v-if="canUserChangeColumns()"
-            class="grow-0"
+            class="grow-0 shrink-0"
             v-model="displayedFields"
             placeholder="Choose Columns"
             :options="Object.keys(columns)"
@@ -228,6 +213,21 @@ loadJobs();
               {{ slotProps.placeholder }}
             </template>
           </MultiSelect>
+          <div class="grow" />
+          <span class="grow-0">
+            <button
+              type="button"
+              icon="pi pi-filter-slash"
+              label="Clear"
+              class="p-button-outlined grow-0"
+              @click="clearFilters()"
+            />
+            <i class="pi pi-search pr-3" />
+            <InputText
+              v-model="filters.global.value"
+              placeholder="Keyword Search"
+            />
+          </span>
         </div>
       </template>
       <template #empty>
