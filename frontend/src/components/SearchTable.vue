@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, toRaw } from "vue";
+import { ref, reactive, toRaw, onBeforeMount } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
@@ -180,12 +180,12 @@ let requestFormOptions = async () => {
     })
     .catch((err) => console.log(err));
   //console.log(formOptions);
-
-  onMounted(async () => {
-    loadJobs();
-    requestFormOptions();
-  });
 };
+
+onBeforeMount(async () => {
+  loadJobs();
+  requestFormOptions();
+});
 </script>
 <template>
   <div class="card m-5 bg-light shadow-lg border">
