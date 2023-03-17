@@ -2,9 +2,10 @@
 import { ref, reactive, toRaw } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
+import Button from "primevue/button";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import Dropdown from "primevue/dropdown";
+import Filter from "./Filter.vue";
 import InputText from "primevue/inputtext";
 import JobDetails from "./JobDetails.vue";
 import MultiSelect from "primevue/multiselect";
@@ -37,19 +38,19 @@ const columns = reactive({
   position: {
     cellContent: (data) => data.position,
     header: "Position",
-    filterMode: "multiselect",
+    filterMode: "multi",
     filterPlaceholder: "Any",
   },
   industry: {
     cellContent: (data) => data.industry,
     header: "Industry",
-    filterMode: "multiselect",
+    filterMode: "multi",
     filterPlaceholder: "Any",
   },
   city: {
     cellContent: (data) => data.city,
     header: "City",
-    filterMode: "multiselect",
+    filterMode: "multi",
     filterPlaceholder: "Any",
   },
   zip: {
@@ -61,20 +62,20 @@ const columns = reactive({
   county: {
     cellContent: (data) => data.county,
     header: "County",
-    filterMode: "multiselect",
+    filterMode: "multi",
     filterPlaceholder: "Any",
   },
   shift: {
     cellContent: (data) => data.shift,
     header: "Shift",
-    filterMode: "dropdown",
+    filterMode: "single",
     filterOptions: ["Early", "Morning", "Afternoon", "Evening"],
     filterPlaceholder: "Any",
   },
   timeCommitment: {
     cellContent: (data) => data.timeCommitment,
     header: "Time Commitment",
-    filterMode: "dropdown",
+    filterMode: "single",
     filterOptions: ["Full-Time", "Part-Time", "Any"],
     filterPlaceholder: "Any",
   },
@@ -145,7 +146,7 @@ function getFilters() {
 }
 
 //authorize action by validating the JWT and checking the isAdmin value after validation
-function canUserChangeColumns() {
+function userCanChangeColumns() {
   return auth.validateJWT() && auth.isAuthAdmin;
 }
 
@@ -201,8 +202,6 @@ async function loadJobs() {
   }
 }
 
-loadJobs();
-
 const formOptions = reactive({
   counties: [],
   cities: [],
@@ -222,9 +221,9 @@ let requestFormOptions = async () => {
       }
     })
     .catch((err) => console.log(err));
-  //console.log(formOptions);
 };
 
+loadJobs();
 requestFormOptions();
 </script>
 
@@ -248,7 +247,7 @@ requestFormOptions();
           class="flex flex-wrap-reverse flex-row-reverse justify-content-between"
         >
           <MultiSelect
-            v-if="canUserChangeColumns()"
+            v-if="userCanChangeColumns()"
             class="grow-0 shrink-0"
             v-model="displayedFields"
             placeholder="Choose Columns"
@@ -261,17 +260,17 @@ requestFormOptions();
           </MultiSelect>
           <div class="grow" />
           <span class="grow-0">
-            <button
-              type="button"
-              icon="pi pi-filter-slash"
-              label="Clear"
-              class="p-button-outlined grow-0"
-              @click="clearFilters()"
-            />
             <i class="pi pi-search pr-3" />
             <InputText
               v-model="filters.global.value"
               placeholder="Keyword Search"
+            />
+            <Button
+              type="button"
+              icon="pi pi-filter-slash"
+              label="Clear"
+              class="p-button-text p-button-secondary"
+              @click="clearFilters()"
             />
           </span>
         </div>
@@ -292,61 +291,13 @@ requestFormOptions();
           {{ columns[field].cellContent(data) }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            v-if="columns[field].filterMode === 'text'"
-            type="text"
-            v-model="filterModel.value"
-            @input="filterCallback()"
-            class="p-column-filter"
+          <Filter 
+            :mode="columns[field].filterMode"
             :placeholder="columns[field].filterPlaceholder"
+            :options="columns[field].filterOptions"
+            :modelValue="filterModel.value"
+            @update:modelValue="{ filterModel.value = $event; filterCallback(); }"
           />
-          <Dropdown
-            v-if="columns[field].filterMode === 'dropdown'"
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="columns[field].filterOptions"
-            :placeholder="columns[field].filterPlaceholder"
-            class="p-dropdown-filter"
-            :showClear="true"
-          >
-            <template #value="slotProps">
-              <span
-                :class="'p-dropdown-value' + slotProps.value"
-                v-if="slotProps.value"
-                >{{ slotProps.value }}
-              </span>
-              <span v-else>{{ slotProps.placeholder }}</span>
-            </template>
-            <template #option="slotProps">
-              <span :class="'p-dropdown-option' + slotProps.option">{{
-                slotProps.option
-              }}</span>
-            </template>
-          </Dropdown>
-          <MultiSelect
-            v-if="columns[field].filterMode === 'multiselect'"
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="columns[field].filterOptions"
-            :showClear="true"
-            :placeholder="columns[field].filterPlaceholder"
-            optionLabel="city"
-            class="p-column-filter"
-          >
-            <template #value="slotProps">
-              <span
-                :class="'p-dropdown' + slotProps.value"
-                v-if="slotProps.value && slotProps.value.length > 0"
-                >{{ slotProps.value.join(", ") }}
-              </span>
-              <span v-else>{{ slotProps.placeholder }}</span>
-            </template>
-            <template #option="slotProps">
-              <span :class="'p-dropdown' + slotProps.option">{{
-                slotProps.option
-              }}</span>
-            </template>
-          </MultiSelect>
         </template>
       </Column>
 
