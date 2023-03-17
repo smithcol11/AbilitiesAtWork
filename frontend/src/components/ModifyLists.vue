@@ -13,6 +13,67 @@ const submitReady = ref(false);
 const choice = ref("");
 const change = ref("");
 const matchText = (element) => element === choice.value;
+
+const success = ref(false);
+const visible = ref(false);
+
+const banner = reactive({
+  displaySuccess: {
+    type: Boolean,
+    default: false,
+  },
+  displayFailed: {
+    type: Boolean,
+    default: false,
+  },
+  duration: 4,
+  timeRemaining: {
+    type: Number,
+    default: 4,
+  },
+  timer: {
+    type: Number,
+    default: 4,
+  },
+});
+
+function DisplayBanner(bannerType) {
+  if (bannerType == "success") banner.displaySuccess = true;
+  else banner.displayFailed = true;
+
+  clearInterval(banner.timer);
+  banner.timeRemaining = banner.duration;
+
+  //create a timer to display banner
+  banner.timer = setInterval(() => {
+    banner.timeRemaining--;
+    if (banner.timeRemaining <= 0) {
+      clearInterval(banner.timer);
+      banner.displaySuccess = false;
+      banner.displayFailed = false;
+    }
+  }, 1000);
+}
+
+// display success banner if post succeeded
+const displaySuccess = () => {
+  banner.success = true;
+  setTimeout(() => {
+    banner.success = false;
+  }, 3000);
+};
+
+// display error banner if post failed
+const displayError = () => {
+  banner.failure = true;
+  setTimeout(() => {
+    banner.failure = false;
+  }, 3000);
+};
+
+// use the rules the data must follow
+//const v$ = useVuelidate(rules, null);
+
 function resetOptions() {
   submitReady.value = false;
   choice.value = "";
@@ -110,9 +171,13 @@ async function sendChanges() {
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(toRaw(formOptions)),
-    }).then((response) => console.log(response));
+    }).then((response) => {
+      console.log(response);
+      DisplayBanner("success");
+    });
   } catch (error) {
     console.log(error);
+    DisplayBanner("error");
   }
 }
 </script>
@@ -121,6 +186,19 @@ async function sendChanges() {
   <div
     class="flex flex-col items-center justify-center shadow-lg border bg-light m-3 pb-3"
   >
+    <Transition>
+      <div role="alert">
+        <div v-if="banner.displaySuccess == true" class="p-2">
+          <successBanner
+            topText="Success"
+            bottomText="List updated successfully"
+          />
+        </div>
+        <div v-if="banner.displayFailed == true" class="p-2">
+          <errorBanner topText="ERROR" bottomText="List was not modified" />
+        </div>
+      </div>
+    </Transition>
     <div class="w-3/4 p-5">
       <Label position="left" text="Which List?" class="py-3" />
       <DropDown

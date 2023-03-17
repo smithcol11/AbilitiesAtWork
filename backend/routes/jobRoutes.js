@@ -1,4 +1,5 @@
 const express = require("express");
+const job = require("../schema/job");
 const router = express.Router();
 const Job = require("../schema/job");
 module.exports = router;
@@ -109,6 +110,8 @@ router.patch("/editJob", async (req, res) => {
   if (req.body.enteredBy) res.job.enteredBy = req.body.enteredBy;
   if (req.body.updatedBy) res.job.updatedBy = req.body.updatedBy;
   if (req.body.benefits) res.job.benefits = req.body.benefits;
+  if (req.body.benefits) res.job.position = req.body.position;
+
 
   try {
     const updatedJob = await res.job.save();
