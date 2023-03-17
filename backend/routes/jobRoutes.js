@@ -55,7 +55,6 @@ router.get("/job", async (req, res) => {
 
 // update a job
 router.patch("/editJob", async (req, res) => {
-  console.log(req.body);
   let job;
   try {
     job = await Job.findById(req.body._id);

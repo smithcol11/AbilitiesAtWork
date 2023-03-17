@@ -133,6 +133,11 @@ function clearFilters() {
   filters.value = structuredClone(filterDefaults);
 }
 
+//Checks if filters are clear
+function filtersAreClear() {
+  return Object.entries(filters.value).every((e) => e[1].value == null);
+}
+
 //This dynamically populates the drop-down and multiselect filters used in the table.
 function getFilters() {
   for (const [field] of Object.entries(toRaw(columns))) {
@@ -266,6 +271,7 @@ requestFormOptions();
               placeholder="Keyword Search"
             />
             <Button
+              v-if="!filtersAreClear()"
               type="button"
               icon="pi pi-filter-slash"
               label="Clear"
@@ -291,12 +297,12 @@ requestFormOptions();
           {{ columns[field].cellContent(data) }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <Filter 
+          <Filter
             :mode="columns[field].filterMode"
             :placeholder="columns[field].filterPlaceholder"
             :options="columns[field].filterOptions"
-            :modelValue="filterModel.value"
-            @update:modelValue="{ filterModel.value = $event; filterCallback(); }"
+            v-model="filterModel.value"
+            @update:modelValue="filterCallback()"
           />
         </template>
       </Column>
