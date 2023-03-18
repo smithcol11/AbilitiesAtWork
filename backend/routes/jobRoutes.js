@@ -54,6 +54,14 @@ router.get("/allJobs", async (req, res) => {
               .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
               .join(" "),
           },
+          position: job.position
+            .split(" ")
+            .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+            .join(" "),
+          industry: job.industry
+            .split(" ")
+            .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+            .join(" "),
         };
       });
 
@@ -111,7 +119,6 @@ router.patch("/editJob", async (req, res) => {
   if (req.body.updatedBy) res.job.updatedBy = req.body.updatedBy;
   if (req.body.benefits) res.job.benefits = req.body.benefits;
   if (req.body.benefits) res.job.position = req.body.position;
-
 
   try {
     const updatedJob = await res.job.save();
