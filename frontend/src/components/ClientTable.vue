@@ -8,8 +8,8 @@ import { onMounted, ref, reactive } from "vue";
 import EditClient from "./EditClient.vue";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
-const auth = useAuthenticationStore(); 
-const isAdmin = auth.isAuthAdmin
+const auth = useAuthenticationStore();
+const isAdmin = auth.isAuthAdmin;
 
 const clients = ref([]);
 const loading = ref(false);
@@ -115,15 +115,14 @@ function customFilterCallback() {
 }
 
 function removeClient(selectedClient) {
-  for(let i=0;i<clients.value.length;i++){
-    if(clients.value[i] == selectedClient)
-      clients.value.splice(i, 1);
+  for (let i = 0; i < clients.value.length; i++) {
+    if (clients.value[i] == selectedClient) clients.value.splice(i, 1);
   }
 }
 
 function saveUpdate(updatedClient, selectedClient) {
-  for(let i=0;i<clients.value.length;i++){
-    if(clients.value[i] == selectedClient){
+  for (let i = 0; i < clients.value.length; i++) {
+    if (clients.value[i] == selectedClient) {
       clients.value[i].firstName = updatedClient.firstName;
       clients.value[i].middleInitial = updatedClient.middleInitial;
       clients.value[i].lastInitial = updatedClient.lastInitial;
@@ -131,7 +130,6 @@ function saveUpdate(updatedClient, selectedClient) {
       clients.value[i].hours = updatedClient.hours;
     }
   }
-  
 }
 </script>
 
@@ -302,9 +300,7 @@ function saveUpdate(updatedClient, selectedClient) {
         </template>
       </Column>
 
-      <Column field="EditClient"
-        v-if="isAdmin == true"
-      >
+      <Column field="EditClient" v-if="isAdmin == true">
         <template #body="slotProps">
           <EditClient
             :data="slotProps.data"
@@ -314,7 +310,6 @@ function saveUpdate(updatedClient, selectedClient) {
           />
         </template>
       </Column>
-
     </DataTable>
   </div>
 </template>
