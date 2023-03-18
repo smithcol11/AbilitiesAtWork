@@ -7,11 +7,11 @@ const Client = require("../schema/client");
 router.post("/addClient", async (req, res) => {
   try {
     await Client.insertMany({
-      firstName: req.body.firstName,
-      middleInitial: req.body.middleInitial,
-      lastInitial: req.body.lastInitial,
+      firstName: req.body.firstName.toLowerCase(),
+      middleInitial: req.body.middleInitial.toLowerCase(),
+      lastInitial: req.body.lastInitial.toLowerCase(),
       hours: req.body.hours,
-      industry: req.body.industry,
+      industry: req.body.industry.toLowerCase(),
       enteredBy: "FIX ME",
       updatedBy: "FIX ME",
     });
@@ -25,9 +25,9 @@ router.put("/editClient", async (req, res) => {
   try {
     const client = await Client.updateOne(
       {
-        firstName: req.body.initialData.firstName,
-        middleInitial: req.body.initialData.middleInitial,
-        lastInitial: req.body.initialData.lastInitial,
+        firstName: req.body.initialData.firstName.toLowerCase(),
+        middleInitial: req.body.initialData.middleInitial.toLowerCase(),
+        lastInitial: req.body.initialData.lastInitial.toLowerCase(),
       },
       req.body.data,
       { new: true }
@@ -46,9 +46,9 @@ router.put("/editClient", async (req, res) => {
 router.delete("/deleteClient", async (req, res) => {
   try {
     const client = await Client.deleteOne({
-      firstName: req.body.firstName,
-      middleInitial: req.body.middleInitial,
-      lastInitial: req.body.lastInitial,
+      firstName: req.body.firstName.toLowerCase(),
+      middleInitial: req.body.middleInitial.toLowerCase(),
+      lastInitial: req.body.lastInitial.toLowerCase(),
     });
 
     if (!client) {
@@ -64,10 +64,25 @@ router.delete("/deleteClient", async (req, res) => {
 router.get("/GetAllClients", (req, res) => {
   try {
     Client.find({}).then((data) => {
-      res.json(data);
+      // Capitalize the first character of each string property
+      const capitalizedData = data.map((client) => {
+        return {
+          ...client._doc,
+          firstName:
+            client.firstName.charAt(0).toUpperCase() +
+            client.firstName.slice(1),
+          middleInitial: client.middleInitial.toUpperCase(),
+          lastInitial: client.lastInitial.toUpperCase(),
+          industry: client.industry.map(
+            (industry) => industry.charAt(0).toUpperCase() + industry.slice(1)
+          ),
+        };
+      });
+
+      res.json(capitalizedData);
     });
   } catch (error) {
-    console.log(err);
+    console.log(error);
   }
 });
 

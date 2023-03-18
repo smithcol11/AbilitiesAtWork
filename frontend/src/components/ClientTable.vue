@@ -58,12 +58,7 @@ let requestFormOptions = async () => {
 
 requestFormOptions();
 
-function onRowSelect(event) {
-  console.log(event.data.firstName);
-  console.log(event.data.middleInitial);
-  console.log(event.data.lastInitial);
-  //console.log(typeof(event.data.industry));
-}
+function onRowSelect(event) {}
 
 function onRowUnselect(event) {}
 

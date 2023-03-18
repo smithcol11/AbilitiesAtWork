@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, toRaw } from "vue";
+import { ref, reactive, toRaw, onBeforeMount } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
@@ -86,11 +86,9 @@ function getFilters() {
   });
 }
 
-
-
 async function removeJob(selectedJob) {
-  for(let i=0;i<jobs.value.length;i++){
-    if(jobs.value[i] == selectedJob){
+  for (let i = 0; i < jobs.value.length; i++) {
+    if (jobs.value[i] == selectedJob) {
       jobs.value.splice(i, 1);
       await fetch("http://localhost:3000/deleteJob", {
         method: "DELETE",
@@ -98,16 +96,15 @@ async function removeJob(selectedJob) {
         credentials: "include",
         body: JSON.stringify(toRaw(selectedJob)),
       })
-      .then((response) => console.log(response))
-      .catch((errors) => console.log(errors));
+        .then((response) => console.log(response))
+        .catch((errors) => console.log(errors));
     }
   }
 }
 
 async function saveUpdate(updatedJob, selectedJob) {
-
-  for(let i=0;i<jobs.value.length;i++){
-    if(jobs.value[i] == selectedJob){
+  for (let i = 0; i < jobs.value.length; i++) {
+    if (jobs.value[i] == selectedJob) {
       jobs.value[i].employer = updatedJob.employer;
       jobs.value[i].contact.name = updatedJob.contact.name;
       jobs.value[i].contact.phone = updatedJob.contact.phone;
@@ -123,7 +120,7 @@ async function saveUpdate(updatedJob, selectedJob) {
       jobs.value[i].openingDate = updatedJob.openingDate;
       jobs.value[i].hourlyWage = updatedJob.hourlyWage;
       jobs.value[i].notes = updatedJob.notes;
-      
+
       //console.log(jobs.value[i]);
 
       await fetch("http://localhost:3000/editJob", {
@@ -132,14 +129,14 @@ async function saveUpdate(updatedJob, selectedJob) {
         credentials: "include",
         body: JSON.stringify(toRaw(jobs.value[i])),
       })
-      .then((response) => console.log(response))
-      .catch((errors) => console.log(errors));
+        .then((response) => console.log(response))
+        .catch((errors) => console.log(errors));
     }
   }
 }
 
 async function loadJobs() {
-  try{
+  try {
     if (props.jobMatches.length < 1) {
       await fetch("http://localhost:3000/allJobs")
         .then((response) => response.json())
@@ -158,12 +155,10 @@ async function loadJobs() {
       initFilters();
       getFilters();
     }
-  }catch(error){
-      console.log(error)
-    }
+  } catch (error) {
+    console.log(error);
+  }
 }
-
-loadJobs();
 
 const formOptions = reactive({
   counties: [],
@@ -187,9 +182,11 @@ let requestFormOptions = async () => {
   //console.log(formOptions);
 };
 
-requestFormOptions();
+onBeforeMount(async () => {
+  loadJobs();
+  requestFormOptions();
+});
 </script>
-
 <template>
   <div class="card m-5 bg-light shadow-lg border">
     <DataTable
