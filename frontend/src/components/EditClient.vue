@@ -121,7 +121,7 @@ async function save() {
 }
 
 function acceptAlphaKeys(keyEvent) {
-  if(/[^a-zA-Z]/.test(keyEvent.key)) {
+  if (/[^a-zA-Z]/.test(keyEvent.key)) {
     keyEvent.preventDefault();
   }
 }
@@ -148,7 +148,7 @@ function acceptAlphaKeys(keyEvent) {
           >
             <div class="pt-2 basis-1/5">
               First Name:
-              <TextBox 
+              <TextBox
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.firstName"
@@ -157,7 +157,7 @@ function acceptAlphaKeys(keyEvent) {
             </div>
             <div class="pt-2 basis-1/5">
               Middle Initial:
-              <TextBox 
+              <TextBox
                 type="text"
                 class="p-inputtext-sm"
                 maxlength="1"
@@ -168,7 +168,7 @@ function acceptAlphaKeys(keyEvent) {
             </div>
             <div class="pt-2 basis-1/5">
               Last Initial:
-              <TextBox 
+              <TextBox
                 type="text"
                 class="p-inputtext-sm"
                 maxlength="1"
@@ -195,7 +195,7 @@ function acceptAlphaKeys(keyEvent) {
                 class="p-inputtext-sm font-normal"
                 :placeholder="data.hours"
                 :options="props.formOptions.timeCommitmentOptions"
-                v-model="updatedClient.timeCommitment"
+                v-model="updatedClient.hours"
               />
             </div>
           </div>

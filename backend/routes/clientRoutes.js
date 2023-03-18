@@ -16,15 +16,13 @@ router.post("/addClient", async (req, res) => {
       updatedBy: "FIX ME",
     });
     res.status(201).send();
-  } catch (error){
-    res.status(500).send({error: "Error adding client"})
+  } catch (error) {
+    res.status(500).send({ error: "Error adding client" });
   }
 });
 
 router.put("/editClient", async (req, res) => {
   try {
-    console.log("Testc: ", req.body)
-    //print("Test")
     const client = await Client.updateOne(
       {
         firstName: req.body.initialData.firstName,
@@ -34,7 +32,7 @@ router.put("/editClient", async (req, res) => {
       req.body.data,
       { new: true }
     );
-    
+
     if (!client) {
       return res.status(404).send({ error: "Client not found when updating" });
     }
@@ -65,12 +63,11 @@ router.delete("/deleteClient", async (req, res) => {
 
 router.get("/GetAllClients", (req, res) => {
   try {
-    Client.find({})
-      .then((data) => {
-        res.json(data);
-      })
-  } catch(error){
-    console.log(err)
+    Client.find({}).then((data) => {
+      res.json(data);
+    });
+  } catch (error) {
+    console.log(err);
   }
 });
 
