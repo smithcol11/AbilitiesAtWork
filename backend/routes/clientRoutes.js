@@ -25,11 +25,11 @@ router.put("/editClient", async (req, res) => {
   try {
     const client = await Client.updateOne(
       {
-        firstName: req.body.firstName.toLowerCase(),
-        middleInitial: req.body.middleInitial.toLowerCase(),
-        lastInitial: req.body.lastInitial.toLowerCase(),
+        firstName: req.body.initialData.firstName.toLowerCase(),
+        middleInitial: req.body.initialData.middleInitial.toLowerCase(),
+        lastInitial: req.body.initialData.lastInitial.toLowerCase(),
       },
-      req.body,
+      req.body.data,
       { new: true }
     );
 
@@ -46,9 +46,9 @@ router.put("/editClient", async (req, res) => {
 router.delete("/deleteClient", async (req, res) => {
   try {
     const client = await Client.deleteOne({
-      firstName: req.body.firstName,
-      middleInitial: req.body.middleInitial,
-      lastInitial: req.body.lastInitial,
+      firstName: req.body.firstName.toLowerCase(),
+      middleInitial: req.body.middleInitial.toLowerCase(),
+      lastInitial: req.body.lastInitial.toLowerCase(),
     });
 
     if (!client) {

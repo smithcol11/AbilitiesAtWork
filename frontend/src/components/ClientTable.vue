@@ -24,14 +24,6 @@ const filters1 = ref({
   hours: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 
-// const columns = ref([
-//   { field: "firstName", header: "First Name" },
-//   { field: "middleInitial", header: "Middle Initial" },
-//   { field: "lastInitial", header: "Last Initial" },
-//   { field: "industry", header: "Industry" },
-//   { field: "hours", header: "Hours" },
-// ]);
-
 const filterData = reactive([
   {
     firstName: [],
@@ -42,22 +34,31 @@ const filterData = reactive([
   },
 ]);
 
-// const selectedFilter = ref([
-//   {
-//     firstName: null,
-//     middleInitial: null,
-//     lastInitial: null,
-//     industry: null,
-//     hours: null,
-//   },
-// ]);
+const formOptions = reactive({
+  counties: [],
+  cities: [],
+  zips: [],
+  positions: [],
+  industries: [],
+  shiftOptions: [],
+  timeCommitmentOptions: [],
+});
 
-function onRowSelect(event) {
-  console.log(event.data.firstName);
-  console.log(event.data.middleInitial);
-  console.log(event.data.lastInitial);
-  //console.log(typeof(event.data.industry));
-}
+let requestFormOptions = async () => {
+  await fetch("http://localhost:3000/GetJobOptions")
+    .then((res) => res.json())
+    .then((newOptions) => {
+      for (const key in formOptions) {
+        formOptions[key] = newOptions[key];
+      }
+    })
+    .catch((err) => console.log(err));
+  //console.log(formOptions);
+};
+
+requestFormOptions();
+
+function onRowSelect(event) {}
 
 function onRowUnselect(event) {}
 
@@ -305,6 +306,7 @@ function saveUpdate(updatedClient, selectedClient) {
           <EditClient
             :data="slotProps.data"
             :index="slotProps.index"
+            :form-options="formOptions"
             :removeClient="removeClient"
             :saveUpdate="saveUpdate"
           />
