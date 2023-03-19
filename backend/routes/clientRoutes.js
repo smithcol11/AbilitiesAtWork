@@ -23,7 +23,7 @@ router.post("/addClient", async (req, res) => {
 
 router.put("/editClient", async (req, res) => {
   try {
-    const client = await Client.updateOne(
+    const result = await Client.updateOne(
       {
         firstName: req.body.initialData.firstName.toLowerCase(),
         middleInitial: req.body.initialData.middleInitial.toLowerCase(),
@@ -33,7 +33,7 @@ router.put("/editClient", async (req, res) => {
       { new: true }
     );
 
-    if (!client) {
+    if (result.matchedCount == 0) {
       return res.status(404).send({ error: "Client not found when updating" });
     }
 

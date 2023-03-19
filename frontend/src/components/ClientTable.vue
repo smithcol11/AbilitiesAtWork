@@ -51,7 +51,6 @@ let requestFormOptions = async () => {
       }
     })
     .catch((err) => console.log(err));
-  //console.log(formOptions);
 };
 
 requestFormOptions();

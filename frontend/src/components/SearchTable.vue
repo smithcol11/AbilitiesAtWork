@@ -189,7 +189,6 @@ async function loadJobs() {
         .then((response) => response.json())
         .then((data) => {
           jobs.value = data;
-          //console.log(data[0])
         })
         .then(() => {
           clearFilters();
