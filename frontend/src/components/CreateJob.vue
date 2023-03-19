@@ -114,29 +114,28 @@ async function addJob() {
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(toRaw(formData)),
-    })
-      .then((response) => console.log(response))
-  } catch(errors){
+    }).then((response) => console.log(response));
+  } catch (errors) {
     console.log(errors);
   }
 }
 
 function ResetFormValues() {
   for (let key in formData) {
-    formData[key] = ""
+    formData[key] = "";
   }
 }
 
 let requestFormOptions = async () => {
-  try{
+  try {
     await fetch("http://localhost:3000/GetJobOptions")
       .then((res) => res.json())
       .then((newOptions) => {
         for (const key in formOptions) {
           formOptions[key] = newOptions[key];
         }
-      })   
-  } catch(errors) {
+      });
+  } catch (errors) {
     console.log(errors);
   }
 };

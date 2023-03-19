@@ -2,20 +2,16 @@
 import { reactive, ref, toRaw } from "vue";
 import DropDown from "./DropDown.vue";
 import Label from "./Label.vue";
-
 const listItems = ref([]);
 const listType = ref("");
 const chosen = ref(false);
-
 const toEdit = ref(false);
 const toRemove = ref(false);
 const toAdd = ref(false);
 const toInput = ref(false);
 const submitReady = ref(false);
-
 const choice = ref("");
 const change = ref("");
-
 const matchText = (element) => element === choice.value;
 
 const success = ref(false);
@@ -87,7 +83,6 @@ function resetOptions() {
   toAdd.value = false;
   change.value = "";
 }
-
 const formOptions = reactive({
   _id: "",
   counties: [],
@@ -98,7 +93,6 @@ const formOptions = reactive({
   shiftOptions: [],
   timeCommitmentOptions: [],
 });
-
 function chooseList(e) {
   if (e) {
     resetOptions();
@@ -107,33 +101,27 @@ function chooseList(e) {
     chosen.value = true;
   }
 }
-
 function startAdd() {
   resetOptions();
   toAdd.value = true;
   toInput.value = true;
   submitReady.value = true;
 }
-
 function startRemove() {
   resetOptions();
   toRemove.value = true;
 }
-
 function startEdit() {
   resetOptions();
   toEdit.value = true;
 }
-
 function openInput(e) {
   if (toRemove.value == false) {
     toInput.value = true;
   }
-
   choice.value = e;
   submitReady.value = true;
 }
-
 function onSubmit() {
   let selectedList = null;
   if (listType.value === "Positions") {
@@ -144,7 +132,6 @@ function onSubmit() {
     // No list selected; modify nothing.
     return;
   }
-
   let matchIndex = selectedList.findIndex(matchText);
   if (toAdd.value && matchIndex < 0) {
     selectedList.push(choice.value);
@@ -155,17 +142,14 @@ function onSubmit() {
     selectedList[matchIndex] = change.value;
     selectedList.sort();
   }
-
   choice.value = "";
   change.value = "";
   sendChanges();
 }
-
 async function getListContents(listName) {
   try {
     await fetch("http://localhost:3000/GetJobOptions")
       .then((res) => res.json())
-
       .then((newOptions) => {
         for (const key in formOptions) {
           formOptions[key] = newOptions[key];
@@ -180,7 +164,6 @@ async function getListContents(listName) {
     listItems.value = formOptions.industries;
   }
 }
-
 async function sendChanges() {
   try {
     await fetch("http://localhost:3000/updateJobOptions", {

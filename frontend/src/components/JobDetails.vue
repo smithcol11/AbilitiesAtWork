@@ -5,7 +5,9 @@ import Dialog from "primevue/dialog";
 import TextBox from "./TextBox.vue";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
+
 const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
+
 const props = defineProps({
   data: {
     type: Object,

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, toRaw } from "vue";
+import { ref, reactive, toRaw, onBeforeMount } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 import Button from "primevue/button";
@@ -228,10 +228,11 @@ let requestFormOptions = async () => {
     .catch((err) => console.log(err));
 };
 
-loadJobs();
-requestFormOptions();
+onBeforeMount(async () => {
+  loadJobs();
+  requestFormOptions();
+});
 </script>
-
 <template>
   <div class="card m-5 bg-light shadow-lg border">
     <DataTable

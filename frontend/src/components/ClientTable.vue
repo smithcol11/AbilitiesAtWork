@@ -32,9 +32,33 @@ const filterData = reactive([
   },
 ]);
 
-function onRowSelect() {}
+const formOptions = reactive({
+  counties: [],
+  cities: [],
+  zips: [],
+  positions: [],
+  industries: [],
+  shiftOptions: [],
+  timeCommitmentOptions: [],
+});
 
-function onRowUnselect() {}
+let requestFormOptions = async () => {
+  await fetch("http://localhost:3000/GetJobOptions")
+    .then((res) => res.json())
+    .then((newOptions) => {
+      for (const key in formOptions) {
+        formOptions[key] = newOptions[key];
+      }
+    })
+    .catch((err) => console.log(err));
+  //console.log(formOptions);
+};
+
+requestFormOptions();
+
+function onRowSelect(event) {}
+
+function onRowUnselect(event) {}
 
 function clearFilter1() {
   initFilters1();
@@ -237,6 +261,7 @@ function saveUpdate(updatedClient, selectedClient) {
           <EditClient
             :data="slotProps.data"
             :index="slotProps.index"
+            :form-options="formOptions"
             :removeClient="removeClient"
             :saveUpdate="saveUpdate"
           />
