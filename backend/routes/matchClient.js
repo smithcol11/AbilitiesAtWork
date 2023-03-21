@@ -7,9 +7,9 @@ router.post("/getMatch", async (req, res) => {
   let matchingJobs = [];
   try {
     const client = await Client.find({
-      firstName: req.body.firstName,
-      middleInitial: req.body.middleInitial,
-      lastInitial: req.body.lastInitial,
+      firstName: req.body.firstName.toLowerCase(),
+      middleInitial: req.body.middleInitial.toLowerCase(),
+      lastInitial: req.body.lastInitial.toLowerCase(),
     });
     console.log(client);
     if (client.length == 0) {
@@ -21,14 +21,13 @@ router.post("/getMatch", async (req, res) => {
 
     // CLients have an array of industries, must loop over each industry to check all matches
     for (let i in client[0].industry) {
-      var jobs = null
-      
-      if (client[0].hours == 'Any') {
+      var jobs = null;
+
+      if (client[0].hours == "Any") {
         jobs = await Job.find({
           industry: client[0].industry[i],
         });
-      }
-      else {
+      } else {
         jobs = await Job.find({
           industry: client[0].industry[i],
           timeCommitment: client[0].hours,
