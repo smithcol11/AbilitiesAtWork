@@ -19,85 +19,111 @@ const props = defineProps({
   },
 });
 
-// Select table columns. Only fields listed here will have columns.
-const displayedFields = ref([
-  "city",
-  "employer",
-  "industry",
-  "position",
-  "timeCommitment",
-]);
+function formatDate(dateObj) {
+  if (dateObj instanceof Date) {
+    return dateObj.toLocaleDateString();
+  } else {
+    return null;
+  }
+}
 
-const columns = reactive({
-  employer: {
+const columns = ref([
+  {
+    title: "Date Posted",
+    field: "openingDate",
+    cellContent: (data) => formatDate(data.openingDate),
+    filterMode: "date",
+    filterPlaceholder: "Search by date",
+  },
+  {
+    title: "Employer",
+    field: "employer",
     cellContent: (data) => data.employer,
-    header: "Employer",
     filterMode: "text",
     filterPlaceholder: "Search by employer",
   },
-  position: {
+  {
+    title: "Position",
+    field: "position",
     cellContent: (data) => data.position,
-    header: "Position",
     filterMode: "multi",
     filterPlaceholder: "Any",
   },
-  industry: {
+  {
+    title: "Industry",
+    field: "industry",
     cellContent: (data) => data.industry,
-    header: "Industry",
     filterMode: "multi",
     filterPlaceholder: "Any",
   },
-  city: {
+  {
+    title: "City",
+    field: "city",
     cellContent: (data) => data.city,
-    header: "City",
     filterMode: "multi",
     filterPlaceholder: "Any",
   },
-  zip: {
+  {
+    title: "Zip",
+    field: "zip",
     cellContent: (data) => data.zip,
-    header: "Zip",
     filterMode: "text",
     filterPlaceholder: "Search by zip",
   },
-  county: {
+  {
+    title: "County",
+    field: "county",
     cellContent: (data) => data.county,
-    header: "County",
     filterMode: "multi",
     filterPlaceholder: "Any",
   },
-  shift: {
+  {
+    title: "Shift",
+    field: "shift",
     cellContent: (data) => data.shift,
-    header: "Shift",
     filterMode: "single",
     filterOptions: ["Early", "Morning", "Afternoon", "Evening"],
     filterPlaceholder: "Any",
   },
-  timeCommitment: {
+  {
+    title: "Time Commitment",
+    field: "timeCommitment",
     cellContent: (data) => data.timeCommitment,
-    header: "Time Commitment",
     filterMode: "single",
     filterOptions: ["Full-Time", "Part-Time", "Any"],
     filterPlaceholder: "Any",
   },
-  "contact.name": {
+  {
+    title: "Contact Name",
+    field: "contact.name",
     cellContent: (data) => data.contact.name,
-    header: "Contact Name",
     filterMode: "text",
     filterPlaceholder: "Search by name",
   },
-  "contact.email": {
+  {
+    title: "Contact Email",
+    field: "contact.email",
     cellContent: (data) => data.contact.email,
-    header: "Contact Email",
     filterMode: "text",
     filterPlaceholder: "Search by email",
   },
-  "contact.phone": {
+  {
+    title: "Contact Phone",
+    field: "contact.phone",
     cellContent: (data) => data.contact.phone,
-    header: "Contact Phone",
     filterMode: "text",
     filterPlaceholder: "Search by phone",
   },
-});
+]);
+
+// Select table columns. Columns listed here are displayed by default.
+const displayedColumns = ref(
+  columns.value.filter((col) =>
+    ["city", "employer", "industry", "position", "timeCommitment"].includes(
+      toRaw(col).field
+    )
+  )
+);
 
 //Custom hours filter to handle the 'Any' condition displaying
 //both Full-Time and Part-Time
@@ -108,6 +134,7 @@ FilterService.register(hoursFilter, (value, filter) => {
 });
 
 const filterDefaults = {
+  openingDate: { value: null, matchMode: FilterMatchMode.DATE_AFTER },
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
   position: { value: null, matchMode: FilterMatchMode.IN },
@@ -140,14 +167,15 @@ function filtersAreClear() {
 
 //This dynamically populates the drop-down and multiselect filters used in the table.
 function getFilters() {
-  for (const [field] of Object.entries(toRaw(columns))) {
-    if (columns[field].filterOptions == null) {
+  columns.value.forEach((column) => {
+    if (column.filterOptions == null) {
       // Extract field from all jobs
-      const current = Array.from(jobs.value, (job) => toRaw(job)[field]);
+      const current = Array.from(jobs.value, j => toRaw(j)[column.field]);
+
       // Remove duplicates
-      columns[field].filterOptions = Array.from(new Set(current));
+      column.filterOptions = Array.from(new Set(current));
     }
-  }
+  });
 }
 
 //authorize action by validating the JWT and checking the isAdmin value after validation
@@ -228,9 +256,14 @@ let requestFormOptions = async () => {
 };
 
 onBeforeMount(async () => {
-  loadJobs();
-  requestFormOptions();
+  await loadJobs();
+  await requestFormOptions();
+
+  jobs.value.forEach((job) => {
+    job.openingDate = new Date(job.openingDate);
+  });
 });
+
 </script>
 <template>
   <div class="card m-5 bg-light shadow-lg border">
@@ -245,7 +278,7 @@ onBeforeMount(async () => {
       :loading="loading"
       :paginator="true"
       :rows="10"
-      :globalFilterFields="displayedFields"
+      :globalFilterFields="Array.from(displayedColumns, )"
     >
       <template #header>
         <div
@@ -254,14 +287,16 @@ onBeforeMount(async () => {
           <MultiSelect
             v-if="userCanChangeColumns()"
             class="grow-0 shrink-0"
-            v-model="displayedFields"
+            v-model="displayedColumns"
             placeholder="Choose Columns"
-            :options="Object.keys(columns).sort()"
+            :options="columns"
             :showClear="true"
-            @update:model-value="displayedFields.sort()"
           >
             <template #value="slotProps">
               {{ slotProps.placeholder }}
+            </template>
+            <template #option="slotProps">
+              {{ slotProps.option.title }}
             </template>
           </MultiSelect>
           <div class="grow" />
@@ -287,13 +322,14 @@ onBeforeMount(async () => {
       </template>
       <template #loading> Loading records, please wait... </template>
 
-      <Column
+      <!-- <Column
         v-for="field in displayedFields"
         sortable
         :field="field"
         :filterField="field"
-        :header="columns[field].header"
-        :showFilterMenu="columns[field].filterMode === 'text'"
+        :header="columns[field].title"
+        :dataType="columns[field].filterMode == 'date' ? 'date' : 'text'"
+        :showFilterMenu="['text', 'date'].includes(columns[field].filterMode)"
         style="min-width: 12rem"
       >
         <template #body="{ data }">
@@ -304,6 +340,30 @@ onBeforeMount(async () => {
             :mode="columns[field].filterMode"
             :placeholder="columns[field].filterPlaceholder"
             :options="columns[field].filterOptions"
+            v-model="filterModel.value"
+            @update:modelValue="filterCallback()"
+          />
+        </template>
+      </Column> -->
+
+      <Column
+        v-for="column in displayedColumns"
+        sortable
+        :field="column.field"
+        :filterField="column.field"
+        :header="column.title"
+        :dataType="column.filterMode == 'date' ? 'date' : 'text'"
+        :showFilterMenu="['text', 'date'].includes(column.filterMode)"
+        style="min-width: 12rem"
+      >
+        <template #body="{ data }">
+          {{ column.cellContent(data) }}
+        </template>
+        <template #filter="{ filterModel, filterCallback }">
+          <Filter
+            :mode="column.filterMode"
+            :placeholder="column.filterPlaceholder"
+            :options="column.filterOptions"
             v-model="filterModel.value"
             @update:modelValue="filterCallback()"
           />

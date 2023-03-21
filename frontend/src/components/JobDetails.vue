@@ -173,7 +173,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
           <p class="pt-2">
             Date Posted:
             <span class="font-normal">{{
-              data.openingDate.substr(0, 10)
+              data.openingDate.toLocaleDateString()
             }}</span>
           </p>
           <p class="pt-2">
