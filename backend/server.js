@@ -1,14 +1,18 @@
-require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const app = express();
-const port = process.env.PORT || 3000;
-const uri = process.env.ATLAS_URI;
 const connection = mongoose.connection;
 const path = require("path");
+
+require("dotenv").config();
+const env = process.env.NODE_ENV || "dev";
+require("dotenv").config({ path: path.resolve(__dirname, `.env.${env}`) });
+
+const port = process.env.PORT || 3000;
+const uri = process.env.ATLAS_URI;
 
 mongoose
   .connect(uri, {
@@ -25,8 +29,8 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:8080", "http://localhost:3000"],
-    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    origin: process.env.CORS_ORIGIN,
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE", "PATCH"],
     credentials: true,
   })
 );

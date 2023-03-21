@@ -53,7 +53,7 @@ const defaultData = {
   lastInitial: "",
   industry: [],
   hours: "",
-}
+};
 
 const data = ref(Object.create(defaultData));
 
@@ -121,6 +121,7 @@ const submitForm = async () => {
     DisplayBanner("failed");
   }
 };
+
 // create the post request and send it to the backend
 async function postClient() {
   try {

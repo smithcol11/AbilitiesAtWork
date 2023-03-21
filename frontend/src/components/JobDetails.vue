@@ -3,6 +3,11 @@ import { ref } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
+import TextBox from "./TextBox.vue";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
+
+
+const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
 
 const props = defineProps({
   data: {
@@ -12,7 +17,11 @@ const props = defineProps({
   index: {
     type: Number,
     required: true,
-    default: 100,
+    //default: 100,
+  },
+  formOptions: {
+    type: Object,
+    required: true,
   },
   removeJob: {
     //from parent(SearchTable.vue)
@@ -35,7 +44,7 @@ const updatedJob = ref({
   contact: {
     email: "",
     name: "",
-    phone: 0,
+    phone: "",
   },
   address: "",
   city: "",
@@ -44,7 +53,7 @@ const updatedJob = ref({
   shift: "",
   industry: "",
   position: "",
-  hourlyWage: 0,
+  hourlyWage: "",
   timeCommitment: "",
   openingDate: "",
   notes: "",
@@ -77,7 +86,7 @@ function closeBasic() {
 }
 
 function remove() {
-  if (index > -1) remove(index);
+  if (props.index > -1) props.removeJob(props.data);
   displayBasic.value = false;
   displayDel.value = false;
 }
@@ -85,21 +94,34 @@ function remove() {
 function save() {
   if (props.index > -1) {
     for (let key in updatedJob.value) {
+      //remain the same data if no new input
+      if (updatedJob.value[key].name == "") {
+        updatedJob.value[key].name = props.data[key].name;
+      }
+      if (updatedJob.value[key].email == "") {
+        updatedJob.value[key].email = props.data[key].email;
+      }
+      if (updatedJob.value[key].phone == "") {
+        updatedJob.value[key].phone = props.data[key].phone;
+      }
       if (updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
-        //remain the same data if no new input
         updatedJob.value[key] = props.data[key];
       }
     }
-    props.saveUpdate(updatedJob.value, props.index);
-  }
-
-  //reset data
-  for (let key in updatedJob) {
-    updatedJob[key] = "";
+    props.saveUpdate(updatedJob.value, props.data);
   }
 
   displayUpdate.value = false;
+
+  updatedJob.value["contact"].name = "";
+  updatedJob.value["contact"].email = "";
+  updatedJob.value["contact"].phone = "";
+  for (let key in updatedJob.value) {
+    if (key != "contact") updatedJob.value[key] = "";
+  }
 }
+
+const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
 </script>
 
 <template>
@@ -156,7 +178,10 @@ function save() {
             Hours: <span class="font-normal">{{ data.timeCommitment }}</span>
           </p>
           <p class="pt-2">
-            Date Posted: <span class="font-normal">{{ data.openingDate }}</span>
+            Date Posted:
+            <span class="font-normal">{{
+              data.openingDate.substr(0, 10)
+            }}</span>
           </p>
           <p class="pt-2">
             Notes: <span class="font-normal">{{ data.notes }}</span>
@@ -172,6 +197,7 @@ function save() {
         class="p-button-text p-button-secondary"
       />
       <Button
+        v-if="isAdmin() == true"
         label="Delete"
         icon="pi pi-times"
         @click="openDel()"
@@ -192,43 +218,43 @@ function save() {
           >
             <div class="pt-2 basis-1/5">
               Company:
-              <InputText
+              <TextBox
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.employer"
-                v-model="updatedJob.company"
+                v-model="updatedJob.employer"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Contact Name:
-              <InputText
+              <TextBox
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.contact.name"
-                v-model="updatedJob.contactName"
+                v-model="updatedJob.contact.name"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Contact Phone Number:
-              <InputText
-                type="text"
+              <TextBox
+                type="number"
                 class="p-inputtext-sm"
-                :placeholder="data.contact.phone"
-                v-model="updatedJob.contactPhoneNumber"
+                :placeholder="data.contact.phone.toString()"
+                v-model="updatedJob.contact.phone"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Contact Email:
-              <InputText
+              <TextBox
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.contact.email"
-                v-model="updatedJob.contactEmail"
+                v-model="updatedJob.contact.email"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Address:
-              <InputText
+              <TextBox
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.address"
@@ -237,79 +263,86 @@ function save() {
             </div>
             <div class="pt-2 basis-1/5">
               City:
-              <InputText
+              <DropDown
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm font-normal"
                 :placeholder="data.city"
+                :options="props.formOptions.cities"
                 v-model="updatedJob.city"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Zip:
-              <InputText
+              <DropDown
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm font-normal"
                 :placeholder="data.zip"
+                :options="props.formOptions.zips"
                 v-model="updatedJob.zip"
               />
             </div>
             <div class="pt-2 basis-1/5">
               County:
-              <InputText
+              <DropDown
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm font-normal"
                 :placeholder="data.county"
+                :options="props.formOptions.counties"
                 v-model="updatedJob.county"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Shift:
-              <InputText
+              <DropDown
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm font-normal"
                 :placeholder="data.shift"
+                :options="props.formOptions.shiftOptions"
                 v-model="updatedJob.shift"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Industry:
-              <InputText
+              <DropDown
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm font-normal"
                 :placeholder="data.industry"
+                :options="props.formOptions.industries"
                 v-model="updatedJob.industry"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Position:
-              <InputText
+              <DropDown
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm font-normal"
                 :placeholder="data.position"
+                :options="props.formOptions.positions"
                 v-model="updatedJob.position"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Hours:
-              <InputText
+              <DropDown
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm font-normal"
                 :placeholder="data.timeCommitment"
-                v-model="updatedJob.hours"
+                :options="props.formOptions.timeCommitmentOptions"
+                v-model="updatedJob.timeCommitment"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Date Posted:
-              <InputText
-                type="text"
+              <TextBox
+                type="date"
                 class="p-inputtext-sm"
                 :placeholder="data.openingDate"
-                v-model="updatedJob.datePosted"
+                v-model="updatedJob.openingDate"
               />
             </div>
             <div class="pt-2 basis-1/5">
               Notes:
-              <InputText
+              <TextBox
                 type="text"
                 class="p-inputtext-sm"
                 :placeholder="data.notes"

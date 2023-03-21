@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, toRaw, onBeforeMount } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
@@ -86,35 +86,63 @@ function getFilters() {
   });
 }
 
-function removeJob(SelectedIndex) {
-  if (SelectedIndex > -1) jobs.splice(SelectedIndex, 1);
+async function removeJob(selectedJob) {
+  for (let i = 0; i < jobs.value.length; i++) {
+    if (jobs.value[i] == selectedJob) {
+      jobs.value.splice(i, 1);
+      await fetch("http://localhost:3000/deleteJob", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(toRaw(selectedJob)),
+      })
+        .then((response) => console.log(response))
+        .catch((errors) => console.log(errors));
+    }
+  }
 }
 
-function saveUpdate(updatedJob, SelectedIndex) {
-  jobs.value[SelectedIndex].employer = updatedJob.employer;
-  jobs.value[SelectedIndex].contact.name = updatedJob.contact.name;
-  jobs.value[SelectedIndex].contact.phone = updatedJob.contact.phone;
-  jobs.value[SelectedIndex].contact.email = updatedJob.contact.email;
-  jobs.value[SelectedIndex].address = updatedJob.address;
-  jobs.value[SelectedIndex].city = updatedJob.city;
-  jobs.value[SelectedIndex].zip = updatedJob.zip;
-  jobs.value[SelectedIndex].county = updatedJob.county;
-  jobs.value[SelectedIndex].shift = updatedJob.shift;
-  jobs.value[SelectedIndex].industry = updatedJob.industry;
-  jobs.value[SelectedIndex].position = updatedJob.position;
-  jobs.value[SelectedIndex].timeCommitment = updatedJob.timeCommitment;
-  jobs.value[SelectedIndex].openingDate = updatedJob.openingDate;
-  jobs.value[SelectedIndex].hourlyWage = updatedJob.hourlyWage;
-  jobs.value[SelectedIndex].notes = updatedJob.notes;
+async function saveUpdate(updatedJob, selectedJob) {
+  for (let i = 0; i < jobs.value.length; i++) {
+    if (jobs.value[i] == selectedJob) {
+      jobs.value[i].employer = updatedJob.employer;
+      jobs.value[i].contact.name = updatedJob.contact.name;
+      jobs.value[i].contact.phone = updatedJob.contact.phone;
+      jobs.value[i].contact.email = updatedJob.contact.email;
+      jobs.value[i].address = updatedJob.address;
+      jobs.value[i].city = updatedJob.city;
+      jobs.value[i].zip = updatedJob.zip;
+      jobs.value[i].county = updatedJob.county;
+      jobs.value[i].shift = updatedJob.shift;
+      jobs.value[i].industry = updatedJob.industry;
+      jobs.value[i].position = updatedJob.position;
+      jobs.value[i].timeCommitment = updatedJob.timeCommitment;
+      jobs.value[i].openingDate = updatedJob.openingDate;
+      jobs.value[i].hourlyWage = updatedJob.hourlyWage;
+      jobs.value[i].notes = updatedJob.notes;
+
+      //console.log(jobs.value[i]);
+
+      await fetch("http://localhost:3000/editJob", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(toRaw(jobs.value[i])),
+      })
+        .then((response) => console.log(response))
+        .catch((errors) => console.log(errors));
+    }
+  }
 }
 
 async function loadJobs() {
-  try{
+  try {
     if (props.jobMatches.length < 1) {
       await fetch("http://localhost:3000/allJobs")
         .then((response) => response.json())
         .then((data) => {
           jobs.value = data;
+          //console.log(data[0])
         })
         .then(() => {
           initFilters();
@@ -127,14 +155,38 @@ async function loadJobs() {
       initFilters();
       getFilters();
     }
-  } catch(error){
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
 }
 
-loadJobs();
-</script>
+const formOptions = reactive({
+  counties: [],
+  cities: [],
+  zips: [],
+  positions: [],
+  industries: [],
+  shiftOptions: [],
+  timeCommitmentOptions: [],
+});
 
+let requestFormOptions = async () => {
+  await fetch("http://localhost:3000/GetJobOptions")
+    .then((res) => res.json())
+    .then((newOptions) => {
+      for (const key in formOptions) {
+        formOptions[key] = newOptions[key];
+      }
+    })
+    .catch((err) => console.log(err));
+  //console.log(formOptions);
+};
+
+onBeforeMount(async () => {
+  loadJobs();
+  requestFormOptions();
+});
+</script>
 <template>
   <div class="card m-5 bg-light shadow-lg border">
     <DataTable
@@ -213,7 +265,7 @@ loadJobs();
             v-model="filterModel.value"
             @change="filterCallback()"
             :options="filterData.city"
-            :filter="true"
+            :filter="false"
             :showClear="true"
             optionLabel="city"
             placeholder="Any"
@@ -330,6 +382,7 @@ loadJobs();
           <JobDetails
             :data="data"
             :index="index"
+            :formOptions="formOptions"
             :removeJob="removeJob"
             :saveUpdate="saveUpdate"
           />
