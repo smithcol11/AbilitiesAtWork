@@ -31,6 +31,7 @@ const columns = ref([
   {
     title: "Date Posted",
     field: "openingDate",
+    dataType: "date",
     cellContent: (data) => formatDate(data.openingDate),
     filterMode: "date",
     filterPlaceholder: "Search by date",
@@ -278,7 +279,7 @@ onBeforeMount(async () => {
       :loading="loading"
       :paginator="true"
       :rows="10"
-      :globalFilterFields="Array.from(displayedColumns, )"
+      :globalFilterFields="Array.from(displayedColumns, col => col.field)"
     >
       <template #header>
         <div
@@ -322,37 +323,13 @@ onBeforeMount(async () => {
       </template>
       <template #loading> Loading records, please wait... </template>
 
-      <!-- <Column
-        v-for="field in displayedFields"
-        sortable
-        :field="field"
-        :filterField="field"
-        :header="columns[field].title"
-        :dataType="columns[field].filterMode == 'date' ? 'date' : 'text'"
-        :showFilterMenu="['text', 'date'].includes(columns[field].filterMode)"
-        style="min-width: 12rem"
-      >
-        <template #body="{ data }">
-          {{ columns[field].cellContent(data) }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <Filter
-            :mode="columns[field].filterMode"
-            :placeholder="columns[field].filterPlaceholder"
-            :options="columns[field].filterOptions"
-            v-model="filterModel.value"
-            @update:modelValue="filterCallback()"
-          />
-        </template>
-      </Column> -->
-
       <Column
         v-for="column in displayedColumns"
         sortable
+        :header="column.title"
         :field="column.field"
         :filterField="column.field"
-        :header="column.title"
-        :dataType="column.filterMode == 'date' ? 'date' : 'text'"
+        :dataType="column.dataType || 'text'"
         :showFilterMenu="['text', 'date'].includes(column.filterMode)"
         style="min-width: 12rem"
       >
@@ -362,8 +339,8 @@ onBeforeMount(async () => {
         <template #filter="{ filterModel, filterCallback }">
           <Filter
             :mode="column.filterMode"
-            :placeholder="column.filterPlaceholder"
             :options="column.filterOptions"
+            :placeholder="column.filterPlaceholder"
             v-model="filterModel.value"
             @update:modelValue="filterCallback()"
           />
