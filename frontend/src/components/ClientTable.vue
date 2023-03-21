@@ -99,7 +99,7 @@ function getFullName(client) {
 
 onMounted(async () => {
   await requestClients();
-  clients.value.forEach(client => {
+  clients.value.forEach((client) => {
     client.fullName = getFullName(client);
   });
   initFilters1();
@@ -168,7 +168,7 @@ function saveUpdate(updatedClient, selectedClient) {
       </template>
       <template #loading> Loading records, please wait... </template>
 
-      <Column field="fullName" header="Name" style="min-width: 12rem">
+      <Column field="fullName" sortable header="Name" style="min-width: 12rem">
         <template #body="{ data }">
           {{ data.fullName }}
         </template>
@@ -186,6 +186,7 @@ function saveUpdate(updatedClient, selectedClient) {
       <Column
         field="industry"
         header="Industry"
+        sortable
         :showFilterMenu="false"
         style="min-width: 12rem"
       >
@@ -222,6 +223,7 @@ function saveUpdate(updatedClient, selectedClient) {
       <Column
         field="hours"
         header="Hours"
+        sortable
         :showFilterMenu="false"
         style="min-width: 12rem"
       >
