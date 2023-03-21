@@ -21,8 +21,8 @@ const props = defineProps({
 
 // Select table columns. Only fields listed here will have columns.
 const displayedFields = ref([
-  "employer",
   "city",
+  "employer",
   "industry",
   "position",
   "timeCommitment",
@@ -256,8 +256,9 @@ onBeforeMount(async () => {
             class="grow-0 shrink-0"
             v-model="displayedFields"
             placeholder="Choose Columns"
-            :options="Object.keys(columns)"
+            :options="Object.keys(columns).sort()"
             :showClear="true"
+            @update:model-value="displayedFields.sort()"
           >
             <template #value="slotProps">
               {{ slotProps.placeholder }}
@@ -288,6 +289,8 @@ onBeforeMount(async () => {
 
       <Column
         v-for="field in displayedFields"
+        sortable
+        :field="field"
         :filterField="field"
         :header="columns[field].header"
         :showFilterMenu="columns[field].filterMode === 'text'"

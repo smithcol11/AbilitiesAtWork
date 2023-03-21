@@ -74,18 +74,18 @@ const onModelUpdate = (value) => {
   :modelValue="currentInput"
   @update:modelValue="($event) => onModelUpdate($event)"
 >
-<template #value="slotProps">
-  <span
-    :class="'p-dropdown' + slotProps.value"
-    v-if="slotProps.value && slotProps.value.length > 0"
-    >{{ slotProps.value.join(", ") }}
-  </span>
-  <span v-else>{{ slotProps.placeholder }}</span>
-</template>
-<template #option="slotProps">
-  <span :class="'p-dropdown' + slotProps.option">{{
-    slotProps.option
-  }}</span>
-</template>
+  <template #value="slotProps">
+    <span
+      :class="'p-dropdown' + slotProps.value"
+      v-if="slotProps.value && slotProps.value.length > 0"
+      >{{ slotProps.value.join(", ") }}
+    </span>
+    <span v-else>{{ slotProps.placeholder }}</span>
+  </template>
+  <template #option="slotProps">
+    <span :class="'p-dropdown' + slotProps.option">{{
+      slotProps.option
+    }}</span>
+  </template>
 </MultiSelect>
 </template>
