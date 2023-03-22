@@ -120,11 +120,11 @@ function toggleLogout() {
     </div>
   </nav>
   <button
-    class="sm:hidden nav-button flex mx-auto border-b border-x shadow-l bg-light"
+    class="sm:hidden nav-button flex mx-auto border-b border-x shadow-l bg-light dark:bg-darkGray dark:border-darkGrayAccent"
     @click="toggleNav()"
   >
     <svg
-      class="h-7 w-32 text-dark"
+      class="h-7 w-32 text-dark dark:text-light"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
