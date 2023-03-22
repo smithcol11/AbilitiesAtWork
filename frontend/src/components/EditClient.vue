@@ -212,7 +212,7 @@ function acceptAlphaKeys(keyEvent) {
           label="Delete"
           icon="pi pi-times"
           @click="openDel()"
-          class="p-button-text p-button-secondary"
+          class="p-button-text p-button-danger"
         />
       </div>
     </form>
@@ -234,7 +234,7 @@ function acceptAlphaKeys(keyEvent) {
         label="No"
         icon="pi pi-times"
         @click="closeDel()"
-        class="p-button-text p-button-secondary"
+        class="p-button-text p-button-danger"
       />
     </div>
   </Dialog>
