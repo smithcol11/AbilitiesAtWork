@@ -39,7 +39,9 @@ const loadTheme = (newName, oldName) => {
     themeName = newName;
     // See if we have an already loaded theme. If so, we have to remove it
     if (loadedThemes[oldName]) {
-      document.head.removeChild(loadedThemes[oldName]);
+      if (document.head.contains(loadedThemes[oldName])) {
+        document.head.removeChild(loadedThemes[oldName]);
+      }
     }
 
     // If we've loaded this theme before, then get it from the cache.
