@@ -2,8 +2,6 @@
 import { ref } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
-import Dropdown from "primevue/dropdown";
 import TextBox from "./TextBox.vue";
 
 const props = defineProps({
@@ -129,10 +127,10 @@ function acceptAlphaKeys(keyEvent) {
 
 <template>
   <Button
-    label="Edit"
-    icon="pi pi-refresh"
-    @click="openUpdate()"
-    class="p-button-text p-button-secondary"
+      label="Edit"
+      icon="pi pi-pencil"
+      @click="openUpdate()"
+      class="p-button-text p-button-secondary"
   />
   <Dialog
     header="Update"

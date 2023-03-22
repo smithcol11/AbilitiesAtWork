@@ -23,21 +23,17 @@ router.post("/addClient", async (req, res) => {
 
 router.put("/editClient", async (req, res) => {
   try {
-    const client = await Client.updateOne(
-      {
-        firstName: req.body.initialData.firstName.toLowerCase(),
-        middleInitial: req.body.initialData.middleInitial.toLowerCase(),
-        lastInitial: req.body.initialData.lastInitial.toLowerCase(),
-      },
+    const result = await Client.updateOne(
+      { _id: req.body.data._id },
       req.body.data,
       { new: true }
     );
 
-    if (!client) {
+    if (result.matchedCount == 0) {
       return res.status(404).send({ error: "Client not found when updating" });
     }
 
-    res.send(client);
+    res.send(result);
   } catch (error) {
     res.status(500).send({ error: "Error updating client" });
   }
@@ -45,18 +41,15 @@ router.put("/editClient", async (req, res) => {
 
 router.delete("/deleteClient", async (req, res) => {
   try {
-    const client = await Client.deleteOne({
-      firstName: req.body.firstName.toLowerCase(),
-      middleInitial: req.body.middleInitial.toLowerCase(),
-      lastInitial: req.body.lastInitial.toLowerCase(),
-    });
+    const result = await Client.deleteOne({ _id: req.body._id });
 
-    if (!client) {
+    if (result.deletedCount == 0) {
       return res.status(404).send({ error: "Client not found when deleting" });
     }
 
-    res.send(client);
+    res.send(result);
   } catch (error) {
+    console.log(error);
     res.status(500).send({ error: "Error deleting client" });
   }
 });
