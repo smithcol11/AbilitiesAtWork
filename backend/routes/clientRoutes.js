@@ -11,7 +11,7 @@ router.post("/addClient", async (req, res) => {
       middleInitial: req.body.middleInitial.toLowerCase(),
       lastInitial: req.body.lastInitial.toLowerCase(),
       hours: req.body.hours,
-      industry: req.body.industry.toLowerCase(),
+      industry: req.body.industry.map((industry) => industry.toLowerCase()),
       enteredBy: "FIX ME",
       updatedBy: "FIX ME",
     });
@@ -23,6 +23,12 @@ router.post("/addClient", async (req, res) => {
 
 router.put("/editClient", async (req, res) => {
   try {
+    req.body.data.firstName = req.body.data.firstName.toLowerCase();
+    req.body.data.middleInitial = req.body.data.middleInitial.toLowerCase();
+    req.body.data.lastInitial = req.body.data.lastInitial.toLowerCase();
+    req.body.data.industry = req.body.data.industry.map((industry) =>
+      industry.toLowerCase()
+    );
     const result = await Client.updateOne(
       { _id: req.body.data._id },
       req.body.data,

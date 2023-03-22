@@ -101,8 +101,7 @@ router.patch("/editJob", async (req, res) => {
       res.job.contact.email = req.body.contact.email.toLowerCase();
     if (req.body.contact.name)
       res.job.contact.name = req.body.contact.name.toLowerCase();
-    if (req.body.contact.phone)
-      res.job.contact.phone = req.body.contact.phone;
+    if (req.body.contact.phone) res.job.contact.phone = req.body.contact.phone;
   }
   if (req.body.employer) res.job.employer = req.body.employer.toLowerCase();
   if (req.body.industry) res.job.industry = req.body.industry.toLowerCase();
