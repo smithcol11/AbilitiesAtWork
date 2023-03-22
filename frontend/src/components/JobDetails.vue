@@ -6,7 +6,6 @@ import InputText from "primevue/inputtext";
 import TextBox from "./TextBox.vue";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
 
-
 const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
 
 const props = defineProps({
@@ -137,7 +136,9 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
   >
     <div class="mt-3 text-center">
       <div class="mt-2 px-7 py-3">
-        <div class="bg-white text-left italic font-bold text-gray-700">
+        <div
+          class="bg-white text-left italic font-bold text-gray-700 dark:bg-moreInfoGray dark:text-light"
+        >
           <p class="pt-2">
             Company: <span class="font-normal">{{ data.employer }}</span>
           </p>
@@ -201,7 +202,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
         label="Delete"
         icon="pi pi-times"
         @click="openDel()"
-        class="p-button-text p-button-secondary"
+        class="p-button-text p-button-danger"
       />
     </template>
   </Dialog>
@@ -214,7 +215,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
       <div class="mt-3 text-center">
         <div class="mt-2 px-7 py-3">
           <div
-            class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6"
+            class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6 dark:bg-moreInfoGray dark:text-gray-300"
           >
             <div class="pt-2 basis-1/5">
               Company:
@@ -363,7 +364,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
           label="Cancel"
           icon="pi pi-times"
           @click="closeUpdate()"
-          class="p-button-text p-button-secondary"
+          class="p-button-text p-button-danger"
         />
       </div>
     </form>
@@ -385,7 +386,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
         label="No"
         icon="pi pi-times"
         @click="closeDel()"
-        class="p-button-text p-button-secondary"
+        class="p-button-text p-button-danger"
       />
     </div>
   </Dialog>

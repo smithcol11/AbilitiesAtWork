@@ -184,7 +184,7 @@ async function sendChanges() {
 
 <template>
   <div
-    class="flex flex-col items-center justify-center shadow-lg border bg-light m-3 pb-3"
+    class="flex flex-col items-center justify-center shadow-lg border bg-light dark:bg-darkGrayAccent dark:border-darkGray m-3 pb-3"
   >
     <Transition>
       <div role="alert">
@@ -202,7 +202,7 @@ async function sendChanges() {
     <div class="w-3/4 p-5">
       <Label position="left" text="Which List?" class="py-3" />
       <DropDown
-        class="w-full"
+        class="w-full dark:bg-darkGrayAccent dark:hover:bg-darkGray dark:text-light"
         v-on:change="chooseList($event)"
         :options="['Industries', 'Positions']"
         placeholder=""
@@ -233,16 +233,15 @@ async function sendChanges() {
           Edit
         </button>
       </div>
-
       <div v-if="toAdd">
         <div v-if="toInput">
           <Label
             position="left"
             text="What would you like to add?"
-            class="py-3"
+            class="py-3 dark:text-light"
           />
           <input
-            class="rounded bg-white pl-2 pt-2 pb-2 border w-full"
+            class="rounded bg-white dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light pl-2 pt-2 pb-2 border w-full"
             v-model="choice"
             :placeholder="choice"
           />
@@ -253,10 +252,10 @@ async function sendChanges() {
         <Label
           position="left"
           text="What would you like to remove?"
-          class="py-3"
+          class="py-3 dark:text-light"
         />
         <DropDown
-          class="w-full"
+          class="w-full dark:bg-darkGrayAccent dark:border-darkGray dark:text-light"
           v-on:change="openInput($event)"
           v-model="choice"
           :options="listItems"
@@ -271,16 +270,16 @@ async function sendChanges() {
           class="py-3"
         />
         <DropDown
-          class="w-full"
+          class="w-full dark:bg-darkGrayAccent dark:border-darkGray dark:text-light"
           v-on:change="openInput($event)"
           v-model="choice"
           :options="listItems"
           placeholder=""
         />
         <div v-if="toInput">
-          <Label position="left" text="Make changes here." class="pb-3 pt-6" />
+          <Label position="left" text="Make changes here." class="pb-3 pt-6 dark:text-light" />
           <input
-            class="rounded bg-white pl-2 pt-2 pb-2 border w-full"
+            class="rounded bg-white pl-2 pt-2 pb-2 border w-full dark:bg-darkGrayAccent dark:border-darkGray dark:focus:bg-darkGray dark:text-light"
             v-model="change"
             :placeholder="choice"
           />

@@ -31,7 +31,8 @@ const props = defineProps({
 <template>
   <input
     :type="type"
-    class="form-control block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-accentLight rounded"
+    class="form-control block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-accentLight rounded
+    dark:focus:bg-darkGray dark:bg-darkGrayAccent dark:border-darkGray dark:focus:outline-light"
     :placeholder="placeholder"
     :value="modelValue"
     :name="name"

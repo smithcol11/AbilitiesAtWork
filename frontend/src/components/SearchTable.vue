@@ -188,15 +188,15 @@ onBeforeMount(async () => {
 });
 </script>
 <template>
-  <div class="card m-5 bg-light shadow-lg border">
+  <div class="card m-5 bg-light dark:bg-darkGrayAccent shadow-lg border dark:border-darkGrayAccent">
     <DataTable
       :value="jobs"
       class="p-datatable-sm"
-      stripedRows
       @rowSelect="onRowSelect"
       @rowUnselect="onRowUnselect"
       v-model:selection="selectedJob"
       selectionMode="single"
+      stripedRows
       v-model:filters="filters"
       filterDisplay="row"
       :loading="loading"
@@ -220,7 +220,7 @@ onBeforeMount(async () => {
             class="p-button-outlined"
             @click="clearFilter()"
           />
-          <span class="">
+          <span>
             <i class="pi pi-search pr-3" />
             <InputText
               v-model="filters['global'].value"
@@ -252,6 +252,7 @@ onBeforeMount(async () => {
       <Column
         field="city"
         header="City"
+        headerStyle= ""
         :showFilterMenu="false"
         style="min-width: 12rem"
       >
@@ -267,7 +268,7 @@ onBeforeMount(async () => {
             :showClear="true"
             optionLabel="city"
             placeholder="Any"
-            class="p-column-filter"
+            
           >
             <template #value="slotProps">
               <span
@@ -353,8 +354,9 @@ onBeforeMount(async () => {
             @change="filterCallback()"
             :options="filterData.timeCommitment"
             placeholder="Any"
+            style="dropdownlabel"
             :filter="false"
-            class="p-dropdown-filter"
+            class="dropdownfilter"
             :showClear="true"
           >
             <template #value="slotProps">
@@ -395,5 +397,11 @@ onBeforeMount(async () => {
 }
 .p-filter-column {
   max-width: 12rem;
+}
+.p-paginator-bottom {
+  border-bottom: 0px;
+}
+.p-paginator {
+  justify-content: center;
 }
 </style>
