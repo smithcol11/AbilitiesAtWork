@@ -188,10 +188,10 @@ onBeforeMount(async () => {
 });
 </script>
 <template>
-  <div class="card m-5 bg-light shadow-lg border">
+  <div class="card m-5 bg-light dark:bg-darkGrayAccent shadow-lg border dark:border-darkGrayAccent">
     <DataTable
       :value="jobs"
-      class="p-datatable-sm datatable-dark"
+      class="p-datatable-sm"
       @rowSelect="onRowSelect"
       @rowUnselect="onRowUnselect"
       v-model:selection="selectedJob"
@@ -199,7 +199,6 @@ onBeforeMount(async () => {
       stripedRows
       v-model:filters="filters"
       filterDisplay="row"
-      rowStyleClass = "#{isDark ? 'dark' : null}"
       :loading="loading"
       :paginator="true"
       :rows="10"
@@ -398,5 +397,11 @@ onBeforeMount(async () => {
 }
 .p-filter-column {
   max-width: 12rem;
+}
+.p-paginator-bottom {
+  border-bottom: 0px;
+}
+.p-paginator {
+  justify-content: center;
 }
 </style>

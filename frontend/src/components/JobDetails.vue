@@ -137,7 +137,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
   >
     <div class="mt-3 text-center">
       <div class="mt-2 px-7 py-3">
-        <div class="bg-white text-left italic font-bold text-gray-700">
+        <div class="bg-white text-left italic font-bold text-gray-700 dark:bg-moreInfoGray dark:text-light">
           <p class="pt-2">
             Company: <span class="font-normal">{{ data.employer }}</span>
           </p>

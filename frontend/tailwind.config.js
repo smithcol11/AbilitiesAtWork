@@ -14,6 +14,7 @@ module.exports = {
         dark: "#0f172a",
         darkGray: "#1e1e1e",
         darkGrayAccent: "#2a2a2a",
+        moreInfoGray: "#262626",
       },
     },
   },

@@ -144,40 +144,40 @@ function acceptAlphaKeys(keyEvent) {
       <div class="mt-3 text-center">
         <div class="mt-2 px-7 py-3">
           <div
-            class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6"
+            class="bg-white dark:bg-moreInfoGray italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6"
           >
-            <div class="pt-2 basis-1/5">
+            <div class="pt-2 basis-1/5 dark:text-light">
               First Name:
               <TextBox
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm dark:text-light"
                 :placeholder="data.firstName"
                 v-model="updatedClient.firstName"
               />
             </div>
-            <div class="pt-2 basis-1/5">
+            <div class="pt-2 basis-1/5 dark:text-light">
               Middle Initial:
               <TextBox
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm dark:text-light"
                 maxlength="1"
                 :placeholder="data.middleInitial"
                 v-on:keypress="acceptAlphaKeys($event)"
                 v-model="updatedClient.middleInitial"
               />
             </div>
-            <div class="pt-2 basis-1/5">
+            <div class="pt-2 basis-1/5 dark:text-light">
               Last Initial:
               <TextBox
                 type="text"
-                class="p-inputtext-sm"
+                class="p-inputtext-sm dark:text-light"
                 maxlength="1"
                 :placeholder="data.lastInitial"
                 v-on:keypress="acceptAlphaKeys($event)"
                 v-model="updatedClient.lastInitial"
               />
             </div>
-            <div class="pt-2 basis-1/5">
+            <div class="pt-2 basis-1/5 dark:text-light">
               Industry:
               <DropDown
                 type="text"
@@ -188,7 +188,7 @@ function acceptAlphaKeys(keyEvent) {
                 v-model="updatedClient.industry"
               />
             </div>
-            <div class="pt-2 basis-1/5">
+            <div class="pt-2 basis-1/5 dark:text-light">
               Hours:
               <DropDown
                 type="text"
