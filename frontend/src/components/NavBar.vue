@@ -70,9 +70,9 @@ const tearDownCallback = () => {
 const toggleDark = () => {
   useToggle(isDark)();
   if (isDark.value == true) {
-    loadTheme("mdc-dark-deeppurple", "saga-blue");
+    loadTheme("mdc-dark-deeppurple", "mdc-light-deeppurple");
   } else {
-    loadTheme("saga-blue", "mdc-dark-deeppurple");
+    loadTheme("mdc-light-deeppurple", "mdc-dark-deeppurple");
   }
 };
 
@@ -122,15 +122,15 @@ function toggleLogout() {
       >
         Logout
       </button>
-      <div class="sm:absolute sm:left-10 sm:bottom-4 sm:w-12">
+      <div class="sm:absolute sm:left-10 sm:bottom-4 sm:w-16">
         <button
-          class="rounded-full sm:w-full h-12 w-16 text-center mx-auto border dark:border-darkGrayAccent sm:py-1 sm:px-2 flex justify-center hover:bg-slate-200 hover:text-light dark:hover:bg-darkGrayAccent dark:text-light dark:border-b-darkGrayAccent"
+          class="rounded-full sm:w-full h-10 w-14 text-center mx-auto border dark:border-darkGray sm:py-1 sm:px-2 flex justify-center hover:bg-slate-200 hover:text-light dark:hover:bg-darkGray dark:text-light dark:border-b-darkGrayAccent"
         >
           <svg
             v-if="isDark"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
-            class="transition ml-2 duration-300 dark:fill-light fill-yellow-400"
+            class="transition ml-2 duration-300 dark:fill-sky-300 fill-yellow-400"
             @click="toggleDark()"
           >
             <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -142,7 +142,7 @@ function toggleLogout() {
             v-if="isDark == false"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
-            class="transition mx-1 duration-300 dark:fill-light fill-yellow-400"
+            class="transition mx-1 duration-300 dark:fill-sky-300 fill-yellow-400"
             @click="toggleDark()"
           >
             <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
