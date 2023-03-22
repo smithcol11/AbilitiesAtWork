@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^3.6.4",
+    "@vueuse/core": "^9.13.0",
     "concurrently": "^7.6.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

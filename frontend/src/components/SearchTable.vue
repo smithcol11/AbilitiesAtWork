@@ -267,7 +267,7 @@ onBeforeMount(async () => {
 
 </script>
 <template>
-  <div class="card m-5 bg-light shadow-lg border">
+  <div class="card m-5 bg-light dark:bg-darkGrayAccent shadow-lg border dark:border-darkGrayAccent">
     <DataTable
       :value="jobs"
       class="p-datatable-sm"
@@ -368,5 +368,11 @@ onBeforeMount(async () => {
 }
 .p-filter-column {
   max-width: 12rem;
+}
+.p-paginator-bottom {
+  border-bottom: 0px;
+}
+.p-paginator {
+  justify-content: center;
 }
 </style>

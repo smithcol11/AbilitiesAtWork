@@ -52,18 +52,19 @@ function ResetValues() {
 
 <template>
   <div id="Admin Login">
-    <Label text="Administrator Login"></Label>
+    <Label class="dark:text-light" text="Administrator Login"></Label>
     <form class="w-full max-w-md" method="post" @submit.prevent>
       <div class="md:flex md:items-center mb-6 mt-2">
         <div class="md:w-1/4">
           <Label
-            class="block mb-1 md:mb-0 pr-4"
+            class="block mb-1 md:mb-0 pr-4 dark:text-light"
             position="right"
             text="Username"
           ></Label>
         </div>
         <div class="md:w-1/2">
           <TextBox
+            class="dark:bg-darkGrayAccent dark:text-light dark:border-darkGray"
             type="username"
             name="username"
             id="username"
@@ -77,13 +78,14 @@ function ResetValues() {
       <div class="md:flex md:items-center mb-6 mt-2">
         <div class="md:w-1/4">
           <Label
-            class="block md:text-right mb-1 md:mb-0 pr-4"
+            class="block md:text-right mb-1 md:mb-0 pr-4 dark:text-light"
             position="middle"
             text="Password"
           ></Label>
         </div>
         <div class="md:w-1/2">
           <TextBox
+            class="dark:bg-darkGrayAccent dark:text-light dark:border-darkGray"
             type="password"
             name="password"
             id="password"
