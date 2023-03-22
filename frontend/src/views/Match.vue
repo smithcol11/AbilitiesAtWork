@@ -155,14 +155,14 @@ async function matchClient() {
               <form method="post" ref="clientForm" @submit.prevent>
                 <div class="px-1 sm:px-1 max-w-md pt-4 w-full">
                   <div
-                    class="mx-auto rounded w-full h-1/2 bg-light p-5 text-left shadow-lg border"
+                    class="mx-auto rounded w-full h-1/2 bg-light dark:bg-darkGray p-5 text-left shadow-lg border dark:border-darkGrayAccent"
                   >
                     <div>
                       <label class="block px-1 py-1 mb-2"
                         >Enter Client's Name</label
                       >
                       <input
-                        class="rounded border p-2 px-1 py-1 w-full mb-2"
+                        class="rounded border p-2 px-1 py-1 w-full mb-2 dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:border-darkGray"
                         type="text"
                         name="initials"
                         id="initials"
@@ -171,7 +171,7 @@ async function matchClient() {
                         style="margin-right: 1rem"
                       />
                       <input
-                        class="rounded border px-1 py-1 w-1/2 mb-2"
+                        class="rounded border px-1 py-1 w-1/2 mb-2 dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:border-darkGray"
                         type="text"
                         name="initials"
                         id="initials"
@@ -179,7 +179,7 @@ async function matchClient() {
                         v-model="clientInfo.middleInitial"
                       />
                       <input
-                        class="rounded border px-1 py-1 w-1/2"
+                        class="rounded border px-1 py-1 w-1/2 dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:border-darkGray"
                         type="text"
                         name="initials"
                         id="initials"

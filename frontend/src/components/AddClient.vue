@@ -46,6 +46,7 @@ const banner = reactive({
   },
 });
 
+
 const defaultData = {
   firstName: "",
   middleInitial: "",
@@ -54,7 +55,7 @@ const defaultData = {
   hours: "",
 };
 
-const data = ref(Object.create(defaultData));
+const data = ref(structuredClone(defaultData));
 
 const rules = computed(() => {
   return {
@@ -87,7 +88,7 @@ const rules = computed(() => {
 // reset form values to default or empty values
 const resetForm = () => {
   v$.value.$reset();
-  data.value = Object.create(defaultData);
+  data.value = structuredClone(defaultData);
 };
 function DisplayBanner(bannerType) {
   if (bannerType == "success") banner.displaySuccess = true;
@@ -139,7 +140,7 @@ async function postClient() {
 
 <template>
   <form @submit.prevent>
-    <div class="shadow-lg border rounded bg-light">
+    <div class="shadow-lg border rounded bg-light dark:bg-darkGrayAccent dark:border-darkGray">
       <div class="h-84 p-5">
         <Transition>
           <div role="alert">
@@ -161,8 +162,9 @@ async function postClient() {
         </Transition>
         <div class="grid grid-cols-2 gap-4 place-content-around">
           <div class="basis-1/5">
-            <Label text="First Name"></Label>
+            <Label class="dark:text-light" text="First Name"></Label>
             <TextBox
+              class="dark:bg-darkGrayAccent dark:text-light dark:border-darkGray"
               type="text"
               placeholder="Enter First Name"
               v-model="data.firstName"
@@ -172,8 +174,9 @@ async function postClient() {
             </p>
           </div>
           <div class="basis-1/5">
-            <Label text="Middle Initial"></Label>
+            <Label class="dark:text-light" text="Middle Initial"></Label>
             <TextBox
+              class="dark:bg-darkGrayAccent dark:text-light dark:border-darkGray"
               type="text"
               placeholder="Enter Middle Initial"
               v-model="data.middleInitial"
@@ -184,8 +187,9 @@ async function postClient() {
             </p>
           </div>
           <div class="basis-1/5">
-            <Label text="Last Initial"></Label>
+            <Label class="dark:text-light" text="Last Initial"></Label>
             <TextBox
+              class="dark:bg-darkGrayAccent dark:text-light dark:border-darkGray"
               type="text"
               placeholder="Enter Last Initial"
               v-model="data.lastInitial"
@@ -195,8 +199,8 @@ async function postClient() {
               {{ v$.lastInitial.$errors[0].$message }}
             </p>
           </div>
-          <div class="basis-1/5">
-            <Label text="Industries"></Label>
+          <div class="basis-1/5 dark:bg-darkGrayAccent">
+            <Label class="dark:text-light" text="Industries"></Label>
             <DropDown
               v-model="data.industry"
               :options="formOptions.industries"
@@ -208,7 +212,7 @@ async function postClient() {
             </p>
           </div>
           <div class="basis-1/5">
-            <Label text="Hours"></Label>
+            <Label class="dark:text-light" text="Hours"></Label>
             <DropDown
               v-model="data.hours"
               :options="formOptions.timeCommitmentOptions"
@@ -219,9 +223,7 @@ async function postClient() {
             </p>
           </div>
         </div>
-        <div
-          class="md:flex flex-wrap grid-cols-2 gap-2 place-content-center py-4"
-        >
+        <div class="md:flex flex-wrap grid-cols-2 gap-2 place-content-center py-4">
           <Button text="Add Client" @click="submitForm()"></Button>
           <Button text="Reset form" @click="resetForm()"></Button>
         </div>

@@ -108,9 +108,7 @@ function DisplayBanner(bannerType) {
 }
 
 async function addJob() {
-  console.log("POST request called");
-
-  try {
+  try{
     await fetch("http://localhost:3000/addJob", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -149,7 +147,7 @@ onBeforeMount(async () => {
 
 <template>
   <form @submit.prevent>
-    <div class="JobCreation shadow-lg border bg-light">
+    <div class="JobCreation shadow-lg border bg-light dark:bg-darkGrayAccent dark:border-darkGray">
       <div class="h-84 p-5">
         <Transition>
           <div role="alert">
@@ -171,7 +169,7 @@ onBeforeMount(async () => {
 
           <div class="flex flex-wrap grid-cols-2 gap-2 place-content-around">
         -->
-        <div class="md:flex flex-wrap grid-cols-2 gap-4 place-content-around">
+        <div class="md:flex flex-wrap grid-cols-2 gap-4 place-content-around ">
           <div class="basis-2/5">
             <Label position="middle" text="Bussiness Name"></Label>
             <TextBox
@@ -312,7 +310,7 @@ onBeforeMount(async () => {
           <div class="basis-2/5">
             <Label position="middle" text="Notes"></Label>
             <textarea
-              class="form-control block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
+              class="form-control block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none dark:bg-darkGrayAccent dark:focus:bg-darkGray dark:text-light dark:border-darkGray"
               v-model="formData.notes"
               placeholder="Add Notes (Optional)"
             ></textarea>

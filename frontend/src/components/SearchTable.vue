@@ -1,12 +1,14 @@
 <script setup>
 import { ref, reactive, toRaw, onBeforeMount } from "vue";
 import { FilterMatchMode, FilterService } from "primevue/api";
+import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
+import Button from "primevue/button";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import Dropdown from "primevue/dropdown";
-import MultiSelect from "primevue/multiselect";
+import Filter from "./Filter.vue";
 import InputText from "primevue/inputtext";
 import JobDetails from "./JobDetails.vue";
+import MultiSelect from "primevue/multiselect";
 
 const props = defineProps({
   jobMatches: {
@@ -17,6 +19,113 @@ const props = defineProps({
   },
 });
 
+function formatDate(dateObj) {
+  if (dateObj instanceof Date) {
+    return dateObj.toLocaleDateString();
+  } else {
+    return null;
+  }
+}
+
+const columns = ref([
+  {
+    title: "Date Posted",
+    field: "openingDate",
+    dataType: "date",
+    cellContent: (data) => formatDate(data.openingDate),
+    filterMode: "date",
+    filterPlaceholder: "Search by date",
+  },
+  {
+    title: "Employer",
+    field: "employer",
+    cellContent: (data) => data.employer,
+    filterMode: "text",
+    filterPlaceholder: "Search by employer",
+  },
+  {
+    title: "Position",
+    field: "position",
+    cellContent: (data) => data.position,
+    filterMode: "multi",
+    filterPlaceholder: "Any",
+  },
+  {
+    title: "Industry",
+    field: "industry",
+    cellContent: (data) => data.industry,
+    filterMode: "multi",
+    filterPlaceholder: "Any",
+  },
+  {
+    title: "City",
+    field: "city",
+    cellContent: (data) => data.city,
+    filterMode: "multi",
+    filterPlaceholder: "Any",
+  },
+  {
+    title: "Zip",
+    field: "zip",
+    cellContent: (data) => data.zip,
+    filterMode: "text",
+    filterPlaceholder: "Search by zip",
+  },
+  {
+    title: "County",
+    field: "county",
+    cellContent: (data) => data.county,
+    filterMode: "multi",
+    filterPlaceholder: "Any",
+  },
+  {
+    title: "Shift",
+    field: "shift",
+    cellContent: (data) => data.shift,
+    filterMode: "single",
+    filterOptions: ["Early", "Morning", "Afternoon", "Evening"],
+    filterPlaceholder: "Any",
+  },
+  {
+    title: "Time Commitment",
+    field: "timeCommitment",
+    cellContent: (data) => data.timeCommitment,
+    filterMode: "single",
+    filterOptions: ["Full-Time", "Part-Time", "Any"],
+    filterPlaceholder: "Any",
+  },
+  {
+    title: "Contact Name",
+    field: "contact.name",
+    cellContent: (data) => data.contact.name,
+    filterMode: "text",
+    filterPlaceholder: "Search by name",
+  },
+  {
+    title: "Contact Email",
+    field: "contact.email",
+    cellContent: (data) => data.contact.email,
+    filterMode: "text",
+    filterPlaceholder: "Search by email",
+  },
+  {
+    title: "Contact Phone",
+    field: "contact.phone",
+    cellContent: (data) => data.contact.phone,
+    filterMode: "text",
+    filterPlaceholder: "Search by phone",
+  },
+]);
+
+// Select table columns. Columns listed here are displayed by default.
+const displayedColumns = ref(
+  columns.value.filter((col) =>
+    ["city", "employer", "industry", "position", "timeCommitment"].includes(
+      toRaw(col).field
+    )
+  )
+);
+
 //Custom hours filter to handle the 'Any' condition displaying
 //both Full-Time and Part-Time
 const hoursFilter = "hoursFilter";
@@ -25,114 +134,81 @@ FilterService.register(hoursFilter, (value, filter) => {
   if (filter === value) return true;
 });
 
+const filterDefaults = {
+  openingDate: { value: null, matchMode: FilterMatchMode.DATE_AFTER },
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  position: { value: null, matchMode: FilterMatchMode.IN },
+  industry: { value: null, matchMode: FilterMatchMode.IN },
+  city: { value: null, matchMode: FilterMatchMode.IN },
+  zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  county: { value: null, matchMode: FilterMatchMode.IN },
+  shift: { value: null, matchMode: FilterMatchMode.IS },
+  timeCommitment: { value: null, matchMode: hoursFilter },
+  "contact.name": { value: null, matchMode: FilterMatchMode.CONTAINS },
+  "contact.phone": { value: null, matchMode: FilterMatchMode.CONTAINS },
+  "contact.email": { value: null, matchMode: FilterMatchMode.CONTAINS },
+};
+
+const filters = ref(structuredClone(filterDefaults));
+const auth = useAuthenticationStore();
 const jobs = ref([]);
 const loading = ref(false);
 const selectedJob = null;
 
-var filters = ref({
-  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  employer: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  city: { value: null, matchMode: FilterMatchMode.IN },
-  zip: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  county: { value: null, matchMode: FilterMatchMode.IN },
-  industry: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  timeCommitment: { value: null, matchMode: hoursFilter },
-});
-
-const filterData = reactive([
-  {
-    county: [],
-    employer: [],
-    city: [],
-    timeCommitment: [],
-  },
-]);
-
-function onRowSelect(event) {
-  console.log(event.data.employer);
-}
-
-function onRowUnselect(event) {}
-
-function clearFilter() {
-  initFilters();
-}
-
 //Sets all filters to default. Can be called to reset all filters.
-function initFilters() {
-  filters.value.global.value = null;
-  filters.value.employer.value = null;
-  filters.value.city.value = null;
-  filters.value.zip.value = null;
-  filters.value.county.value = null;
-  filters.value.industry.value = null;
-  filters.value.timeCommitment.value = null;
+function clearFilters() {
+  filters.value = structuredClone(filterDefaults);
+}
+
+//Checks if filters are clear
+function filtersAreClear() {
+  return Object.entries(filters.value).every((e) => e[1].value == null);
 }
 
 //This dynamically populates the drop-down and multiselect filters used in the table.
 function getFilters() {
-  filterData.county = new Array();
-  filterData.employer = new Array();
-  filterData.city = new Array();
-  filterData.timeCommitment = new Array();
-  filterData.timeCommitment.push("Full-Time", "Part-Time", "Any");
+  columns.value.forEach((column) => {
+    if (column.filterOptions == null) {
+      // Extract field from all jobs
+      const current = Array.from(jobs.value, j => toRaw(j)[column.field]);
 
-  jobs.value.forEach((job) => {
-    if (!filterData.county.includes(job.county))
-      filterData.county.push(job.county);
-    if (!filterData.city.includes(job.city)) filterData.city.push(job.city);
-    if (!filterData.employer.includes(job.employer))
-      filterData.employer.push(job.employer);
+      // Remove duplicates
+      column.filterOptions = Array.from(new Set(current));
+    }
   });
 }
 
-async function removeJob(selectedJob) {
-  for (let i = 0; i < jobs.value.length; i++) {
-    if (jobs.value[i] == selectedJob) {
-      jobs.value.splice(i, 1);
-      await fetch("http://localhost:3000/deleteJob", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(toRaw(selectedJob)),
-      })
-        .then((response) => console.log(response))
-        .catch((errors) => console.log(errors));
-    }
-  }
+//authorize action by validating the JWT and checking the isAdmin value after validation
+function userCanChangeColumns() {
+  return auth.validateJWT() && auth.isAuthAdmin;
 }
 
-async function saveUpdate(updatedJob, selectedJob) {
-  for (let i = 0; i < jobs.value.length; i++) {
-    if (jobs.value[i] == selectedJob) {
-      jobs.value[i].employer = updatedJob.employer;
-      jobs.value[i].contact.name = updatedJob.contact.name;
-      jobs.value[i].contact.phone = updatedJob.contact.phone;
-      jobs.value[i].contact.email = updatedJob.contact.email;
-      jobs.value[i].address = updatedJob.address;
-      jobs.value[i].city = updatedJob.city;
-      jobs.value[i].zip = updatedJob.zip;
-      jobs.value[i].county = updatedJob.county;
-      jobs.value[i].shift = updatedJob.shift;
-      jobs.value[i].industry = updatedJob.industry;
-      jobs.value[i].position = updatedJob.position;
-      jobs.value[i].timeCommitment = updatedJob.timeCommitment;
-      jobs.value[i].openingDate = updatedJob.openingDate;
-      jobs.value[i].hourlyWage = updatedJob.hourlyWage;
-      jobs.value[i].notes = updatedJob.notes;
+async function removeJob(SelectedIndex) {
+  let removedJob = jobs.value[SelectedIndex];
+  if (SelectedIndex > -1) jobs.value.splice(SelectedIndex, 1);
 
-      //console.log(jobs.value[i]);
+  await fetch("http://localhost:3000/deleteJob", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(removedJob),
+  })
+    .then((response) => console.log(response))
+    .catch((errors) => console.log(errors));
+}
 
-      await fetch("http://localhost:3000/editJob", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(toRaw(jobs.value[i])),
-      })
-        .then((response) => console.log(response))
-        .catch((errors) => console.log(errors));
-    }
-  }
+async function saveUpdate(updatedJob, SelectedIndex) {
+  Object.assign(jobs.value[SelectedIndex], structuredClone(toRaw(updatedJob)));
+
+  await fetch("http://localhost:3000/editJob", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(toRaw(jobs.value[SelectedIndex])),
+  })
+    .then((response) => console.log(response))
+    .catch((errors) => console.log(errors));
 }
 
 async function loadJobs() {
@@ -142,17 +218,16 @@ async function loadJobs() {
         .then((response) => response.json())
         .then((data) => {
           jobs.value = data;
-          //console.log(data[0])
         })
         .then(() => {
-          initFilters();
+          clearFilters();
           getFilters();
         });
     } else {
       for (let i in props.jobMatches) {
         jobs.value.push(props.jobMatches[i]);
       }
-      initFilters();
+      clearFilters();
       getFilters();
     }
   } catch (error) {
@@ -179,22 +254,24 @@ let requestFormOptions = async () => {
       }
     })
     .catch((err) => console.log(err));
-  //console.log(formOptions);
 };
 
 onBeforeMount(async () => {
-  loadJobs();
-  requestFormOptions();
+  await loadJobs();
+  await requestFormOptions();
+
+  jobs.value.forEach((job) => {
+    job.openingDate = new Date(job.openingDate);
+  });
 });
+
 </script>
 <template>
-  <div class="card m-5 bg-light shadow-lg border">
+  <div class="card m-5 bg-light dark:bg-darkGrayAccent shadow-lg border dark:border-darkGrayAccent">
     <DataTable
       :value="jobs"
       class="p-datatable-sm"
       stripedRows
-      @rowSelect="onRowSelect"
-      @rowUnselect="onRowUnselect"
       v-model:selection="selectedJob"
       selectionMode="single"
       v-model:filters="filters"
@@ -202,29 +279,41 @@ onBeforeMount(async () => {
       :loading="loading"
       :paginator="true"
       :rows="10"
-      :globalFilterFields="[
-        'employer',
-        'city',
-        'industry',
-        'timeCommitment',
-        'zip',
-        'county',
-      ]"
+      :globalFilterFields="Array.from(displayedColumns, col => col.field)"
     >
       <template #header>
-        <div class="flex justify-content-between">
-          <button
-            type="button"
-            icon="pi pi-filter-slash"
-            label="Clear"
-            class="p-button-outlined"
-            @click="clearFilter()"
-          />
-          <span class="">
+        <div
+          class="flex flex-wrap-reverse flex-row-reverse justify-content-between"
+        >
+          <MultiSelect
+            v-if="userCanChangeColumns()"
+            class="grow-0 shrink-0"
+            v-model="displayedColumns"
+            placeholder="Choose Columns"
+            :options="columns"
+            :showClear="true"
+          >
+            <template #value="slotProps">
+              {{ slotProps.placeholder }}
+            </template>
+            <template #option="slotProps">
+              {{ slotProps.option.title }}
+            </template>
+          </MultiSelect>
+          <div class="grow" />
+          <span class="grow-0">
             <i class="pi pi-search pr-3" />
             <InputText
-              v-model="filters['global'].value"
+              v-model="filters.global.value"
               placeholder="Keyword Search"
+            />
+            <Button
+              v-if="!filtersAreClear()"
+              type="button"
+              icon="pi pi-filter-slash"
+              label="Clear"
+              class="p-button-text p-button-secondary"
+              @click="clearFilters()"
             />
           </span>
         </div>
@@ -234,143 +323,27 @@ onBeforeMount(async () => {
       </template>
       <template #loading> Loading records, please wait... </template>
 
-      <Column field="employer" header="Employer" style="min-width: 12rem">
+      <Column
+        v-for="column in displayedColumns"
+        sortable
+        :header="column.title"
+        :field="column.field"
+        :filterField="column.field"
+        :dataType="column.dataType || 'text'"
+        :showFilterMenu="['text', 'date'].includes(column.filterMode)"
+        style="min-width: 12rem"
+      >
         <template #body="{ data }">
-          {{ data.employer }}
+          {{ column.cellContent(data) }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            type="text"
+          <Filter
+            :mode="column.filterMode"
+            :options="column.filterOptions"
+            :placeholder="column.filterPlaceholder"
             v-model="filterModel.value"
-            @input="filterCallback()"
-            class="p-column-filter"
-            placeholder="Search by employer"
+            @update:modelValue="filterCallback()"
           />
-        </template>
-      </Column>
-
-      <Column
-        field="city"
-        header="City"
-        :showFilterMenu="false"
-        style="min-width: 12rem"
-      >
-        <template #body="{ data }">
-          {{ data.city }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="filterData.city"
-            :filter="false"
-            :showClear="true"
-            optionLabel="city"
-            placeholder="Any"
-            class="p-column-filter"
-          >
-            <template #value="slotProps">
-              <span
-                :class="'p-dropdown' + slotProps.value"
-                v-if="slotProps.value && slotProps.value.length > 0"
-                >{{ slotProps.value.join(", ") }}</span
-              >
-              <span v-else>{{ slotProps.placeholder }}</span>
-            </template>
-            <template #option="slotProps">
-              <span :class="'p-dropdown' + slotProps.option">{{
-                slotProps.option
-              }}</span>
-            </template>
-          </MultiSelect>
-        </template>
-      </Column>
-
-      <Column field="zip" header="Zip" style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ data.zip }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            type="text"
-            v-model="filterModel.value"
-            @input="filterCallback()"
-            class="p-column-filter"
-            placeholder="Search by zip"
-          />
-        </template>
-      </Column>
-
-      <Column
-        header="County"
-        filter-field="county"
-        :showFilterMatchModes="false"
-        style="min-width: 12rem"
-      >
-        <template #body="{ data }">
-          {{ data.county }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="filterData.county"
-            :filter="false"
-            optionLabel="county"
-            label="county"
-            placeholder="Any"
-            display="chip"
-          >
-            <template #value="slotProps">
-              <span
-                :class="'p-dropdown' + slotProps.value"
-                v-if="slotProps.value && slotProps.value.length > 0"
-                >{{ slotProps.value.join(", ") }}</span
-              >
-              <span v-else>{{ slotProps.placeholder }}</span>
-            </template>
-            <template #option="slotProps">
-              <span :class="'p-dropdown-option' + slotProps.option">{{
-                slotProps.option
-              }}</span>
-            </template>
-          </MultiSelect>
-        </template>
-      </Column>
-
-      <Column
-        field="timeCommitment"
-        header="TimeCommitment"
-        :showFilterMenu="false"
-        style="min-width: 12rem"
-      >
-        <template #body="{ data }">
-          {{ data.timeCommitment }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <Dropdown
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="filterData.timeCommitment"
-            placeholder="Any"
-            :filter="false"
-            class="p-dropdown-filter"
-            :showClear="true"
-          >
-            <template #value="slotProps">
-              <span
-                :class="'p-dropdown-value' + slotProps.value"
-                v-if="slotProps.value"
-                >{{ slotProps.value }}</span
-              >
-              <span v-else>{{ slotProps.placeholder }}</span>
-            </template>
-            <template #option="slotProps">
-              <span :class="'p-dropdown-option' + slotProps.option">{{
-                slotProps.option
-              }}</span>
-            </template>
-          </Dropdown>
         </template>
       </Column>
 
@@ -395,5 +368,11 @@ onBeforeMount(async () => {
 }
 .p-filter-column {
   max-width: 12rem;
+}
+.p-paginator-bottom {
+  border-bottom: 0px;
+}
+.p-paginator {
+  justify-content: center;
 }
 </style>

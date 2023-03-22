@@ -1,11 +1,9 @@
 <script setup>
-import { ref } from "vue";
+import { ref, toRaw } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
-import InputText from "primevue/inputtext";
 import TextBox from "./TextBox.vue";
 import { useAuthenticationStore } from "../stores/AuthenticationStore.js";
-
 
 const auth = useAuthenticationStore(); //use auth store for authorizing admin-only capabilities
 
@@ -39,12 +37,12 @@ const displayBasic = ref(false);
 const displayDel = ref(false);
 const displayUpdate = ref(false);
 
-const updatedJob = ref({
+const emptyJob = {
   employer: "",
   contact: {
     email: "",
     name: "",
-    phone: "",
+    phone: null,
   },
   address: "",
   city: "",
@@ -53,11 +51,13 @@ const updatedJob = ref({
   shift: "",
   industry: "",
   position: "",
-  hourlyWage: "",
+  hourlyWage: null,
   timeCommitment: "",
   openingDate: "",
   notes: "",
-});
+};
+
+const updatedJob = ref(structuredClone(emptyJob));
 
 function openDel() {
   displayBasic.value = false;
@@ -86,39 +86,31 @@ function closeBasic() {
 }
 
 function remove() {
-  if (props.index > -1) props.removeJob(props.data);
+  if (props.index > -1) props.removeJob(props.index);
   displayBasic.value = false;
   displayDel.value = false;
 }
 
+function copyEmptyProps(target, source) {
+  for (let key in target) {
+    if (["", 0, null].includes(target[key])) {
+      target[key] = source[key];
+    } else if (target[key] instanceof Object) {
+      copyEmptyProps(target[key], source[key]);
+    }
+  }
+}
+
 function save() {
   if (props.index > -1) {
-    for (let key in updatedJob.value) {
-      //remain the same data if no new input
-      if (updatedJob.value[key].name == "") {
-        updatedJob.value[key].name = props.data[key].name;
-      }
-      if (updatedJob.value[key].email == "") {
-        updatedJob.value[key].email = props.data[key].email;
-      }
-      if (updatedJob.value[key].phone == "") {
-        updatedJob.value[key].phone = props.data[key].phone;
-      }
-      if (updatedJob.value[key] == "" || updatedJob.value[key] == 0) {
-        updatedJob.value[key] = props.data[key];
-      }
-    }
-    props.saveUpdate(updatedJob.value, props.data);
+    copyEmptyProps(updatedJob.value, toRaw(props.data));
+    props.saveUpdate(updatedJob.value, props.index);
   }
+
+  //reset data
+  updatedJob.value = structuredClone(emptyJob); 
 
   displayUpdate.value = false;
-
-  updatedJob.value["contact"].name = "";
-  updatedJob.value["contact"].email = "";
-  updatedJob.value["contact"].phone = "";
-  for (let key in updatedJob.value) {
-    if (key != "contact") updatedJob.value[key] = "";
-  }
 }
 
 const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
@@ -137,7 +129,9 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
   >
     <div class="mt-3 text-center">
       <div class="mt-2 px-7 py-3">
-        <div class="bg-white text-left italic font-bold text-gray-700">
+        <div
+          class="bg-white text-left italic font-bold text-gray-700 dark:bg-moreInfoGray dark:text-light"
+        >
           <p class="pt-2">
             Company: <span class="font-normal">{{ data.employer }}</span>
           </p>
@@ -180,7 +174,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
           <p class="pt-2">
             Date Posted:
             <span class="font-normal">{{
-              data.openingDate.substr(0, 10)
+              data.openingDate.toLocaleDateString()
             }}</span>
           </p>
           <p class="pt-2">
@@ -201,7 +195,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
         label="Delete"
         icon="pi pi-times"
         @click="openDel()"
-        class="p-button-text p-button-secondary"
+        class="p-button-text p-button-danger"
       />
     </template>
   </Dialog>
@@ -214,7 +208,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
       <div class="mt-3 text-center">
         <div class="mt-2 px-7 py-3">
           <div
-            class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6"
+            class="bg-white italic font-bold text-gray-700 grid grid-cols-2 gap-4 p-6 dark:bg-moreInfoGray dark:text-gray-300"
           >
             <div class="pt-2 basis-1/5">
               Company:
@@ -363,7 +357,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
           label="Cancel"
           icon="pi pi-times"
           @click="closeUpdate()"
-          class="p-button-text p-button-secondary"
+          class="p-button-text p-button-danger"
         />
       </div>
     </form>
@@ -385,7 +379,7 @@ const isAdmin = () => auth.validateJWT() && auth.isAuthAdmin;
         label="No"
         icon="pi pi-times"
         @click="closeDel()"
-        class="p-button-text p-button-secondary"
+        class="p-button-text p-button-danger"
       />
     </div>
   </Dialog>
