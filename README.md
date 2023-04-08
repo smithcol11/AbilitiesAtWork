@@ -1,7 +1,3 @@
-## Project Google Drive
-
-- [Files and Info](https://drive.google.com/drive/u/1/folders/1iHAWP1x04z62L0bYL39agfxcUHKKW5kN)
-
 ## Development Setup
 
 - [VS Code](https://code.visualstudio.com/)
